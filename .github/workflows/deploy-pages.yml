@@ -5,6 +5,9 @@ on:
     branches:
       - main
       - chore/decouple-chatgpt-sites
+  pull_request:
+    branches:
+      - main
   workflow_dispatch:
 
 permissions:
