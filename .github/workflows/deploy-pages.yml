@@ -17,7 +17,7 @@ permissions:
   id-token: write
 
 concurrency:
-  group: "pages"
+  group: "allenks-${{ github.ref }}"
   cancel-in-progress: true
 
 jobs:
@@ -47,26 +47,115 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v4
+
       - name: Setup Node
         uses: actions/setup-node@v4
         with:
           node-version: 22
           cache: npm
+
       - name: Install dependencies
         run: npm ci
+
       - name: Build static site
+        env:
+          MIGRATION_PREVIEW: ${{ (github.ref == 'refs/heads/migration/current-public-20260821' || github.head_ref == 'migration/current-public-20260821') && '1' || '0' }}
         run: npm run build
+
+      - name: Normalize preview public asset URLs
+        if: github.ref == 'refs/heads/migration/current-public-20260821' || github.head_ref == 'migration/current-public-20260821'
+        shell: bash
+        run: |
+          PREVIEW_ROOT="https://raw.githack.com/alandiaz145/allenks-web-v2/migration/current-public-20260821/preview-build"
+          while IFS= read -r -d '' file; do
+            sed -i \
+              -e "s|\"/assets/|\"${PREVIEW_ROOT}/assets/|g" \
+              -e "s|'\/assets/|'${PREVIEW_ROOT}/assets/|g" \
+              -e "s|\"/favicon|\"${PREVIEW_ROOT}/favicon|g" \
+              "$file"
+          done < <(find out -type f -name '*.html' -print0)
+
       - name: Upload migration build
-        if: github.ref == 'refs/heads/migration/current-public-20260821' || github.event_name == 'pull_request'
+        if: github.ref == 'refs/heads/migration/current-public-20260821' || github.head_ref == 'migration/current-public-20260821'
         uses: actions/upload-artifact@v4
         with:
           name: allenks-migration-build
           path: ./out
+
       - name: Upload Pages artifact
         if: github.ref == 'refs/heads/main'
         uses: actions/upload-pages-artifact@v3
         with:
           path: ./out
+
+  publish-migration-preview:
+    if: github.event_name == 'push' && github.ref == 'refs/heads/migration/current-public-20260821' && github.actor != 'github-actions[bot]'
+    runs-on: ubuntu-latest
+    needs: build
+    permissions:
+      contents: write
+    steps:
+      - name: Checkout migration branch
+        uses: actions/checkout@v4
+        with:
+          ref: migration/current-public-20260821
+
+      - name: Replace preview build
+        shell: bash
+        run: rm -rf preview-build
+
+      - name: Download migration build
+        uses: actions/download-artifact@v4
+        with:
+          name: allenks-migration-build
+          path: preview-build
+
+      - name: Commit preview build to migration branch
+        shell: bash
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add -A preview-build
+          if git diff --cached --quiet; then
+            echo "Preview is already current."
+          else
+            git commit -m "chore: refresh migration preview [skip ci]"
+            git push origin HEAD:migration/current-public-20260821
+          fi
+
+      - name: Verify public preview URL
+        shell: bash
+        run: |
+          URL="https://raw.githack.com/alandiaz145/allenks-web-v2/migration/current-public-20260821/preview-build/index.html"
+          ok=0
+          for attempt in $(seq 1 12); do
+            if curl --fail --location --silent --show-error "$URL" -o preview-response.html && grep -q "ALLEN KS" preview-response.html; then
+              ok=1
+              break
+            fi
+            sleep 5
+          done
+          test "$ok" -eq 1
+          printf '%s\n' "$URL" > preview-url.txt
+
+      - name: Capture desktop and mobile preview
+        shell: bash
+        run: |
+          URL=$(cat preview-url.txt)
+          mkdir -p preview-checks
+          BROWSER=$(command -v google-chrome || command -v chromium || true)
+          if [ -n "$BROWSER" ]; then
+            "$BROWSER" --headless=new --no-sandbox --disable-gpu --hide-scrollbars --window-size=1440,1200 --screenshot=preview-checks/desktop.png "$URL"
+            "$BROWSER" --headless=new --no-sandbox --disable-gpu --hide-scrollbars --window-size=390,844 --screenshot=preview-checks/mobile.png "$URL"
+          fi
+          cp preview-url.txt preview-checks/preview-url.txt
+
+      - name: Upload preview checks
+        uses: actions/upload-artifact@v4
+        with:
+          name: allenks-migration-preview-checks
+          path: preview-checks
+          if-no-files-found: error
 
   deploy:
     if: github.ref == 'refs/heads/main'
