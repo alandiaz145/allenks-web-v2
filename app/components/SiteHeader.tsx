@@ -1,14 +1,21 @@
 import Link from "next/link";
 import { tickerItems } from "../site-data";
 
-const nav = [
+type NavItem = {
+  label: string;
+  key: string;
+  href?: string;
+  disabled?: boolean;
+};
+
+const nav: NavItem[] = [
   { label: "Inicio", href: "/", key: "inicio" },
   { label: "Música", href: "/musica", key: "musica" },
   { label: "Tienda", href: "/tienda", key: "tienda" },
   { label: "Sorteos", key: "sorteos", disabled: true },
   { label: "Proyectos", href: "/proyectos", key: "proyectos" },
   { label: "Asesoramiento", key: "asesoramiento", disabled: true },
-] as const;
+];
 
 const musicTicker = [
   "ALLEN KS · ARTISTA INDEPENDIENTE",
