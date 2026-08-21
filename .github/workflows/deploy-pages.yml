@@ -28,14 +28,12 @@ jobs:
       - name: Capture current public site
         shell: bash
         run: |
-          mkdir -p public-snapshot/assets
+          mkdir -p public-snapshot
           curl --fail --location --silent --show-error https://allenks.com.ar/ -o public-snapshot/index.html
           for route in musica tienda proyectos descargas; do
             code=$(curl --location --silent --show-error --output "public-snapshot/${route}.html" --write-out "%{http_code}" "https://allenks.com.ar/${route}" || true)
             printf '%s %s\n' "$route" "$code" >> public-snapshot/status.txt
           done
-          curl --fail --location --silent --show-error https://allenks.com.ar/assets/index-vnRxlWgz.css -o public-snapshot/assets/production.css
-          curl --fail --location --silent --show-error https://www.allenks.com.ar/assets/allen-ks-favicon-512-square.png -o public-snapshot/assets/allen-ks-favicon-512-square.png
       - name: Upload public snapshot
         uses: actions/upload-artifact@v4
         with:
@@ -47,21 +45,19 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v4
+
       - name: Setup Node
         uses: actions/setup-node@v4
         with:
           node-version: 22
           cache: npm
+
       - name: Install dependencies
         run: npm ci
+
       - name: Build static site
         run: npm run build
-      - name: Upload migration build
-        if: github.ref == 'refs/heads/migration/current-public-20260821' || github.event_name == 'pull_request'
-        uses: actions/upload-artifact@v4
-        with:
-          name: allenks-migration-build
-          path: ./out
+
       - name: Upload Pages artifact
         if: github.ref == 'refs/heads/main'
         uses: actions/upload-pages-artifact@v3
