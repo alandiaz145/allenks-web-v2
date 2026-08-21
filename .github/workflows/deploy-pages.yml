@@ -4,16 +4,18 @@ on:
   push:
     branches:
       - main
+  pull_request:
+    branches:
+      - main
   workflow_dispatch:
 
 permissions:
   contents: read
   pages: write
   id-token: write
-  issues: write
 
 concurrency:
-  group: "pages-main"
+  group: "pages-${{ github.ref }}"
   cancel-in-progress: true
 
 jobs:
@@ -36,26 +38,15 @@ jobs:
         run: npm run build
 
       - name: Configure GitHub Pages
-        id: pages_setup
-        continue-on-error: true
         uses: actions/configure-pages@v5
 
-      - name: Report Pages setup failure
-        if: steps.pages_setup.outcome != 'success' && github.event.head_commit.message == 'ci: probe GitHub Pages deployment'
-        env:
-          GH_TOKEN: ${{ github.token }}
-        run: |
-          gh api "repos/${GITHUB_REPOSITORY}/issues/2/comments" \
-            -f body="PAGES_PROBE setup=failed sha=${GITHUB_SHA}"
-          exit 1
-
       - name: Upload GitHub Pages artifact
-        if: steps.pages_setup.outcome == 'success'
         uses: actions/upload-pages-artifact@v4
         with:
           path: ./out
 
   deploy:
+    if: github.event_name != 'pull_request' && github.ref == 'refs/heads/main'
     environment:
       name: github-pages
       url: ${{ steps.deployment.outputs.page_url }}
@@ -64,30 +55,23 @@ jobs:
     steps:
       - name: Deploy to GitHub Pages
         id: deployment
-        continue-on-error: true
         uses: actions/deploy-pages@v4
 
-      - name: Verify deployed URL
-        id: verify
-        if: steps.deployment.outcome == 'success'
+      - name: Verify deployed site
         env:
           PAGE_URL: ${{ steps.deployment.outputs.page_url }}
         run: |
           curl --fail --location --silent --show-error "$PAGE_URL" -o deployed.html
           grep -q "ALLEN KS" deployed.html
-          printf 'url=%s\n' "$PAGE_URL" >> "$GITHUB_OUTPUT"
+          grep -q "GETTING STARTED" deployed.html
 
-      - name: Report Pages probe
-        if: always() && github.event.head_commit.message == 'ci: probe GitHub Pages deployment'
-        env:
-          GH_TOKEN: ${{ github.token }}
-          DEPLOY_OUTCOME: ${{ steps.deployment.outcome }}
-          VERIFY_OUTCOME: ${{ steps.verify.outcome }}
-          PAGE_URL: ${{ steps.deployment.outputs.page_url }}
+  verify-live:
+    if: github.event_name == 'pull_request'
+    runs-on: ubuntu-latest
+    needs: build
+    steps:
+      - name: Verify current GitHub Pages URL
         run: |
-          gh api "repos/${GITHUB_REPOSITORY}/issues/2/comments" \
-            -f body="PAGES_PROBE deploy=${DEPLOY_OUTCOME} verify=${VERIFY_OUTCOME} url=${PAGE_URL} sha=${GITHUB_SHA}"
-
-      - name: Assert deployment
-        if: steps.deployment.outcome != 'success' || steps.verify.outcome != 'success'
-        run: exit 1
+          curl --fail --location --silent --show-error https://alandiaz145.github.io/allenks-web-v2/ -o live.html
+          grep -q "ALLEN KS" live.html
+          grep -q "GETTING STARTED" live.html
