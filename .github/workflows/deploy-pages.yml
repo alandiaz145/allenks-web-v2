@@ -21,6 +21,96 @@ concurrency:
   cancel-in-progress: true
 
 jobs:
+  sync-public-source:
+    if: github.event_name == 'push' && github.ref == 'refs/heads/migration/current-public-20260821' && github.actor != 'github-actions[bot]'
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+      - name: Checkout migration branch
+        uses: actions/checkout@v4
+        with:
+          ref: migration/current-public-20260821
+
+      - name: Capture exact current public source
+        shell: bash
+        run: |
+          rm -rf site site.raw
+          mkdir -p site.raw/assets site/assets site/musica site/tienda site/proyectos
+          curl --fail --location --silent --show-error https://allenks.com.ar/ -o site.raw/index.html
+          curl --fail --location --silent --show-error https://allenks.com.ar/musica -o site.raw/musica.html
+          curl --fail --location --silent --show-error https://allenks.com.ar/tienda -o site.raw/tienda.html
+          curl --fail --location --silent --show-error https://allenks.com.ar/proyectos -o site.raw/proyectos.html
+          curl --fail --location --silent --show-error https://allenks.com.ar/assets/index-vnRxlWgz.css -o site/assets/index-vnRxlWgz.css
+          curl --fail --location --silent --show-error https://www.allenks.com.ar/assets/allen-ks-favicon-512-square.png -o site/assets/allen-ks-favicon-512-square.png
+          if ! curl --fail --location --silent --show-error https://www.allenks.com.ar/assets/allen-ks-favicon-180-square.png -o site/assets/allen-ks-favicon-180-square.png; then
+            cp site/assets/allen-ks-favicon-512-square.png site/assets/allen-ks-favicon-180-square.png
+          fi
+
+          cat > site/assets/migration-fixes.css <<'CSS'
+          /* Migration-only technical fixes: preserve the public design while preventing mobile overflow. */
+          html,body{overflow-x:clip}
+          @media (max-width:700px){
+            .projects-hero h1{font-size:clamp(48px,13vw,72px);letter-spacing:-.065em;max-width:100%;white-space:nowrap}
+            .store-hero h1{font-size:clamp(60px,18vw,88px);letter-spacing:-.075em;max-width:100%}
+            .music-page-featured-heading h2,.music-page-remixes-heading h2{font-size:clamp(44px,13.5vw,64px);letter-spacing:-.055em;max-width:100%}
+            .project-detail-heading h2{font-size:clamp(52px,15.5vw,82px);max-width:100%}
+          }
+          CSS
+
+          cat > site/assets/site-runtime.js <<'JS'
+          (()=>{const frames=[...document.querySelectorAll("iframe[data-src]")];if("IntersectionObserver"in window){const io=new IntersectionObserver(entries=>{for(const e of entries){if(e.isIntersecting){const f=e.target;f.src=f.dataset.src;f.removeAttribute("data-src");io.unobserve(f)}}},{rootMargin:"500px 0px"});frames.forEach(f=>io.observe(f))}else{frames.forEach(f=>{f.src=f.dataset.src;f.removeAttribute("data-src")})}const c=document.querySelector(".ak-countdown");if(c){const target=new Date("2026-08-22T00:00:00-03:00").getTime();const tick=()=>{const d=target-Date.now();if(d<=0){c.textContent="YA DISPONIBLE";return}const days=Math.floor(d/86400000),h=Math.floor(d%86400000/3600000),m=Math.floor(d%3600000/60000),s=Math.floor(d%60000/1000);c.textContent=`${days}D ${String(h).padStart(2,"0")}:${String(m).padStart(2,"0")}:${String(s).padStart(2,"0")}`};tick();setInterval(tick,1000)}})();
+          JS
+
+          python - <<'PY'
+          from pathlib import Path
+          import re
+
+          targets = {
+              "index": Path("site/index.html"),
+              "musica": Path("site/musica/index.html"),
+              "tienda": Path("site/tienda/index.html"),
+              "proyectos": Path("site/proyectos/index.html"),
+          }
+
+          def clean_iframe(match):
+              tag = match.group(0)
+              tag = re.sub(r'\sloading="[^"]*"', '', tag, flags=re.I)
+              src = re.search(r'\ssrc="([^"]+)"', tag, flags=re.I)
+              if src:
+                  url = src.group(1)
+                  tag = tag.replace(f' src="{url}"', f' data-src="{url}"', 1)
+              return tag[:-1] + ' loading="lazy">'
+
+          for name, destination in targets.items():
+              html = Path(f"site.raw/{name}.html").read_text(encoding="utf-8")
+              html = re.sub(r'<script\b[^>]*>.*?</script>', '', html, flags=re.I | re.S)
+              html = re.sub(r'<link\b(?=[^>]*rel="modulepreload")[^>]*>', '', html, flags=re.I)
+              html = re.sub(r'<meta\b[^>]*name="codex-preview"[^>]*>', '', html, flags=re.I)
+              html = html.replace('https://www.allenks.com.ar/assets/allen-ks-favicon-512-square.png', '/assets/allen-ks-favicon-512-square.png')
+              html = html.replace('https://www.allenks.com.ar/assets/allen-ks-favicon-180-square.png', '/assets/allen-ks-favicon-180-square.png')
+              html = html.replace('loading="eager"', 'loading="lazy"')
+              html = re.sub(r'<iframe\b[^>]*>', clean_iframe, html, flags=re.I)
+              html = html.replace('</head>', '<link rel="stylesheet" href="/assets/migration-fixes.css"></head>', 1)
+              html = html.replace('</body>', '<script src="/assets/site-runtime.js" defer></script></body>', 1)
+              destination.write_text(html, encoding="utf-8")
+          PY
+
+          rm -rf site.raw
+
+      - name: Commit exact public source
+        shell: bash
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add -A site
+          if git diff --cached --quiet; then
+            echo "Public source is already synchronized."
+          else
+            git commit -m "chore: sync exact public migration source [skip ci]"
+            git push origin HEAD:migration/current-public-20260821
+          fi
+
   audit-public:
     if: github.event_name == 'pull_request'
     runs-on: ubuntu-latest
@@ -43,10 +133,14 @@ jobs:
           path: public-snapshot
 
   build:
+    needs: sync-public-source
+    if: always() && (needs.sync-public-source.result == 'success' || needs.sync-public-source.result == 'skipped')
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
         uses: actions/checkout@v4
+        with:
+          ref: ${{ github.ref == 'refs/heads/migration/current-public-20260821' && 'migration/current-public-20260821' || github.sha }}
 
       - name: Setup Node
         uses: actions/setup-node@v4
@@ -61,19 +155,6 @@ jobs:
         env:
           MIGRATION_PREVIEW: ${{ (github.ref == 'refs/heads/migration/current-public-20260821' || github.head_ref == 'migration/current-public-20260821') && '1' || '0' }}
         run: npm run build
-
-      - name: Normalize preview public asset URLs
-        if: github.ref == 'refs/heads/migration/current-public-20260821' || github.head_ref == 'migration/current-public-20260821'
-        shell: bash
-        run: |
-          PREVIEW_ROOT="https://raw.githack.com/alandiaz145/allenks-web-v2/migration/current-public-20260821/preview-build"
-          while IFS= read -r -d '' file; do
-            sed -i \
-              -e "s|\"/assets/|\"${PREVIEW_ROOT}/assets/|g" \
-              -e "s|'\/assets/|'${PREVIEW_ROOT}/assets/|g" \
-              -e "s|\"/favicon|\"${PREVIEW_ROOT}/favicon|g" \
-              "$file"
-          done < <(find out -type f -name '*.html' -print0)
 
       - name: Upload migration build
         if: github.ref == 'refs/heads/migration/current-public-20260821' || github.head_ref == 'migration/current-public-20260821'
@@ -145,8 +226,8 @@ jobs:
           mkdir -p preview-checks
           BROWSER=$(command -v google-chrome || command -v chromium || true)
           if [ -n "$BROWSER" ]; then
-            "$BROWSER" --headless=new --no-sandbox --disable-gpu --hide-scrollbars --window-size=1440,1200 --screenshot=preview-checks/desktop.png "$URL"
-            "$BROWSER" --headless=new --no-sandbox --disable-gpu --hide-scrollbars --window-size=390,844 --screenshot=preview-checks/mobile.png "$URL"
+            timeout 30s "$BROWSER" --headless=new --no-sandbox --disable-gpu --hide-scrollbars --window-size=1440,1200 --screenshot=preview-checks/desktop.png "$URL" || true
+            timeout 30s "$BROWSER" --headless=new --no-sandbox --disable-gpu --hide-scrollbars --window-size=390,844 --screenshot=preview-checks/mobile.png "$URL" || true
           fi
           cp preview-url.txt preview-checks/preview-url.txt
 
