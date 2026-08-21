@@ -21,21 +21,39 @@ if (existsSync(publicAssets)) {
 
 writeFileSync(join(out, ".nojekyll"), "");
 
-if (process.env.MIGRATION_PREVIEW === "1") {
-  const previewRoot = "https://raw.githack.com/alandiaz145/allenks-web-v2/migration/current-public-20260821/preview-build";
-  const htmlFiles = [
-    join(out, "index.html"),
-    join(out, "musica", "index.html"),
-    join(out, "tienda", "index.html"),
-    join(out, "proyectos", "index.html"),
-  ];
+// Keep the artifact portable: relative internal URLs work both at the
+// temporary GitHub Pages project path (/allenks-web-v2/) and later at the
+// custom-domain root (allenks.com.ar) without another code change.
+const htmlFiles = [
+  { file: join(out, "index.html"), prefix: "./" },
+  { file: join(out, "musica", "index.html"), prefix: "../" },
+  { file: join(out, "tienda", "index.html"), prefix: "../" },
+  { file: join(out, "proyectos", "index.html"), prefix: "../" },
+];
 
-  for (const file of htmlFiles) {
-    if (!existsSync(file)) continue;
-    let html = readFileSync(file, "utf8");
-    html = html.replace(/\b(href|src)="\/(?!\/)([^"]*)"/g, (_match, attr, path) => `${attr}="${previewRoot}/${path}"`);
-    writeFileSync(file, html);
-  }
+function portableUrl(path, prefix) {
+  if (path === "/") return prefix;
+
+  const match = path.match(/^\/([^?#]*)([?#].*)?$/);
+  if (!match) return path;
+
+  let pathname = match[1];
+  const suffix = match[2] ?? "";
+
+  if (!pathname) return `${prefix}${suffix}`;
+  if (!pathname.includes(".") && !pathname.endsWith("/")) pathname += "/";
+
+  return `${prefix}${pathname}${suffix}`;
+}
+
+for (const { file, prefix } of htmlFiles) {
+  if (!existsSync(file)) continue;
+
+  let html = readFileSync(file, "utf8");
+  html = html.replace(/\b(href|src)="\/(?!\/)([^"]*)"/g, (_match, attr, path) => {
+    return `${attr}="${portableUrl(`/${path}`, prefix)}"`;
+  });
+  writeFileSync(file, html);
 }
 
 console.log(`Static site built at ${out}`);
