@@ -1,4 +1,0 @@
-:HL["https://raw.githack.com/alandiaz145/allenks-web-v2/migration/current-public-20260821/preview-build/_next/static/chunks/0marx0~6w4oav.css","style"]
-:HL["/assets/allen-ks-logo.png","image"]
-:HL["/assets/allen-ks-portada.jpg","image"]
-0:{"tree":{"name":"","param":null,"prefetchHints":16,"slots":{"children":{"name":"__PAGE__","param":null,"prefetchHints":0,"slots":null}}},"staleTime":300,"buildId":"bilWdpTRB0Xb3EW3OPvqV"}
