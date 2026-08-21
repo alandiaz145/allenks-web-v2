@@ -5,6 +5,7 @@ on:
     branches:
       - main
       - chore/decouple-chatgpt-sites
+      - migration/current-public-20260821
   pull_request:
     branches:
       - main
@@ -20,6 +21,25 @@ concurrency:
   cancel-in-progress: true
 
 jobs:
+  audit-public:
+    if: github.event_name == 'pull_request'
+    runs-on: ubuntu-latest
+    steps:
+      - name: Capture current public site
+        shell: bash
+        run: |
+          mkdir -p public-snapshot
+          curl --fail --location --silent --show-error https://allenks.com.ar/ -o public-snapshot/index.html
+          for route in musica tienda proyectos descargas; do
+            code=$(curl --location --silent --show-error --output "public-snapshot/${route}.html" --write-out "%{http_code}" "https://allenks.com.ar/${route}" || true)
+            printf '%s %s\n' "$route" "$code" >> public-snapshot/status.txt
+          done
+      - name: Upload public snapshot
+        uses: actions/upload-artifact@v4
+        with:
+          name: allenks-public-snapshot
+          path: public-snapshot
+
   build:
     runs-on: ubuntu-latest
     steps:
