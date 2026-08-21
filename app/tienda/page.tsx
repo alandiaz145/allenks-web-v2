@@ -1,19 +1,3 @@
 import SiteHeader from "../components/SiteHeader";
 
-export default function TiendaPage() {
-  return (
-    <main id="top" className="section-dark">
-      <SiteHeader active="tienda" />
-      <section className="store-page">
-        <div className="store-copy">
-          <div className="section-index"><span>TIENDA</span></div>
-          <h1 className="page-title light">TIENDA</h1>
-          <p className="page-lead light">Espacio preparado para merch, material digital, entradas, packs y productos de Allen KS.</p>
-          <div className="store-note"><span>TIENDA OFICIAL</span><h2>PRÓXIMAMENTE</h2><p>Base lista para activar cuando definamos productos.</p></div>
-          <a className="button button-red" href="mailto:contacto@allenks.com.ar?subject=Tienda%20Allen%20KS">CONSULTAR ↗</a>
-        </div>
-        <div className="store-visual" aria-hidden="true"><span>ALLEN KS</span><strong>SOON</strong><b>MERCH · DIGITAL · ENTRADAS</b></div>
-      </section>
-    </main>
-  );
-}
+export default function TiendaPage(){return <main id="top"><SiteHeader active="tienda" /><section className="store-public section-paper"><div className="section-index"><span>01</span><span>RECURSOS OFICIALES</span></div><h1>TIENDA</h1><p className="store-public-lead">Productos y descargas reunidos en un solo lugar. La estructura ya está preparada para sumar el contenido.</p><div className="store-public-grid"><article><span>01</span><small>ALLEN KS</small><h2>PRODUCTOS</h2><p>Merch, ediciones especiales y recursos del proyecto.</p><b>PRÓXIMAMENTE</b></article><article><span>02</span><small>ZONA DIGITAL</small><h2>DESCARGAS</h2><p>Música, archivos y recursos descargables integrados dentro de la Tienda.</p><b>CONTENIDO EN PREPARACIÓN</b></article></div><div className="simple-footer"><span>ALLEN KS · BUENOS AIRES, ARGENTINA</span><a href="/">VOLVER AL INICIO →</a></div></section></main>}

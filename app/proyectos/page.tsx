@@ -1,26 +1,6 @@
-import Footer from "../components/Footer";
+import LazyEmbed from "../components/LazyEmbed";
 import SiteHeader from "../components/SiteHeader";
 
-export default function ProyectosPage() {
-  return (
-    <main id="top">
-      <SiteHeader active="proyectos" />
-      <section className="page-hero section-paper">
-        <div className="section-index"><span>UNIVERSO ALLEN KS</span></div>
-        <h1 className="page-title">PROYECTOS</h1>
-        <p className="page-lead">No es sólo música. Es la escena que construyo alrededor: un sello independiente y una plataforma de fiestas/comunidad.</p>
-      </section>
-      <section id="spartans" className="project-detail section-dark">
-        <div className="project-number">01</div>
-        <div className="project-detail-copy"><span>SELLO INDEPENDIENTE</span><h2>SPARTANS<br />LABEL</h2><p>Dubstep y Bass Music latinoamericano: artistas, lanzamientos y demos.</p><p>Un proyecto editorial y de sello enfocado en darle marco, identidad y salida a música de productores de la escena.</p><a className="button button-red" href="https://spartanslabel.com.ar" target="_blank" rel="noreferrer">CONOCER SPARTANS ↗</a></div>
-        <div className="project-poster poster-spartans"><span>SPARTANS</span><strong>LABEL</strong><small>DUBSTEP · BASS MUSIC · LATINOAMÉRICA</small></div>
-      </section>
-      <section id="otra-noche" className="project-detail project-detail-paper section-paper">
-        <div className="project-number">02</div>
-        <div className="project-detail-copy"><span>FIESTAS & COMUNIDAD</span><h2>OTRA<br />NOCHE</h2><p>Fiestas, DJs, sets y cruces alrededor de la cultura bass.</p><p>Un espacio para llevar la música a la pista y conectar artistas, público y comunidad en encuentros presenciales.</p></div>
-        <div className="project-poster poster-otra"><span>OTRA</span><strong>NOCHE</strong><small>FIESTAS · DJS · COMUNIDAD</small></div>
-      </section>
-      <Footer />
-    </main>
-  );
-}
+const outswag="https://w.soundcloud.com/player/?url=https%3A%2F%2Fsoundcloud.com%2Fspartanslabel%2Foutswag&color=%23ff5500&auto_play=false&hide_related=true&show_comments=false&show_user=true&show_reposts=false&show_teaser=false&visual=true&show_artwork=true";
+const otra="https://www.youtube.com/embed/gj2hWnohCco?start=3522&rel=0&modestbranding=1";
+export default function ProyectosPage(){return <main id="top"><SiteHeader active="proyectos" /><section className="projects-public-intro section-paper"><div className="section-index"><span>01</span><span>UNIVERSO ALLEN KS</span></div><h1>PROYECTOS</h1><p>Dos espacios conectados por la misma idea: impulsar música, artistas y encuentros alrededor de la cultura bass.</p></section><section id="spartans" className="project-public section-dark"><div className="project-public-head"><span>01</span><small>SELLO INDEPENDIENTE</small><h2>SPARTANS<br/>LABEL</h2><p>Un sello enfocado en Dubstep, Bass Music y el crecimiento de artistas latinoamericanos. Argentina · México.</p></div><div className="project-public-media"><div><span>ÚLTIMO RELEASE</span><h3>OUTSWAG</h3><p>EL HEREJE · SPARTANS LABEL · 2026</p></div><LazyEmbed className="square-embed" src={outswag} title="OUTSWAG — último lanzamiento de Spartans Label" /></div><div className="manifesto"><span>MANIFIESTO</span><p>Conectar artistas, impulsar colaboraciones y construir una escena con identidad propia.</p></div><div className="project-public-features"><article><b>01</b><strong>RELEASES</strong><p>Catálogo y lanzamientos del sello.</p></article><article><b>02</b><strong>ARTISTS</strong><p>Productores que forman parte del proyecto.</p></article><a href="mailto:spartanslabel@gmail.com?subject=Demo%20para%20Spartans%20Label"><b>03</b><strong>DEMOS</strong><p>Presentá tu música a Spartans Label. ↗</p></a></div></section><section id="otra-noche" className="project-public project-public-otra section-paper"><div className="project-public-head"><span>02</span><small>FIESTAS & COMUNIDAD</small><h2>OTRA NOCHE</h2><p>Una plataforma para crear fechas, cruces entre artistas y experiencias en vivo alrededor del Drum & Bass y la Bass Music.</p></div><div className="project-public-media"><div><span>ENCUENTRO</span><p>Sets intensos, identidad independiente y una comunidad que vive la música desde cerca.</p></div><LazyEmbed className="video-embed" src={otra} title="IKI B2B ALLEN KS — Otra Noche" /></div><div className="project-public-features"><article><b>01</b><strong>FIESTAS</strong><p>Fechas y experiencias presenciales.</p></article><article><b>02</b><strong>SETS</strong><p>Presentaciones completas y B2B.</p></article><article><b>03</b><strong>COMUNIDAD</strong><p>Artistas y público conectados por la Bass Music.</p></article></div></section><div className="simple-footer section-paper"><span>ALLEN KS · BUENOS AIRES, ARGENTINA</span><a href="/">VOLVER AL INICIO →</a></div></main>}

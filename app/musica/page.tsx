@@ -1,53 +1,11 @@
-import Footer from "../components/Footer";
 import LazyEmbed from "../components/LazyEmbed";
+import SimpleFooter from "../components/SimpleFooter";
 import SiteHeader from "../components/SiteHeader";
-import { collaborations, remixes, site, topTracks } from "../site-data";
 
-export default function MusicaPage() {
-  return (
-    <main id="top">
-      <SiteHeader active="musica" />
-      <section className="page-hero section-dark">
-        <div className="section-index"><span>01 CATÁLOGO ALLEN KS</span></div>
-        <h1 className="page-title light">MÚSICA</h1>
-        <p className="page-lead light">Lanzamientos, originales, remixes, colaboraciones y selecciones de ALLEN KS.</p>
-      </section>
-      <section className="music-feature section-dark">
-        <div className="section-head section-head-light">
-          <div><div className="section-index"><span>02 ACTUALIDAD</span></div><h2>AHORA</h2></div>
-        </div>
-        <div className="release-grid">
-          <article className="release-card release-card-on-dark">
-            <div className="release-card-head"><span>ÚLTIMO LANZAMIENTO</span><b>174 BPM</b></div>
-            <h3>GETTING STARTED</h3>
-            <LazyEmbed className="square-embed" src={site.latestSoundCloudEmbed} title="GETTING STARTED de ALLEN KS" />
-          </article>
-          <article className="release-card release-card-red">
-            <div className="release-card-head"><span>PRÓXIMO LANZAMIENTO</span><b>22 AGO 2026</b></div>
-            <h3>BASS SO HEAVY</h3>
-            <LazyEmbed className="square-embed" src={site.upcomingSoundCloudEmbed} title="BASS SO HEAVY de ALLEN KS" />
-          </article>
-        </div>
-      </section>
-      <section className="catalog-section section-paper">
-        <div className="section-head"><div><div className="section-index"><span>03 TOP 10</span></div><h2>ORIGINALES</h2></div></div>
-        <div className="track-grid">
-          {topTracks.map((track, index) => <article className="track-card" key={track}><span>{String(index + 1).padStart(2, "0")}</span><strong>{track}</strong><small>ALLEN KS</small></article>)}
-        </div>
-      </section>
-      <section className="split-catalog section-dark">
-        <div className="catalog-column"><div className="section-index"><span>04</span></div><h2>REMIXES</h2>{remixes.map((track, index) => <article key={track}><b>{String(index + 1).padStart(2, "0")}</b><span>{track}</span></article>)}</div>
-        <div className="catalog-column"><div className="section-index"><span>05</span></div><h2>COLABORACIONES</h2>{collaborations.map((track, index) => <article key={track}><b>{String(index + 1).padStart(2, "0")}</b><span>{track}</span></article>)}</div>
-      </section>
-      <section className="platform-section section-paper">
-        <div className="section-head"><div><div className="section-index"><span>06 ESCUCHÁ MÁS</span></div><h2>PLATAFORMAS</h2></div></div>
-        <div className="platform-grid">
-          <a href={site.soundcloud} target="_blank" rel="noreferrer"><span>SOUNDCLOUD</span><strong>ALLENKSMUSIC</strong><b>ABRIR ↗</b></a>
-          <a href={site.spotify} target="_blank" rel="noreferrer"><span>SPOTIFY</span><strong>ALLEN KS</strong><b>ABRIR ↗</b></a>
-          <a href={site.youtube} target="_blank" rel="noreferrer"><span>YOUTUBE</span><strong>@ALLENKSMUSIC</strong><b>ABRIR ↗</b></a>
-        </div>
-      </section>
-      <Footer />
-    </main>
-  );
-}
+const top = [
+  { n:"01", title:"BUST IT", plays:"4.159", platform:"YouTube", embed:"https://www.youtube.com/embed/ki1cUmKv_5Y?rel=0&modestbranding=1" },
+  { n:"02", title:"RIDDIM RIOT", plays:"3.893", platform:"SoundCloud", embed:"https://w.soundcloud.com/player/?url=https%3A%2F%2Fsoundcloud.com%2Fallenksmusic%2Friddim-riot&color=%23ff5500&auto_play=false&hide_related=true&show_comments=false&show_user=true&show_reposts=false&show_teaser=false&visual=true&show_artwork=true" },
+  { n:"03", title:"DAMAGE REMIX", plays:"3.522", platform:"SoundCloud", embed:"https://w.soundcloud.com/player/?url=https%3A%2F%2Fsoundcloud.com%2Fallenksmusic%2Fvirtual-riot-diesel-damage-allen-ks-remix-feat-shaquille-oneal&color=%23ff5500&auto_play=false&hide_related=true&show_comments=false&show_user=true&show_reposts=false&show_teaser=false&visual=true&show_artwork=true" },
+];
+
+export default function MusicaPage(){return <main id="top"><SiteHeader active="musica" /><section className="music-current section-dark"><div className="section-index"><span>01</span><span>CATÁLOGO · ALLEN KS</span></div><h1 className="music-current-title">MÁS ESCUCHADOS</h1><div className="music-topbar"><strong>TOP 10 · ALLEN KS</strong><span>01 / 04</span><div><button aria-label="Anterior">←</button><button aria-label="Siguiente">→</button></div></div><div className="music-public-grid">{top.map(item=><article className="music-public-card" key={item.n}><div className="release-card-head"><span>{item.n}</span><b>{item.title}</b></div><div className="music-play-meta"><strong>{item.plays}</strong><span>reproducciones ·<br />{item.platform}</span></div><LazyEmbed className="square-embed" src={item.embed} title={`${item.title} — ALLEN KS en ${item.platform}`} /></article>)}</div></section><section className="soundcloud-selection section-paper"><div className="selection-copy"><div className="section-index"><span>02</span><span>SELECCIÓN DE SOUNDCLOUD</span></div><h2>REMIXES</h2><p>Versiones y relecturas de otros artistas llevadas al sonido de ALLEN KS.</p></div><div className="selection-box"><span>SOUNDCLOUD</span><strong>REMIXES de ALLEN KS en SoundCloud</strong></div></section><section className="soundcloud-selection section-dark"><div className="selection-copy"><div className="section-index"><span>03</span><span>SELECCIÓN DE SOUNDCLOUD</span></div><h2>COLABORACIONES</h2><p>Producciones compartidas con artistas, crews y sellos de la escena bass.</p></div><div className="selection-box selection-box-dark"><span>SOUNDCLOUD</span><strong>COLABORACIONES de ALLEN KS en SoundCloud</strong></div></section><SimpleFooter /></main>}
