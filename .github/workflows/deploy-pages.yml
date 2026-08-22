@@ -77,3 +77,22 @@ jobs:
           grep -q "GETTING STARTED" live.html
           curl --fail --location --silent --show-error https://alandiaz145.github.io/allenks-web-v2/pages-verification.txt -o pages-verification.txt
           grep -q "main deployment pipeline active" pages-verification.txt
+
+  dns-inspect:
+    if: github.event_name == 'pull_request'
+    runs-on: ubuntu-latest
+    steps:
+      - name: Inspect current public DNS
+        run: |
+          echo '=== NS ==='
+          dig +short NS allenks.com.ar
+          echo '=== A ==='
+          dig +short A allenks.com.ar
+          echo '=== AAAA ==='
+          dig +short AAAA allenks.com.ar
+          echo '=== CNAME apex ==='
+          dig +short CNAME allenks.com.ar
+          echo '=== WWW CNAME ==='
+          dig +short CNAME www.allenks.com.ar
+          echo '=== WWW A ==='
+          dig +short A www.allenks.com.ar
