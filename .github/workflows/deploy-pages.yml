@@ -75,3 +75,5 @@ jobs:
           curl --fail --location --silent --show-error https://alandiaz145.github.io/allenks-web-v2/ -o live.html
           grep -q "ALLEN KS" live.html
           grep -q "GETTING STARTED" live.html
+          curl --fail --location --silent --show-error https://alandiaz145.github.io/allenks-web-v2/pages-verification.txt -o pages-verification.txt
+          grep -q "main deployment pipeline active" pages-verification.txt
