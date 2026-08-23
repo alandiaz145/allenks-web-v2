@@ -1,11 +1,34 @@
+import Footer from "../components/Footer";
 import LazyEmbed from "../components/LazyEmbed";
-import SimpleFooter from "../components/SimpleFooter";
+import ReleaseArtwork from "../components/ReleaseArtwork";
 import SiteHeader from "../components/SiteHeader";
+import { collaborations, remixes, site, topTracks } from "../site-data";
 
-const top = [
-  { n:"01", title:"BUST IT", plays:"4.159", platform:"YouTube", embed:"https://www.youtube.com/embed/ki1cUmKv_5Y?rel=0&modestbranding=1" },
-  { n:"02", title:"RIDDIM RIOT", plays:"3.893", platform:"SoundCloud", embed:"https://w.soundcloud.com/player/?url=https%3A%2F%2Fsoundcloud.com%2Fallenksmusic%2Friddim-riot&color=%23ff5500&auto_play=false&hide_related=true&show_comments=false&show_user=true&show_reposts=false&show_teaser=false&visual=true&show_artwork=true" },
-  { n:"03", title:"DAMAGE REMIX", plays:"3.522", platform:"SoundCloud", embed:"https://w.soundcloud.com/player/?url=https%3A%2F%2Fsoundcloud.com%2Fallenksmusic%2Fvirtual-riot-diesel-damage-allen-ks-remix-feat-shaquille-oneal&color=%23ff5500&auto_play=false&hide_related=true&show_comments=false&show_user=true&show_reposts=false&show_teaser=false&visual=true&show_artwork=true" },
-];
+export default function MusicPage() {
+  return (
+    <main id="top">
+      <SiteHeader active="musica" />
+      <section className="inner-hero">
+        <img src="/assets/allen-ks-portada.jpg" alt="ALLEN KS en vivo" />
+        <div className="inner-hero-copy"><span>ALLEN KS / CATALOG</span><h1>MUSIC</h1><p>Originals, remixes, collaborations y el archivo del proyecto.</p></div>
+      </section>
 
-export default function MusicaPage(){return <main id="top"><SiteHeader active="musica" /><section className="music-current section-dark"><div className="section-index"><span>01</span><span>CATÁLOGO · ALLEN KS</span></div><h1 className="music-current-title">MÁS ESCUCHADOS</h1><div className="music-topbar"><strong>TOP 10 · ALLEN KS</strong><span>01 / 04</span><div><button aria-label="Anterior">←</button><button aria-label="Siguiente">→</button></div></div><div className="music-public-grid">{top.map(item=><article className="music-public-card" key={item.n}><div className="release-card-head"><span>{item.n}</span><b>{item.title}</b></div><div className="music-play-meta"><strong>{item.plays}</strong><span>reproducciones ·<br />{item.platform}</span></div><LazyEmbed className="square-embed" src={item.embed} title={`${item.title} — ALLEN KS en ${item.platform}`} /></article>)}</div></section><section className="soundcloud-selection section-paper"><div className="selection-copy"><div className="section-index"><span>02</span><span>SELECCIÓN DE SOUNDCLOUD</span></div><h2>REMIXES</h2><p>Versiones y relecturas de otros artistas llevadas al sonido de ALLEN KS.</p></div><div className="selection-box"><span>SOUNDCLOUD</span><strong>REMIXES de ALLEN KS en SoundCloud</strong></div></section><section className="soundcloud-selection section-dark"><div className="selection-copy"><div className="section-index"><span>03</span><span>SELECCIÓN DE SOUNDCLOUD</span></div><h2>COLABORACIONES</h2><p>Producciones compartidas con artistas, crews y sellos de la escena bass.</p></div><div className="selection-box selection-box-dark"><span>SOUNDCLOUD</span><strong>COLABORACIONES de ALLEN KS en SoundCloud</strong></div></section><SimpleFooter /></main>}
+      <section className="music-page-feature">
+        <div className="feature-copy"><span>OUT NOW</span><h2>BASS SO<br />HEAVY</h2><p>El release actual abre el catálogo. Escuchalo acá o entrá a SoundCloud para el resto del material.</p><a href={site.soundcloud} target="_blank" rel="noreferrer">OPEN SOUNDCLOUD →</a></div>
+        <div><ReleaseArtwork compact /><div style={{ marginTop: 22 }}><LazyEmbed className="square-embed" src={site.bassSoHeavyEmbed} title="BASS SO HEAVY — ALLEN KS" /></div></div>
+      </section>
+
+      <section className="catalog-section">
+        <h2>CATALOG</h2>
+        <div className="catalog-list">{topTracks.map((track, i) => <div key={track}><span>{String(i + 1).padStart(2, "0")}</span><strong>{track}</strong><b>ALLEN KS</b></div>)}</div>
+      </section>
+
+      <section className="remix-grid">
+        <div className="remix-panel"><h2>REMIXES</h2>{remixes.map((track, i) => <article key={track}><span>R{String(i + 1).padStart(2, "0")}</span><strong>{track}</strong></article>)}</div>
+        <div className="remix-panel"><h2>COLLABS</h2>{collaborations.map((track, i) => <article key={track}><span>C{String(i + 1).padStart(2, "0")}</span><strong>{track}</strong></article>)}</div>
+      </section>
+
+      <Footer />
+    </main>
+  );
+}

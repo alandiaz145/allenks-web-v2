@@ -1,6 +1,29 @@
+import Footer from "../components/Footer";
 import LazyEmbed from "../components/LazyEmbed";
 import SiteHeader from "../components/SiteHeader";
 
-const outswag="https://w.soundcloud.com/player/?url=https%3A%2F%2Fsoundcloud.com%2Fspartanslabel%2Foutswag&color=%23ff5500&auto_play=false&hide_related=true&show_comments=false&show_user=true&show_reposts=false&show_teaser=false&visual=true&show_artwork=true";
-const otra="https://www.youtube.com/embed/gj2hWnohCco?start=3522&rel=0&modestbranding=1";
-export default function ProyectosPage(){return <main id="top"><SiteHeader active="proyectos" /><section className="projects-public-intro section-paper"><div className="section-index"><span>01</span><span>UNIVERSO ALLEN KS</span></div><h1>PROYECTOS</h1><p>Dos espacios conectados por la misma idea: impulsar música, artistas y encuentros alrededor de la cultura bass.</p></section><section id="spartans" className="project-public section-dark"><div className="project-public-head"><span>01</span><small>SELLO INDEPENDIENTE</small><h2>SPARTANS<br/>LABEL</h2><p>Un sello enfocado en Dubstep, Bass Music y el crecimiento de artistas latinoamericanos. Argentina · México.</p></div><div className="project-public-media"><div><span>ÚLTIMO RELEASE</span><h3>OUTSWAG</h3><p>EL HEREJE · SPARTANS LABEL · 2026</p></div><LazyEmbed className="square-embed" src={outswag} title="OUTSWAG — último lanzamiento de Spartans Label" /></div><div className="manifesto"><span>MANIFIESTO</span><p>Conectar artistas, impulsar colaboraciones y construir una escena con identidad propia.</p></div><div className="project-public-features"><article><b>01</b><strong>RELEASES</strong><p>Catálogo y lanzamientos del sello.</p></article><article><b>02</b><strong>ARTISTS</strong><p>Productores que forman parte del proyecto.</p></article><a href="mailto:spartanslabel@gmail.com?subject=Demo%20para%20Spartans%20Label"><b>03</b><strong>DEMOS</strong><p>Presentá tu música a Spartans Label. ↗</p></a></div></section><section id="otra-noche" className="project-public project-public-otra section-paper"><div className="project-public-head"><span>02</span><small>FIESTAS & COMUNIDAD</small><h2>OTRA NOCHE</h2><p>Una plataforma para crear fechas, cruces entre artistas y experiencias en vivo alrededor del Drum & Bass y la Bass Music.</p></div><div className="project-public-media"><div><span>ENCUENTRO</span><p>Sets intensos, identidad independiente y una comunidad que vive la música desde cerca.</p></div><LazyEmbed className="video-embed" src={otra} title="IKI B2B ALLEN KS — Otra Noche" /></div><div className="project-public-features"><article><b>01</b><strong>FIESTAS</strong><p>Fechas y experiencias presenciales.</p></article><article><b>02</b><strong>SETS</strong><p>Presentaciones completas y B2B.</p></article><article><b>03</b><strong>COMUNIDAD</strong><p>Artistas y público conectados por la Bass Music.</p></article></div></section><div className="simple-footer section-paper"><span>ALLEN KS · BUENOS AIRES, ARGENTINA</span><a href="/">VOLVER AL INICIO →</a></div></main>}
+const outswag = "https://w.soundcloud.com/player/?url=https%3A%2F%2Fsoundcloud.com%2Fspartanslabel%2Foutswag&color=%23e61927&auto_play=false&hide_related=true&show_comments=false&show_user=true&show_reposts=false&show_teaser=false&visual=true&show_artwork=true";
+const otra = "https://www.youtube.com/embed/gj2hWnohCco?start=3522&rel=0&modestbranding=1";
+
+export default function ProjectsPage() {
+  return (
+    <main id="top">
+      <SiteHeader active="proyectos" />
+      <section className="project-page-intro"><span>ALLEN KS / PROJECTS</span><h1>TWO WORLDS.<br />ONE CORE.</h1><p>Spartans Label lleva la música hacia afuera. Otra Noche la convierte en encuentro, fechas y comunidad.</p></section>
+
+      <section id="spartans" className="project-page-band project-page-spartans">
+        <div className="copy"><span>INDEPENDENT LABEL / ARGENTINA + MÉXICO</span><h2>SPARTANS<br />LABEL</h2><p>Dubstep, Bass Music, artistas y releases con identidad propia.</p><a href="mailto:spartanslabel@gmail.com?subject=Demo%20para%20Spartans%20Label">SEND DEMO →</a></div>
+        <div className="media"><LazyEmbed className="square-embed" src={outswag} title="OUTSWAG — Spartans Label" /></div>
+      </section>
+
+      <section id="otra-noche" className="project-page-band project-page-otra">
+        <img src="/assets/allen-ks-portada.jpg" alt="Otra Noche" />
+        <div className="copy"><span>EVENTS / COMMUNITY / BASS CULTURE</span><h2>OTRA<br />NOCHE</h2><p>Fiestas, B2B y encuentros alrededor del Drum & Bass y la Bass Music.</p><a href="/#live">VIEW NEXT SHOW →</a></div>
+        <div className="media"><LazyEmbed className="video-embed" src={otra} title="IKI B2B ALLEN KS — Otra Noche" /></div>
+      </section>
+
+      <section className="projects-outro"><h2>MUSIC AT THE CENTER.<br />EVERYTHING ELSE EXPANDS FROM IT.</h2></section>
+      <Footer />
+    </main>
+  );
+}
