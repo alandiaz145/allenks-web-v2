@@ -1,70 +1,41 @@
 import Link from "next/link";
-import { tickerItems } from "../site-data";
+import { site } from "../site-data";
 
-type NavItem = {
-  label: string;
-  key: string;
-  href?: string;
-  disabled?: boolean;
-};
+const nav = [
+  { label: "Music", href: "/musica", key: "musica" },
+  { label: "Live", href: "/#live", key: "live" },
+  { label: "Store", href: "/tienda", key: "tienda" },
+  { label: "Projects", href: "/proyectos", key: "proyectos" },
+] as const;
 
-const nav: NavItem[] = [
-  { label: "Inicio", href: "/", key: "inicio" },
-  { label: "Música", href: "/musica", key: "musica" },
-  { label: "Tienda", href: "/tienda", key: "tienda" },
-  { label: "Sorteos", key: "sorteos", disabled: true },
-  { label: "Proyectos", href: "/proyectos", key: "proyectos" },
-  { label: "Asesoramiento", key: "asesoramiento", disabled: true },
-];
-
-const musicTicker = [
-  "ALLEN KS · ARTISTA INDEPENDIENTE",
-  "NUEVO RELEASE · 22.08.2026",
-  "BUENOS AIRES · ARGENTINA",
-  "DUBSTEP · DRUM & BASS · RIDDIM",
-  "SETS · REMIXES · PRODUCCIÓN",
-  "AKA DUBSTEP WACHO",
-];
+const socials = [
+  ["IG", site.instagram],
+  ["SC", site.soundcloud],
+  ["YT", site.youtube],
+  ["SP", site.spotify],
+] as const;
 
 export default function SiteHeader({ active }: { active: string }) {
-  const showTicker = active === "inicio" || active === "musica";
-  const ticker = active === "musica" ? musicTicker : tickerItems;
   return (
-    <>
-      {showTicker && (
-        <div className="ticker" aria-label="Novedades de ALLEN KS">
-          <div className="ticker-track">
-            {[0, 1].map((copy) => (
-              <div className="ticker-group" aria-hidden={copy === 1} key={copy}>
-                {ticker.map((item) => <span key={`${copy}-${item}`}>{item}</span>)}
-              </div>
-            ))}
-          </div>
-        </div>
-      )}
-      <header className={`site-header${showTicker ? "" : " site-header--top"}`}>
-        <Link className="brand" href="/" aria-label="ALLEN KS — Inicio">
-          <img src="/assets/allen-ks-logo.png" alt="" width="926" height="609" />
-          <strong>ALLEN KS</strong>
-        </Link>
-        <nav className="desktop-nav" aria-label="Navegación principal">
-          {nav.map((item) => item.disabled ? (
-            <span className="nav-disabled" key={item.key} aria-disabled="true">{item.label}</span>
-          ) : (
-            <Link className={active === item.key ? "active" : ""} href={item.href!} key={item.key}>{item.label}</Link>
-          ))}
+    <header className="v3-header">
+      <nav className="v3-nav v3-nav-left" aria-label="Navegación principal">
+        {nav.map(item => <Link key={item.key} href={item.href} className={active === item.key ? "active" : ""}>{item.label}</Link>)}
+      </nav>
+      <Link href="/" className="v3-logo" aria-label="ALLEN KS — Inicio">
+        <img src="/assets/allen-ks-logo.png" alt="" />
+        <strong>ALLEN KS</strong>
+      </Link>
+      <nav className="v3-nav v3-nav-right" aria-label="Redes sociales">
+        {socials.map(([label, href]) => <a key={label} href={href} target="_blank" rel="noreferrer">{label}</a>)}
+        <a className="v3-booking" href={site.bookingWhatsapp} target="_blank" rel="noreferrer">Booking</a>
+      </nav>
+      <details className="v3-mobile-nav">
+        <summary aria-label="Abrir menú"><i /><i /></summary>
+        <nav>
+          {nav.map(item => <Link key={item.key} href={item.href}>{item.label}</Link>)}
+          <a href={site.bookingWhatsapp} target="_blank" rel="noreferrer">Booking ↗</a>
         </nav>
-        <details className="mobile-nav">
-          <summary aria-label="Abrir menú"><span /><span /></summary>
-          <nav aria-label="Navegación móvil">
-            {nav.map((item) => item.disabled ? (
-              <span className="mobile-disabled" key={item.key}>{item.label}</span>
-            ) : (
-              <Link className={active === item.key ? "active" : ""} href={item.href!} key={item.key}>{item.label}</Link>
-            ))}
-          </nav>
-        </details>
-      </header>
-    </>
+      </details>
+    </header>
   );
 }
