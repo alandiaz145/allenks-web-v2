@@ -2,8 +2,9 @@
 .v10-static-releases,.v10-static-live,.v10-static-projects{position:relative;overflow:hidden;padding:46px clamp(18px,5vw,72px)}
 .v10-static-heading{width:min(1040px,100%);margin:0 auto 24px;text-align:center}
 .v10-static-heading h2{margin:0!important;font-family:"Arial Black",Impact,Haettenschweiler,sans-serif;font-size:clamp(44px,5vw,68px)!important;font-weight:900!important;line-height:.9!important;letter-spacing:-.045em!important;text-transform:uppercase}
-.v10-static-releases,.v10-static-projects{background:#f2eee8;color:#090606}
-.v10-static-releases .v10-static-heading h2,.v10-static-projects .v10-static-heading h2{color:#090606!important}
+.v10-static-releases{background:#f2eee8;color:#090606}
+.v10-static-releases .v10-static-heading h2{color:#090606!important}
+.v10-static-projects .v10-static-heading h2{color:#fff!important;text-shadow:0 2px 18px rgba(0,0,0,.6)}
 .v10-static-live{min-height:calc(100svh - 72px);display:flex;flex-direction:column;justify-content:center;background:radial-gradient(circle at 50% 0%,rgba(229,9,20,.1),transparent 28%),#090606;color:#fff;padding-top:28px;padding-bottom:28px}
 .v10-static-live .v10-static-heading{margin-bottom:18px}
 .v10-static-live .v10-static-heading h2{font-size:clamp(40px,4.2vw,58px)!important;color:#fff!important}
@@ -24,9 +25,9 @@
 .v10-static-next div{display:grid;justify-items:end}
 .v10-static-next strong{font-family:"Arial Black",Impact,Haettenschweiler,sans-serif;font-size:clamp(22px,2.6vw,34px);line-height:.9;letter-spacing:-.03em;color:#fff}
 .v10-static-next small{margin-top:5px;color:rgba(255,255,255,.68);font-size:10px;font-weight:900;letter-spacing:.1em}
-.v10-static-projects{min-height:calc(100svh - 72px);display:flex;flex-direction:column;justify-content:center;padding-top:28px;padding-bottom:28px;background-image:linear-gradient(rgba(9,6,6,.035) 1px,transparent 1px),linear-gradient(90deg,rgba(9,6,6,.03) 1px,transparent 1px);background-size:54px 54px}
+.v10-static-projects{min-height:calc(100svh - 72px);display:flex;flex-direction:column;justify-content:center;padding-top:28px;padding-bottom:28px;background:#000 url("projects-bg.webp") center center/cover no-repeat;color:#fff}
 .v10-static-projects .v10-static-heading{margin-bottom:18px}
-.v10-static-project-video-only{width:min(980px,100%);margin:0 auto;border-color:rgba(9,6,6,.18)}
+.v10-static-project-video-only{width:min(980px,100%);margin:0 auto;border:1px solid rgba(255,255,255,.22);box-shadow:0 22px 60px rgba(0,0,0,.48)}
 .v10-static-footer{background:#090606;color:#fff;border-top:1px solid rgba(255,255,255,.16)}
 .v10-static-footer-main{min-height:220px;padding:clamp(30px,4vw,48px) clamp(20px,6vw,86px);display:grid;grid-template-columns:minmax(0,.8fr) minmax(360px,1.2fr);gap:clamp(34px,6vw,90px);align-items:center}
 .v10-static-footer-brand{display:flex;align-items:center;gap:18px}.v10-static-footer-brand img{width:86px;height:66px;object-fit:contain}.v10-static-footer-brand div{display:grid;gap:6px}.v10-static-footer-brand strong{font-family:"Arial Black",Impact,Haettenschweiler,sans-serif;font-size:clamp(30px,3.3vw,48px);line-height:.88;color:#fff}.v10-static-footer-brand span{color:rgba(255,255,255,.52);font-size:9px;font-weight:900;letter-spacing:.11em}
