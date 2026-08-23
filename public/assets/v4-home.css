@@ -1,4 +1,4 @@
-/* Unified desktop section scale: one viewport per primary home section. */
+/* Compact releases + normalized lower home sections. */
 .v4-releases{position:relative;padding:48px 24px 64px;background:#f0f0ed;color:#0a0a0a;overflow:hidden}
 .v4-releases:before{content:"";position:absolute;inset:0;pointer-events:none;opacity:.42;background:radial-gradient(circle at 8% 16%,rgba(229,9,20,.06),transparent 22%),linear-gradient(rgba(0,0,0,.022) 1px,transparent 1px),linear-gradient(90deg,rgba(0,0,0,.016) 1px,transparent 1px);background-size:auto,46px 46px,46px 46px;mask-image:linear-gradient(to bottom,#000,transparent 88%)}
 .v4-releases-shell{position:relative;z-index:1;width:min(1040px,100%);margin-inline:auto}
@@ -10,9 +10,7 @@
 .v4-catalog-link{width:max-content;display:flex;align-items:center;gap:9px;margin:18px auto 0;padding-bottom:6px;border-bottom:2px solid var(--v3-red);font:900 10px/1 var(--v3-nav);letter-spacing:.09em;color:#0a0a0a!important}
 
 @media(min-width:761px){
-  .v4-releases,.ak-live,.ak-projects{min-height:100svh}
-  .v4-releases{display:flex;align-items:center;padding-top:calc(var(--v3-header) + 24px);padding-bottom:40px}
-  .ak-live,.ak-projects{display:flex;flex-direction:column;justify-content:center;padding:calc(var(--v3-header) + 22px) 24px 40px}
+  .ak-live,.ak-projects{min-height:100svh;display:flex;flex-direction:column;justify-content:center;padding:calc(var(--v3-header) + 22px) 24px 40px}
   .ak-live .ak-section-heading,.ak-live-grid,.ak-projects .ak-section-heading,.ak-project-pitch,.ak-project-grid{width:min(1040px,100%);margin-left:auto;margin-right:auto}
   .ak-live .ak-section-heading>div,.ak-projects .ak-section-heading>div{margin-top:14px;padding-bottom:16px}
   .ak-live .ak-section-heading h2,.ak-projects .ak-section-heading h2{font-family:var(--v3-display);font-size:clamp(46px,4.5vw,72px);line-height:.82;letter-spacing:-.045em}
