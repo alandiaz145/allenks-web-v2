@@ -1,25 +1,27 @@
 import { site } from "../site-data";
 
+const links = [
+  ["Instagram", "@DUBSTEPWACHO", site.instagram],
+  ["SoundCloud", "ALLENKSMUSIC", site.soundcloud],
+  ["YouTube", "@ALLENKSMUSIC", site.youtube],
+  ["Spotify", "ALLEN KS", site.spotify],
+] as const;
+
 export default function Footer() {
-  const links = [
-    ["Instagram", "@DUBSTEPWACHO", site.instagram],
-    ["SoundCloud", "ALLENKSMUSIC", site.soundcloud],
-    ["YouTube", "@ALLENKSMUSIC", site.youtube],
-    ["Spotify", "ALLEN KS", site.spotify],
-  ];
   return (
-    <footer className="footer">
-      <div className="footer-socials">
+    <footer className="v3-footer">
+      <div className="v3-footer-mark">
+        <img src="/assets/allen-ks-logo.png" alt="ALLEN KS" />
+        <p>DJ / PRODUCER<br />BUENOS AIRES</p>
+      </div>
+      <div className="v3-footer-links">
         {links.map(([name, handle, href]) => (
           <a href={href} target="_blank" rel="noreferrer" key={name}>
-            <span>{name}</span><strong>{handle}</strong><b>↗</b>
+            <small>{name}</small><strong>{handle}</strong><span>↗</span>
           </a>
         ))}
       </div>
-      <div className="footer-bottom">
-        <span>© 2026 ALLEN KS · BUENOS AIRES, ARGENTINA</span>
-        <a href="#top">VOLVER ARRIBA ↑</a>
-      </div>
+      <div className="v3-footer-bottom"><span>© 2026 ALLEN KS</span><span>ARGENTINA</span><a href="#top">BACK TO TOP ↑</a></div>
     </footer>
   );
 }
