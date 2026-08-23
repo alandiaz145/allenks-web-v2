@@ -1,11 +1,17 @@
 import Footer from "../components/Footer";
+import ProductVisual from "../components/ProductVisual";
 import SiteHeader from "../components/SiteHeader";
 
-const products=[
- {n:"01",cat:"PHYSICAL",name:"ALLEN KS TEE",meta:"TEE // BLACK",tone:"red"},
- {n:"02",cat:"PHYSICAL",name:"ALLEN KS HOODIE",meta:"HOODIE // BLACK",tone:"cyan"},
- {n:"03",cat:"PRODUCER TOOLS",name:"SAMPLE PACK 001",meta:"DIGITAL // WAV",tone:"violet"},
- {n:"04",cat:"PRODUCER TOOLS",name:"SAMPLE PACK 002",meta:"DIGITAL // WAV",tone:"cream"},
+const products = [
+  { name: "ALLEN KS TEE", kicker: "PHYSICAL / DROP 01", type: "tee" as const, label: "TEE" },
+  { name: "ALLEN KS HOODIE", kicker: "PHYSICAL / DROP 01", type: "hoodie" as const, label: "HOODIE" },
+  { name: "SAMPLE PACK 001", kicker: "PRODUCER TOOLS / WAV", type: "pack" as const, label: "PACK 001" },
+  { name: "SAMPLE PACK 002", kicker: "PRODUCER TOOLS / WAV", type: "pack" as const, label: "PACK 002" },
 ];
 
-export default function StorePage(){return <main id="top"><SiteHeader active="tienda"/><section className="sub-hero store-hero"><div><span className="eyebrow">OBJECTS // PRODUCER TOOLS</span><h1>STORE</h1><p>Merch físico y herramientas digitales del universo ALLEN KS.</p></div><div className="store-hero-code"><span>AKS.STORE</span><b>04 OBJECTS<br/>IN QUEUE</b></div></section><section className="signal-section store-main"><div className="section-heading compact"><div><span className="eyebrow">01 // FIRST DROP</span><h2>OBJECTS</h2></div><p className="heading-note">La V1 muestra únicamente los cuatro productos reales previstos. Sin placeholders infinitos ni catálogo inventado.</p></div><div className="store-full-grid">{products.map(p=><article className={`product-card product-${p.tone}`} key={p.n}><div className="product-art"><span>AKS-{p.n}</span><div className="product-orbit"><i/><i/><i/><b>{p.n}</b></div><small>OBJECT // {p.n}</small></div><div className="product-copy"><span>{p.cat}</span><h2>{p.name}</h2><p>{p.meta}</p><b>COMING SOON</b></div></article>)}</div></section><section className="store-manifest"><span>STORE PROTOCOL</span><h2>PHYSICAL<br/>+ DIGITAL.</h2><p>La tienda queda lista para sumar fotos, precios y checkout cuando estén definidos, manteniendo la misma dirección visual.</p></section><Footer/></main>}
+export default function StorePage(){return <main id="top"><SiteHeader active="tienda"/>
+  <section className="store-page-hero"><span>ALLEN KS / FIRST DROP</span><h1>STORE</h1><p>MERCH + PRODUCER TOOLS</p></section>
+  <section className="store-gallery">{products.map((product,index)=><article key={product.name} className={`store-product product-${index+1}`}><div className="store-product-art"><ProductVisual type={product.type} label={product.label}/></div><div className="store-product-copy"><small>{product.kicker}</small><h2>{product.name}</h2><p>COMING SOON</p></div></article>)}</section>
+  <section className="store-endnote"><span>NO FILLER.</span><h2>FOUR PRODUCTS.<br/>DONE RIGHT.</h2><p>Las fotos, precios y checkout entran cuando el drop esté listo. Hasta entonces la tienda muestra únicamente lo que realmente existe.</p></section>
+  <Footer/>
+</main>}
