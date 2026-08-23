@@ -1,70 +1,21 @@
 import Link from "next/link";
-import { tickerItems } from "../site-data";
+import { signalTicker } from "../site-data";
 
-type NavItem = {
-  label: string;
-  key: string;
-  href?: string;
-  disabled?: boolean;
-};
-
-const nav: NavItem[] = [
+const nav = [
   { label: "Inicio", href: "/", key: "inicio" },
   { label: "Música", href: "/musica", key: "musica" },
-  { label: "Tienda", href: "/tienda", key: "tienda" },
-  { label: "Sorteos", key: "sorteos", disabled: true },
+  { label: "Live", href: "/#live", key: "live" },
+  { label: "Store", href: "/tienda", key: "tienda" },
   { label: "Proyectos", href: "/proyectos", key: "proyectos" },
-  { label: "Asesoramiento", key: "asesoramiento", disabled: true },
-];
-
-const musicTicker = [
-  "ALLEN KS · ARTISTA INDEPENDIENTE",
-  "NUEVO RELEASE · 22.08.2026",
-  "BUENOS AIRES · ARGENTINA",
-  "DUBSTEP · DRUM & BASS · RIDDIM",
-  "SETS · REMIXES · PRODUCCIÓN",
-  "AKA DUBSTEP WACHO",
-];
+] as const;
 
 export default function SiteHeader({ active }: { active: string }) {
-  const showTicker = active === "inicio" || active === "musica";
-  const ticker = active === "musica" ? musicTicker : tickerItems;
-  return (
-    <>
-      {showTicker && (
-        <div className="ticker" aria-label="Novedades de ALLEN KS">
-          <div className="ticker-track">
-            {[0, 1].map((copy) => (
-              <div className="ticker-group" aria-hidden={copy === 1} key={copy}>
-                {ticker.map((item) => <span key={`${copy}-${item}`}>{item}</span>)}
-              </div>
-            ))}
-          </div>
-        </div>
-      )}
-      <header className={`site-header${showTicker ? "" : " site-header--top"}`}>
-        <Link className="brand" href="/" aria-label="ALLEN KS — Inicio">
-          <img src="/assets/allen-ks-logo.png" alt="" width="926" height="609" />
-          <strong>ALLEN KS</strong>
-        </Link>
-        <nav className="desktop-nav" aria-label="Navegación principal">
-          {nav.map((item) => item.disabled ? (
-            <span className="nav-disabled" key={item.key} aria-disabled="true">{item.label}</span>
-          ) : (
-            <Link className={active === item.key ? "active" : ""} href={item.href!} key={item.key}>{item.label}</Link>
-          ))}
-        </nav>
-        <details className="mobile-nav">
-          <summary aria-label="Abrir menú"><span /><span /></summary>
-          <nav aria-label="Navegación móvil">
-            {nav.map((item) => item.disabled ? (
-              <span className="mobile-disabled" key={item.key}>{item.label}</span>
-            ) : (
-              <Link className={active === item.key ? "active" : ""} href={item.href!} key={item.key}>{item.label}</Link>
-            ))}
-          </nav>
-        </details>
-      </header>
-    </>
-  );
+  return <>
+    <div className="signal-ticker"><div className="signal-ticker-track">{[0,1].map(copy => <div className="signal-ticker-group" aria-hidden={copy === 1} key={copy}>{signalTicker.map(item => <span key={`${copy}-${item}`}>{item}</span>)}</div>)}</div></div>
+    <header className="signal-header">
+      <Link href="/" className="signal-brand" aria-label="ALLEN KS — Inicio"><img src="/assets/allen-ks-logo.png" alt=""/><span><strong>ALLEN KS</strong><small>AKS // 2026</small></span></Link>
+      <nav className="signal-nav">{nav.map(item => <Link key={item.key} href={item.href} className={active === item.key ? "active" : ""}>{item.label}</Link>)}<a href="https://wa.me/5491136133976?text=Hola+Allen+KS%2C+quiero+consultar+por+una+contrataci%C3%B3n." target="_blank" rel="noreferrer" className="nav-booking">Booking ↗</a></nav>
+      <details className="signal-mobile"><summary aria-label="Abrir menú"><i/><i/></summary><nav>{nav.map(item => <Link key={item.key} href={item.href} className={active === item.key ? "active" : ""}>{item.label}</Link>)}<a href="https://wa.me/5491136133976?text=Hola+Allen+KS%2C+quiero+consultar+por+una+contrataci%C3%B3n." target="_blank" rel="noreferrer">Booking ↗</a></nav></details>
+    </header>
+  </>;
 }

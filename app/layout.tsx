@@ -1,22 +1,20 @@
 import type { Metadata } from "next";
-import "./migration-base.css";
-import "./migration-sections.css";
-import "./migration-responsive.css";
+import "./signal.css";
 
 export const metadata: Metadata = {
   metadataBase: new URL("https://www.allenks.com.ar"),
-  title: "ALLEN KS | Dubstep Wacho",
-  description: "Artista argentino, creador de Otra Noche y fundador de Spartans Label. Descubrí su música, próximas fechas y proyectos.",
+  title: "ALLEN KS — Signal Universe",
+  description: "ALLEN KS — DJ y productor argentino. Música, fechas, merch, Spartans Label y Otra Noche.",
   robots: { index: true, follow: true },
   openGraph: {
     locale: "es_AR",
     type: "website",
     siteName: "ALLEN KS",
-    title: "ALLEN KS | Dubstep Wacho",
-    description: "Artista argentino, creador de Otra Noche y fundador de Spartans Label.",
+    title: "ALLEN KS — Signal Universe",
+    description: "Música, fechas, merch y proyectos de ALLEN KS.",
     url: "https://www.allenks.com.ar/",
   },
-  other: { "theme-color": "#f2eee8" },
+  other: { "theme-color": "#08080a" },
   icons: { icon: "/favicon.svg", shortcut: "/favicon.svg" },
 };
 
