@@ -65,31 +65,13 @@ function renderHero() {
   return `<section class="v3-hero" aria-labelledby="v3-hero-title"><div class="v3-hero-copy"><h1 id="v3-hero-title">ALLEN KS</h1><p class="v3-hero-aka">AKA DUBSTEP WACHO</p><p class="v3-hero-lead">Productor Argentino, Dj, creador de Otra Noche y fundador de Spartans Label. Descubrí su música, próximas fechas y proyectos.</p><div class="v3-hero-actions"><a href="#lanzamientos">ESCUCHAR AHORA ↘</a><a href="#en-vivo">VER EN VIVO ↘</a></div></div></section>`;
 }
 
-const releasePages = [
-  [
-    ["01", "NUEVO · 22 AGO 2026", "BASS SO HEAVY", "ÚLTIMO LANZAMIENTO", "is-featured"],
-    ["02", "RECIENTE · 174 BPM", "GETTING STARTED", "ORIGINAL", ""],
-    ["03", "YOUTUBE · 4.159 REPRODUCCIONES", "BUST IT", "CATÁLOGO", ""],
-    ["04", "SOUNDCLOUD · 3.893 REPRODUCCIONES", "RIDDIM RIOT", "CATÁLOGO", ""],
-  ],
-  [
-    ["05", "SOUNDCLOUD · 3.522 REPRODUCCIONES", "DAMAGE REMIX", "REMIX", ""],
-    ["06", "CATÁLOGO · ALLEN KS", "CORRUPTION", "ORIGINAL", ""],
-    ["07", "CATÁLOGO · ALLEN KS", "CONQUEROR", "ORIGINAL", ""],
-    ["08", "CATÁLOGO · ALLEN KS", "DAMNATION", "ORIGINAL", ""],
-  ],
-];
-
-function renderReleaseCard([number, meta, title, tag, extraClass]) {
-  return `<a class="v4-release-card ${extraClass}" href="/musica/"><div class="v4-release-card-top"><span>${number}</span><b>${tag}</b></div><div class="v4-release-card-body"><p>${meta}</p><h3>${title}</h3></div><div class="v4-release-card-foot"><span>ESCUCHAR / VER</span><b aria-hidden="true">↗</b></div></a>`;
+function renderMarquee() {
+  const item = '<span>NUEVA MÚSICA</span><i>✦</i><span>SETS</span><i>✦</i><span>REMIXES</span><i>✦</i><span>COLABORACIONES</span><i>✦</i>';
+  return `<div class="ak-marquee" aria-hidden="true"><div>${item.repeat(6)}</div></div>`;
 }
 
 function renderReleases() {
-  const pages = releasePages
-    .map((cards, index) => `<div class="v4-release-page" data-release-page="${index}"${index === 0 ? "" : " hidden"}>${cards.map(renderReleaseCard).join("")}</div>`)
-    .join("");
-
-  return `<section class="v4-releases" id="lanzamientos" aria-labelledby="v4-releases-title"><div class="v4-releases-shell"><div class="v4-releases-head"><div><p class="v4-kicker"><span>02</span> LANZAMIENTOS</p><h2 id="v4-releases-title">LANZAMIENTOS</h2><p class="v4-releases-copy">Últimos lanzamientos, originales y tracks destacados del catálogo.</p></div><div class="v4-release-controls"><span data-release-status>01 / 02</span><button type="button" data-release-prev aria-label="Ver lanzamientos anteriores" disabled>←</button><button type="button" data-release-next aria-label="Ver más lanzamientos">→</button></div></div><div class="v4-release-pages">${pages}</div><a class="v4-catalog-link" href="/musica/">VER TODO EL CATÁLOGO <span aria-hidden="true">→</span></a></div></section>`;
+  return `<section class="v4-releases" id="lanzamientos" aria-labelledby="v4-releases-title"><div class="v4-releases-shell"><div class="v4-releases-head"><p class="v4-kicker"><span>02</span> MÚSICA</p><h2 id="v4-releases-title">LANZAMIENTOS</h2><p class="v4-releases-copy">Últimos lanzamientos y videos destacados de ALLEN KS.</p></div><div class="v4-video-block"><div class="v4-video-frame"><iframe title="BUST IT — ALLEN KS" data-src="https://www.youtube.com/embed/ki1cUmKv_5Y?rel=0&modestbranding=1" width="100%" height="100%" frameBorder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerPolicy="strict-origin-when-cross-origin" allowFullScreen="" loading="lazy"></iframe></div><div class="v4-video-meta"><span>VIDEO DESTACADO</span><strong>BUST IT · ALLEN KS</strong></div></div><a class="v4-catalog-link" href="/musica/">VER TODO EL CATÁLOGO <span aria-hidden="true">→</span></a></div></section>`;
 }
 
 function renderFooterSocials() {
@@ -115,6 +97,7 @@ for (const { route, file } of htmlTargets) {
 
   if (route === "inicio") {
     html = html.replace(/<section class="ak-hero"[^>]*>.*?<\/section>/s, renderHero());
+    html = html.replace(/<div class="ak-marquee"[^>]*>.*?<\/div><\/div>/s, renderMarquee());
     html = html.replace(/<section class="ak-releases"[^>]*>.*?<\/section>/s, renderReleases());
     html = html.replace(/<div class="ak-footer-brand">.*?<\/div>/s, '<div class="ak-footer-brand"><strong class="v3-footer-wordmark">ALLEN KS</strong></div>');
     html = html.replace(/<nav class="ak-socials"[^>]*>.*?<\/nav>/s, renderFooterSocials());
