@@ -21,7 +21,8 @@ export default function Footer() {
 
         <div className="v10-footer-cta">
           <small>BOOKINGS · COLABS · PRODUCCIÓN</small>
-          <h2>¿HACEMOS<br />ALGO RUIDOSO?</h2>
+          <h2>¿TENÉS UNA IDEA?</h2>
+          <p>Fechas, colaboraciones, producción y propuestas.</p>
           <a className="button button-red" href={site.whatsapp} target="_blank" rel="noreferrer">
             HABLEMOS →
           </a>
