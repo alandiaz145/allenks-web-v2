@@ -1,24 +1,63 @@
 import Footer from "./components/Footer";
 import LazyEmbed from "./components/LazyEmbed";
+import ProductVisual from "./components/ProductVisual";
 import SiteHeader from "./components/SiteHeader";
 import { site } from "./site-data";
 
-const store = [
-  ["01","PHYSICAL","ALLEN KS TEE","TEE // BLACK"],
-  ["02","PHYSICAL","ALLEN KS HOODIE","HOODIE // BLACK"],
-  ["03","PRODUCER TOOLS","SAMPLE PACK 001","DIGITAL // WAV"],
-  ["04","PRODUCER TOOLS","SAMPLE PACK 002","DIGITAL // WAV"],
+const products = [
+  { name: "ALLEN KS TEE", meta: "PHYSICAL / DROP 01", type: "tee" as const, label: "TEE" },
+  { name: "ALLEN KS HOODIE", meta: "PHYSICAL / DROP 01", type: "hoodie" as const, label: "HOODIE" },
+  { name: "SAMPLE PACK 001", meta: "PRODUCER TOOLS / WAV", type: "pack" as const, label: "PACK 001" },
+  { name: "SAMPLE PACK 002", meta: "PRODUCER TOOLS / WAV", type: "pack" as const, label: "PACK 002" },
 ];
 
 export default function HomePage(){return <main id="top"><SiteHeader active="inicio"/>
-  <section className="signal-hero">
-    <div className="hero-grid-bg"/><div className="hero-copy"><div className="signal-code"><span>AKS.001</span><b>DJ // PRODUCER // PROMOTER</b></div><h1>ALLEN<br/><em>KS</em></h1><p className="hero-alias">AKA DUBSTEP WACHO</p><p className="hero-text">Bass music desde Buenos Aires. Música, fechas, proyectos y objetos del universo ALLEN KS.</p><div className="hero-actions"><a href="#current" className="signal-btn red">ENTER SIGNAL ↘</a><a href="#live" className="signal-btn ghost">LIVE DATES ↘</a></div><div className="hero-coords"><span>34.6037° S</span><span>58.3816° W</span><span>SIGNAL // ONLINE</span></div></div>
-    <div className="hero-visual"><div className="rift rift-a"/><div className="rift rift-b"/><div className="rift-core">KS</div><figure><img src="/assets/allen-ks-portada.jpg" alt="ALLEN KS en vivo"/><figcaption><span>LIVE CAPTURE // 2026</span><b>OTRA NOCHE FT. DANCING BUDHAS</b></figcaption></figure><div className="visual-chip cyan">CURRENT<br/>FREQUENCY</div><div className="visual-chip violet">SIGNAL<br/>UNIVERSE</div></div>
+  <section className="campaign-hero">
+    <img className="campaign-bg" src="/assets/allen-ks-portada.jpg" alt="ALLEN KS en vivo"/>
+    <div className="campaign-shade"/>
+    <div className="release-object" aria-hidden="true"><small>ALLEN KS / 2026</small><strong>BASS<br/>SO<br/>HEAVY</strong><span>OUT NOW</span></div>
+    <div className="campaign-copy"><span>NEW RELEASE</span><h1>BASS SO<br/>HEAVY</h1><p>OUT NOW</p><a href={site.soundcloud} target="_blank" rel="noreferrer">LISTEN NOW <b>→</b></a></div>
+    <div className="campaign-caption">DJ SET EN VIVO / OTRA NOCHE FT. DANCING BUDHAS / 2026</div>
   </section>
-  <div className="frequency-strip"><div><span>NEW MUSIC</span><b>✦</b><span>LIVE SIGNALS</span><b>✦</b><span>MERCH</span><b>✦</b><span>SPARTANS</span><b>✦</b><span>OTRA NOCHE</span><b>✦</b><span>NEW MUSIC</span></div></div>
-  <section id="current" className="signal-section current-signal"><div className="section-heading"><div><span className="eyebrow">02 // CURRENT SIGNAL</span><h2>BASS SO<br/>HEAVY</h2></div><div className="signal-meta"><p><span>TYPE</span><b>ORIGINAL</b></p><p><span>STATUS</span><b className="live-dot">OUT NOW</b></p><p><span>DATE</span><b>22.08.26</b></p></div></div><div className="current-grid"><article className="embed-frame red-frame"><LazyEmbed className="square-embed" src={site.bassSoHeavyEmbed} title="BASS SO HEAVY — ALLEN KS"/></article><div className="current-copy"><span className="eyebrow cyan-text">TRANSMISSION // 2368394750</span><h3>THE NEW SIGNAL<br/>IS ACTIVE.</h3><p>El lanzamiento más reciente de ALLEN KS abre esta nueva etapa visual. El reproductor se carga recién cuando entra en pantalla para mantener la navegación liviana.</p><a className="signal-btn red" href={site.soundcloud} target="_blank" rel="noreferrer">LISTEN ON SOUNDCLOUD ↗</a></div></div></section>
-  <section className="signal-section transmissions"><div className="section-heading compact"><div><span className="eyebrow">03 // RECENT TRANSMISSIONS</span><h2>MUSIC</h2></div><a href="/musica" className="signal-link">FULL CATALOG →</a></div><div className="transmission-grid"><article className="transmission feature"><span>001</span><h3>GETTING<br/>STARTED</h3><small>174 BPM // 2026</small><LazyEmbed className="square-embed" src={site.gettingStartedEmbed} title="GETTING STARTED — ALLEN KS"/></article>{[["002","BUST IT","TOP SIGNAL"],["003","RIDDIM RIOT","ARCHIVE"],["004","DAMAGE REMIX","REMIX"]].map(([n,title,type])=><article className="transmission text-card" key={n}><span>{n}</span><div className="mini-orbit"><i/><i/></div><h3>{title}</h3><small>{type} // ALLEN KS</small></article>)}</div></section>
-  <section id="live" className="signal-section live-zone"><div className="section-heading light"><div><span className="eyebrow">04 // LIVE TRANSMISSIONS</span><h2>LIVE</h2></div><a href={site.bookingWhatsapp} target="_blank" rel="noreferrer" className="signal-link light-link">BOOK ALLEN KS ↗</a></div><div className="live-layout"><div className="live-media"><LazyEmbed className="video-embed" src={site.liveYouTubeEmbed} title="ALLEN KS live set"/><div className="media-label"><span>ARCHIVE SIGNAL</span><b>IKI B2B ALLEN KS</b></div></div><div className="dates-panel"><div className="date-card next"><time><b>05</b><span>SEP</span></time><div><small>NEXT SIGNAL // CONFIRMED</small><h3>BUENOS AIRES</h3><p>OTRA NOCHE FT. DANCING BUDHAS</p></div><strong>→</strong></div><div className="date-card"><time><b>--</b><span>TBA</span></time><div><small>WAITING FOR SIGNAL</small><h3>NEXT DATE</h3><p>LOCATION // TO BE ANNOUNCED</p></div><strong>+</strong></div></div></div></section>
-  <section className="signal-section store-preview"><div className="section-heading compact"><div><span className="eyebrow">05 // OBJECTS & TOOLS</span><h2>STORE</h2></div><a href="/tienda" className="signal-link">ENTER STORE →</a></div><div className="store-grid">{store.map(([n,cat,name,meta],index)=><article className={`store-card tone-${index+1}`} key={n}><div className="store-art"><span className="object-code">AKS-{n}</span><div className="object-shape"><i/><i/><i/></div></div><div className="store-info"><small>{cat}</small><h3>{name}</h3><span>{meta}</span><b>COMING SOON</b></div></article>)}</div></section>
-  <section className="signal-section universe-zone"><div className="universe-head"><span className="eyebrow">06 // CONNECTED WORLDS</span><h2>ALLEN KS<br/><em>UNIVERSE</em></h2><p>La música es el centro. Spartans Label y Otra Noche expanden el mismo universo hacia releases, artistas, fechas y comunidad.</p></div><div className="world-grid"><a href="/proyectos#spartans" className="world-card spartans"><span>WORLD // 01</span><h3>SPARTANS<br/>LABEL</h3><p>RELEASES // ARTISTS // DEMOS</p><b>ENTER WORLD ↗</b></a><a href="/proyectos#otra-noche" className="world-card otra"><span>WORLD // 02</span><h3>OTRA<br/>NOCHE</h3><p>EVENTS // SETS // COMMUNITY</p><b>ENTER WORLD ↗</b></a></div></section>
-  <section className="contact-signal"><div><span>BOOKINGS // COLLABS // PRODUCTION</span><h2>START A<br/>NEW SIGNAL.</h2></div><a className="signal-btn cyan" href={site.whatsapp} target="_blank" rel="noreferrer">CONTACT ↗</a></section><Footer/></main>}
+
+  <section className="world-scene">
+    <div className="world-intro"><span>WELCOME TO</span><h2>THE ALLEN KS<br/>WORLD.</h2><p>Música, shows, proyectos y objetos reunidos en un mismo lugar. Menos interfaz; más identidad.</p></div>
+    <div className="world-board">
+      <div className="board-grid"/>
+      <div className="tape tape-a"/><div className="tape tape-b"/><div className="tape tape-c"/>
+      <figure className="board-photo"><img src="/assets/allen-ks-portada.jpg" alt="ALLEN KS en vivo"/><figcaption>LIVE / BUENOS AIRES</figcaption></figure>
+      <div className="board-laptop"><div className="laptop-screen"><LazyEmbed className="video-embed" src={site.liveYouTubeEmbed} title="ALLEN KS live set"/></div><div className="laptop-base"/></div>
+      <a href="/proyectos#spartans" className="board-note note-spartans"><small>LABEL</small><strong>SPARTANS</strong><span>RELEASES / ARTISTS / DEMOS</span></a>
+      <a href="/proyectos#otra-noche" className="board-note note-otra"><small>EVENTS</small><strong>OTRA NOCHE</strong><span>LIVE / COMMUNITY</span></a>
+      <a href="/tienda" className="board-sticker">MERCH<br/><b>+ TOOLS</b></a>
+      <div className="board-tag">AKA<br/><strong>DUBSTEP<br/>WACHO</strong></div>
+      <div className="board-scribble">BASS<br/>MUSIC</div>
+    </div>
+  </section>
+
+  <section className="music-splash" id="music">
+    <div className="music-word" aria-hidden="true">MUSIC</div>
+    <div className="music-player"><LazyEmbed className="square-embed" src={site.bassSoHeavyEmbed} title="BASS SO HEAVY — ALLEN KS"/></div>
+    <div className="music-copy"><span>NOW PLAYING</span><h2>BASS SO HEAVY</h2><p>El release más reciente de ALLEN KS.</p><ol><li><b>01</b><strong>GETTING STARTED</strong><span>2026</span></li><li><b>02</b><strong>BUST IT</strong><span>TOP TRACK</span></li><li><b>03</b><strong>RIDDIM RIOT</strong><span>ARCHIVE</span></li></ol><a href="/musica">EXPLORE MUSIC →</a></div>
+  </section>
+
+  <section className="live-campaign" id="live">
+    <img src="/assets/allen-ks-portada.jpg" alt="ALLEN KS live"/>
+    <div className="live-campaign-shade"/>
+    <div className="live-date"><strong>05</strong><span>SEP</span></div>
+    <div className="live-campaign-copy"><small>NEXT SHOW / CONFIRMED</small><h2>OTRA NOCHE</h2><h3>FT. DANCING BUDHAS</h3><p>BUENOS AIRES / ARGENTINA</p><a href={site.bookingWhatsapp} target="_blank" rel="noreferrer">BOOK ALLEN KS →</a></div>
+  </section>
+
+  <section className="store-shelf" id="store">
+    <div className="shelf-head"><div><span>FIRST DROP</span><h2>MERCH +<br/>PRODUCER TOOLS</h2></div><a href="/tienda">ENTER STORE →</a></div>
+    <div className="shelf-products">{products.map(product=><article key={product.name}><div className="product-stage"><ProductVisual type={product.type} label={product.label}/></div><small>{product.meta}</small><h3>{product.name}</h3><span>COMING SOON</span></article>)}</div>
+  </section>
+
+  <section className="project-portals">
+    <a href="/proyectos#spartans" className="project-portal portal-spartans"><small>INDEPENDENT LABEL</small><h2>SPARTANS<br/>LABEL</h2><p>DUBSTEP / BASS MUSIC / LATAM</p><span>ENTER →</span></a>
+    <a href="/proyectos#otra-noche" className="project-portal portal-otra"><small>EVENTS + COMMUNITY</small><h2>OTRA<br/>NOCHE</h2><p>SETS / B2B / BASS CULTURE</p><span>ENTER →</span></a>
+  </section>
+
+  <section className="contact-band"><div><small>BOOKINGS / COLLABS / PRODUCTION</small><h2>LET'S MAKE<br/>SOMETHING LOUD.</h2></div><a href={site.whatsapp} target="_blank" rel="noreferrer">CONTACT →</a></section>
+  <Footer/>
+</main>}
