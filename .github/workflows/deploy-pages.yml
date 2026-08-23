@@ -19,6 +19,31 @@ concurrency:
   cancel-in-progress: true
 
 jobs:
+  dns-diagnostic:
+    if: github.event_name == 'pull_request'
+    runs-on: ubuntu-latest
+    steps:
+      - name: Inspect authoritative and public DNS
+        run: |
+          echo '=== NS ==='
+          dig +short NS allenks.com.ar
+          echo '=== AUTHORITATIVE A (ns1) ==='
+          dig @ns1.wcaup.com allenks.com.ar A +noall +answer
+          echo '=== AUTHORITATIVE A (ns2) ==='
+          dig @ns2.wcaup.com allenks.com.ar A +noall +answer
+          echo '=== AUTHORITATIVE WWW CNAME (ns1) ==='
+          dig @ns1.wcaup.com www.allenks.com.ar CNAME +noall +answer
+          echo '=== GOOGLE A ==='
+          dig @8.8.8.8 allenks.com.ar A +noall +answer
+          echo '=== CLOUDFLARE A ==='
+          dig @1.1.1.1 allenks.com.ar A +noall +answer
+          echo '=== GOOGLE WWW ==='
+          dig @8.8.8.8 www.allenks.com.ar CNAME +noall +answer
+          echo '=== HTTP APEX ==='
+          curl -I -L --max-time 15 https://allenks.com.ar/ || true
+          echo '=== HTTP WWW ==='
+          curl -I -L --max-time 15 https://www.allenks.com.ar/ || true
+
   build:
     runs-on: ubuntu-latest
     steps:
