@@ -8,10 +8,10 @@ type NavItem = {
 };
 
 const nav: NavItem[] = [
-  { label: "MUSIC", href: "/musica", key: "musica" },
-  { label: "LIVE", href: "/#en-vivo", key: "live" },
-  { label: "STORE", href: "/tienda", key: "tienda" },
-  { label: "PROJECTS", href: "/proyectos", key: "proyectos" },
+  { label: "MÚSICA", href: "/musica", key: "musica" },
+  { label: "EN VIVO", href: "/#en-vivo", key: "live" },
+  { label: "TIENDA", href: "/tienda", key: "tienda" },
+  { label: "PROYECTOS", href: "/proyectos", key: "proyectos" },
 ];
 
 const socials = [
