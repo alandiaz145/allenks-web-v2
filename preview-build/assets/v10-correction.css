@@ -1,5 +1,9 @@
 .v10-static-releases{
-  background:#000 url("projects-bg.webp") center center/cover no-repeat!important;
+  background-color:#000!important;
+  background-image:url("https://i.imgur.com/5RFUeiu.png")!important;
+  background-position:center center!important;
+  background-size:100% auto!important;
+  background-repeat:no-repeat!important;
   color:#fff!important;
 }
 .v10-static-releases .v10-static-heading h2{
