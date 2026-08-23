@@ -75,3 +75,15 @@ jobs:
           curl --fail --location --silent --show-error https://alandiaz145.github.io/allenks-web-v2/ -o live.html
           grep -q "ALLEN KS" live.html
           grep -q "GETTING STARTED" live.html
+
+  verify-v3-preview:
+    if: github.event_name == 'pull_request' && github.head_ref == 'redesign/artist-campaign-v3'
+    runs-on: ubuntu-latest
+    steps:
+      - name: Verify public V3 branch preview
+        run: |
+          curl --fail --location --silent --show-error https://raw.githack.com/alandiaz145/allenks-web-v2/redesign/artist-campaign-v3/preview-v3/index.html -o preview.html
+          grep -q "Artist Campaign V3" preview.html
+          grep -q "ENTER THE" preview.html
+          grep -q "BASS SO" preview.html
+          grep -q "NEW OBJECTS" preview.html
