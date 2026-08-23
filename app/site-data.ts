@@ -10,7 +10,15 @@ export const site = {
   upcomingSoundCloudEmbed:
     "https://w.soundcloud.com/player/?auto_play=false&color=%23ff5500&hide_related=true&show_artwork=true&show_comments=false&show_reposts=false&show_teaser=false&show_user=true&url=https%3A%2F%2Fapi.soundcloud.com%2Ftracks%2Fsoundcloud%3Atracks%3A2368394750&visual=true",
   liveYouTubeEmbed:
-    "https://www.youtube.com/embed/gj2hWnohCco?autoplay=1&controls=1&modestbranding=1&mute=1&playsinline=1&rel=0&start=3522",
+    "https://www.youtube.com/embed/gj2hWnohCco?controls=1&modestbranding=1&playsinline=1&rel=0&start=3522",
+  liveYouTubeEmbeds: [
+    "https://www.youtube.com/embed/gj2hWnohCco?controls=1&modestbranding=1&playsinline=1&rel=0&start=3522",
+    "https://www.youtube.com/embed/fo5r5zwix6A?controls=1&modestbranding=1&playsinline=1&rel=0&start=913",
+    "https://www.youtube.com/embed/t1Ax3fmWiYE?controls=1&modestbranding=1&playsinline=1&rel=0&start=548",
+    "https://www.youtube.com/embed/kwbqAT45G00?controls=1&modestbranding=1&playsinline=1&rel=0&start=491",
+  ],
+  productionYouTubeEmbed:
+    "https://www.youtube.com/embed/3u6WUPHy0fI?controls=1&modestbranding=1&playsinline=1&rel=0&start=19",
   releaseDate: "2026-08-22T00:00:00-03:00",
 };
 
