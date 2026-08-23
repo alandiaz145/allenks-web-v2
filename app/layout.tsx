@@ -3,6 +3,7 @@ import "./migration-base.css";
 import "./migration-sections.css";
 import "./migration-responsive.css";
 import "./v3-clean.css";
+import "./v10.css";
 
 export const metadata: Metadata = {
   metadataBase: new URL("https://www.allenks.com.ar"),
