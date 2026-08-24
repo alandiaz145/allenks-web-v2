@@ -94,26 +94,54 @@ html body .v10-static-releases .v10-static-catalog{
   margin:14px auto 0!important;
 }
 
-/* DESKTOP ONLY — align heading + catalog link with the beige negative-space panel in the artwork. Mobile is intentionally untouched. */
+/* DESKTOP ONLY — remove the beige masking panel entirely. Mobile stays exactly as-is. */
 @media(min-width:801px){
+  html body .v10-static-releases::before,
+  html body .v10-static-releases::after,
+  html body .v10-static-releases .v10-static-heading::before,
+  html body .v10-static-releases .v10-static-heading::after,
+  html body .v10-static-releases .v10-static-carousel::before,
+  html body .v10-static-releases .v10-static-carousel::after,
+  html body .v10-static-releases .v10-static-stage::before,
+  html body .v10-static-releases .v10-static-stage::after,
+  html body .v10-static-releases .v10-static-slide::before,
+  html body .v10-static-releases .v10-static-slide::after,
+  html body .v10-static-releases .v10-static-release-slide::before,
+  html body .v10-static-releases .v10-static-release-slide::after{
+    content:none!important;
+    display:none!important;
+    background:transparent!important;
+  }
+
+  html body .v10-static-releases .v10-static-heading,
+  html body .v10-static-releases .v10-static-carousel,
+  html body .v10-static-releases .v10-static-stage,
+  html body .v10-static-releases .v10-static-slide,
+  html body .v10-static-releases .v10-static-release-slide{
+    background:transparent!important;
+    background-color:transparent!important;
+    box-shadow:none!important;
+    outline:0!important;
+  }
+
+  html body .v10-static-releases .v10-static-release-slide{
+    padding:0!important;
+    margin:0!important;
+  }
+
   html body .v10-static-releases{
-    padding-top:34px!important;
-    padding-bottom:42px!important;
+    padding-top:30px!important;
+    padding-bottom:34px!important;
   }
+
   html body .v10-static-releases .v10-static-heading{
-    transform:translateY(15px)!important;
-    margin-bottom:28px!important;
+    transform:none!important;
+    margin-bottom:18px!important;
   }
-  html body .v10-static-releases .v10-static-heading>span{
-    display:block!important;
-    margin-bottom:5px!important;
-  }
+
   html body .v10-static-releases .v10-static-catalog{
-    position:relative!important;
-    left:0!important;
-    transform:translateY(-5px)!important;
-    margin:22px auto 0!important;
-    padding:0 4px 7px!important;
+    transform:none!important;
+    margin:18px auto 0!important;
     text-align:center!important;
   }
 }
