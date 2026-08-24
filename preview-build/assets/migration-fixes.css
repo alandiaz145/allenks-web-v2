@@ -6,3 +6,11 @@ html,body{overflow-x:clip}
   .music-page-featured-heading h2,.music-page-remixes-heading h2{font-size:clamp(44px,13.5vw,64px);letter-spacing:-.055em;max-width:100%}
   .project-detail-heading h2{font-size:clamp(52px,15.5vw,82px);max-width:100%}
 }
+
+/* LANZAMIENTOS: solo reemplazo de fondo. No modifica layout ni otras secciones. */
+.v10-static-releases{
+  background-image:url("https://i.imgur.com/5RFUeiu.png")!important;
+  background-size:cover!important;
+  background-position:center center!important;
+  background-repeat:no-repeat!important;
+}
