@@ -12,8 +12,9 @@ html body .v10-static-releases{
   min-height:0!important;
   height:auto!important;
   padding:28px clamp(18px,5vw,72px) 34px!important;
-  background-image:url("https://i.imgur.com/5RFUeiu.png")!important;
-  background-size:cover!important;
+  background-color:#f2eee8!important;
+  background-image:url("releases-bg.webp")!important;
+  background-size:contain!important;
   background-position:center center!important;
   background-repeat:no-repeat!important;
 }
@@ -148,7 +149,7 @@ html body .v10-static-releases .v10-static-catalog{
 
 @media(max-width:800px){
   html body .v3-hero h1{font-size:clamp(59px,16.8vw,110px)!important}
-  html body .v10-static-releases{padding:24px 16px 28px!important}
+  html body .v10-static-releases{padding:24px 16px 28px!important;background-size:cover!important}
   html body .v10-static-releases .v10-static-heading{margin-bottom:14px!important}
   html body .v10-static-releases .v10-static-heading h2{font-size:clamp(36px,10vw,50px)!important}
   html body .v10-static-releases .v10-static-carousel{grid-template-columns:1fr 1fr!important;gap:10px!important}
