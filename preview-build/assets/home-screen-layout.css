@@ -114,6 +114,24 @@ html body main.ak-editorial section.v10-static-live .v10-static-next strong{
   font-size:clamp(29px,3.15vw,42px)!important;
   color:#fff!important;
   text-shadow:0 3px 16px rgba(0,0,0,.8)!important;
+  display:flex!important;
+  align-items:baseline!important;
+  justify-content:flex-end!important;
+  gap:.2em!important;
+  white-space:nowrap!important;
+}
+
+html body main.ak-editorial section.v10-static-live .v10-static-next .v10-date-day{
+  font-family:Impact,"Arial Black",Arial,sans-serif!important;
+  font-size:1.38em!important;
+  line-height:.72!important;
+  letter-spacing:.01em!important;
+  color:#fff!important;
+}
+
+html body main.ak-editorial section.v10-static-live .v10-static-next .v10-date-month{
+  font-size:.92em!important;
+  line-height:.9!important;
 }
 
 html body main.ak-editorial section.v10-static-live .v10-static-next small{
@@ -129,6 +147,20 @@ html body main.ak-editorial section.v10-static-live .v10-static-next small{
 html body main.ak-editorial section.v10-static-projects .v10-static-heading{
   text-align:center!important;
   transform:translateY(-28px)!important;
+}
+
+html body main.ak-editorial section.v10-static-projects .v10-static-heading>span{
+  width:max-content!important;
+  max-width:100%!important;
+  margin:0 auto 12px!important;
+  padding:5px 10px!important;
+  background:rgba(242,238,232,.9)!important;
+  box-shadow:0 2px 12px rgba(9,6,6,.14)!important;
+  color:#090606!important;
+}
+
+html body main.ak-editorial section.v10-static-projects .v10-static-heading>h2{
+  margin:0!important;
 }
 
 html body main.ak-editorial section.v10-static-projects{
@@ -150,6 +182,45 @@ html body main.ak-editorial section.v10-static-projects .v10-static-project-copy
   font-weight:900!important;
   letter-spacing:.01em!important;
   line-height:.92!important;
+}
+
+html body main.ak-editorial section.v10-static-projects .v10-static-project-video-label{
+  width:max-content!important;
+  max-width:100%!important;
+  margin-top:10px!important;
+  padding:8px 11px!important;
+  display:flex!important;
+  align-items:baseline!important;
+  flex-wrap:wrap!important;
+  gap:6px 10px!important;
+  background:rgba(242,238,232,.92)!important;
+  box-shadow:0 3px 14px rgba(9,6,6,.16)!important;
+  color:#090606!important;
+}
+
+html body main.ak-editorial section.v10-static-projects .v10-static-project-video-label span,
+html body main.ak-editorial section.v10-static-projects .v10-static-project-video-label strong{
+  color:#090606!important;
+  text-shadow:none!important;
+}
+
+html body main.ak-editorial section.v10-static-projects .v10-static-project-copy{
+  padding:20px!important;
+  background:rgba(242,238,232,.9)!important;
+  box-shadow:0 8px 28px rgba(9,6,6,.18)!important;
+  color:#090606!important;
+}
+
+html body main.ak-editorial section.v10-static-projects .v10-static-project-copy>span,
+html body main.ak-editorial section.v10-static-projects .v10-static-project-copy h3,
+html body main.ak-editorial section.v10-static-projects .v10-static-project-copy p,
+html body main.ak-editorial section.v10-static-projects .v10-static-note{
+  color:#090606!important;
+  text-shadow:none!important;
+}
+
+html body main.ak-editorial section.v10-static-projects .v10-static-tags span{
+  background:rgba(255,255,255,.52)!important;
 }
 
 /* Bottom: two project cards above, brand and social/contact controls below. */
@@ -402,8 +473,16 @@ html body main.ak-editorial footer.v10-static-footer .v10-static-footer-bottom{
     justify-items:start!important;
   }
 
+  html body main.ak-editorial section.v10-static-live .v10-static-next strong{
+    justify-content:flex-start!important;
+  }
+
   html body main.ak-editorial section.v10-static-projects .v10-static-heading{
     transform:translateY(-10px)!important;
+  }
+
+  html body main.ak-editorial section.v10-static-projects .v10-static-project-copy{
+    padding:16px!important;
   }
 
   html body main.ak-editorial footer.v10-static-footer{
