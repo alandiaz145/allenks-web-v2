@@ -2,7 +2,7 @@
 
 /* HOTFIX 24/08 — alcance cerrado: topbar + fondo/legibilidad de Lanzamientos */
 
-/* CONTENIDO: mantener texto alineado y usar una línea de hover independiente. */
+/* CONTENIDO: mantener texto alineado y replicar EXACTAMENTE la línea de hover del nav original. */
 html body main.ak-editorial header.v3-site-header nav.v3-nav{
   display:flex!important;
   flex-wrap:nowrap!important;
@@ -31,26 +31,29 @@ html body main.ak-editorial header.v3-site-header nav.v3-nav a:last-child::after
   font-size:12px!important;
   line-height:1!important;
   vertical-align:middle!important;
-  background:none!important;
+  background:transparent!important;
   border:0!important;
   width:auto!important;
   height:auto!important;
 }
+/* El nav original dibuja la línea con left/right 14px, bottom 0 y 2px de alto. */
 html body main.ak-editorial header.v3-site-header nav.v3-nav a:last-child::before{
   content:""!important;
   position:absolute!important;
-  left:0!important;
-  right:0!important;
-  bottom:-30px!important;
+  left:14px!important;
+  right:14px!important;
+  bottom:0!important;
   height:2px!important;
-  background:#e50914!important;
-  transform:scaleX(0)!important;
-  transform-origin:center!important;
-  transition:transform .18s ease!important;
+  background:transparent!important;
+  transform:none!important;
+}
+html body main.ak-editorial header.v3-site-header nav.v3-nav a:last-child:hover::after,
+html body main.ak-editorial header.v3-site-header nav.v3-nav a:last-child:focus-visible::after{
+  background:transparent!important;
 }
 html body main.ak-editorial header.v3-site-header nav.v3-nav a:last-child:hover::before,
 html body main.ak-editorial header.v3-site-header nav.v3-nav a:last-child:focus-visible::before{
-  transform:scaleX(1)!important;
+  background:#e50914!important;
 }
 
 /* LANZAMIENTOS: usar exactamente el artwork indicado y conservarlo como fondo. */
