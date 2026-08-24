@@ -29,6 +29,12 @@ html body main.ak-editorial section.v10-static-releases .v10-static-heading{
   transform:translateY(62px)!important;
 }
 
+html body main.ak-editorial section.v10-static-releases .v10-static-heading>h2{
+  font-family:"Raider Crusader","Arial Black",Impact,Haettenschweiler,sans-serif!important;
+  font-weight:900!important;
+  letter-spacing:-.035em!important;
+}
+
 html body main.ak-editorial section.v10-static-releases .v10-static-catalog{
   position:relative!important;
   z-index:5!important;
@@ -56,6 +62,8 @@ html body main.ak-editorial section.v10-static-live .v10-static-heading>span{
   color:#fff!important;
   background:rgba(9,6,6,.62)!important;
   text-shadow:0 2px 10px #000!important;
+  text-align:center!important;
+  font-size:12px!important;
 }
 
 html body main.ak-editorial section.v10-static-live .v10-static-heading>h2{
@@ -64,8 +72,13 @@ html body main.ak-editorial section.v10-static-live .v10-static-heading>h2{
 }
 
 html body main.ak-editorial section.v10-static-live .v10-static-live-caption{
-  min-height:54px!important;
+  min-height:28px!important;
   align-items:center!important;
+  justify-content:flex-end!important;
+}
+
+html body main.ak-editorial section.v10-static-live .v10-static-live-caption>div{
+  display:none!important;
 }
 
 html body main.ak-editorial section.v10-static-live .v10-static-live-caption span{
@@ -88,7 +101,7 @@ html body main.ak-editorial section.v10-static-live .v10-static-next>span{
   padding:9px 12px!important;
   background:#e50914!important;
   color:#fff!important;
-  font-size:12px!important;
+  font-size:13px!important;
   line-height:1!important;
   letter-spacing:.13em!important;
 }
@@ -107,7 +120,7 @@ html body main.ak-editorial section.v10-static-live .v10-static-next small{
   margin-top:4px!important;
   color:#fff!important;
   opacity:.92!important;
-  font-size:12px!important;
+  font-size:13px!important;
   letter-spacing:.12em!important;
   text-shadow:0 2px 10px #000!important;
 }
@@ -116,6 +129,14 @@ html body main.ak-editorial section.v10-static-live .v10-static-next small{
 html body main.ak-editorial section.v10-static-projects .v10-static-heading{
   text-align:center!important;
   transform:translateY(-28px)!important;
+}
+
+html body main.ak-editorial section.v10-static-projects{
+  background-color:#f2eee8!important;
+  background-image:url("./content-bg.webp")!important;
+  background-size:cover!important;
+  background-position:center center!important;
+  background-repeat:no-repeat!important;
 }
 
 html body main.ak-editorial section.v10-static-projects .v10-static-heading>span::after,
@@ -190,12 +211,23 @@ html body main.ak-editorial footer.v10-static-footer .v10-footer-project h2{
   color:#fff!important;
 }
 
-html body main.ak-editorial footer.v10-static-footer .v10-footer-project p{
+html body main.ak-editorial footer.v10-static-footer .v10-footer-project .v10-footer-project-type{
   margin-top:10px!important;
   font-family:Impact,"Arial Black",Arial,sans-serif!important;
   font-size:16px!important;
   letter-spacing:.055em!important;
   color:rgba(255,255,255,.66)!important;
+}
+
+html body main.ak-editorial footer.v10-static-footer .v10-footer-project .v10-footer-project-description{
+  max-width:230px!important;
+  margin-top:16px!important;
+  font-family:Arial,Helvetica,sans-serif!important;
+  font-size:13px!important;
+  font-weight:400!important;
+  line-height:1.48!important;
+  letter-spacing:0!important;
+  color:rgba(255,255,255,.72)!important;
 }
 
 html body main.ak-editorial footer.v10-static-footer .v10-footer-project>header>a{
