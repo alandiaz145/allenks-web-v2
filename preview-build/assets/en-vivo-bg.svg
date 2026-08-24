@@ -1,6 +1,6 @@
 <svg xmlns="http://www.w3.org/2000/svg" width="1672" height="941" viewBox="0 0 1672 941" preserveAspectRatio="xMidYMid slice">
-  <image href="en-vivo-bg-1.webp" x="0" y="0" width="418" height="941"/>
-  <image href="en-vivo-bg-2.webp" x="418" y="0" width="418" height="941"/>
-  <image href="en-vivo-bg-3.webp" x="836" y="0" width="418" height="941"/>
-  <image href="en-vivo-bg-4.webp" x="1254" y="0" width="418" height="941"/>
+  <image href="https://raw.githack.com/alandiaz145/allenks-web-v2/0c28e3f79a99948d3ce7ff0dca6b025506dea33f/preview-build/assets/en-vivo-bg-1.webp" x="0" y="0" width="418" height="941" preserveAspectRatio="none"/>
+  <image href="https://raw.githack.com/alandiaz145/allenks-web-v2/0c28e3f79a99948d3ce7ff0dca6b025506dea33f/preview-build/assets/en-vivo-bg-2.webp" x="418" y="0" width="418" height="941" preserveAspectRatio="none"/>
+  <image href="https://raw.githack.com/alandiaz145/allenks-web-v2/0c28e3f79a99948d3ce7ff0dca6b025506dea33f/preview-build/assets/en-vivo-bg-3.webp" x="836" y="0" width="418" height="941" preserveAspectRatio="none"/>
+  <image href="https://raw.githack.com/alandiaz145/allenks-web-v2/0c28e3f79a99948d3ce7ff0dca6b025506dea33f/preview-build/assets/en-vivo-bg-4.webp" x="1254" y="0" width="418" height="941" preserveAspectRatio="none"/>
 </svg>
