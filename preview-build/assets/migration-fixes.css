@@ -3,48 +3,67 @@
 /* Persisted migration fixes. Keep these overrides isolated from EN VIVO / PROYECTOS. */
 html,body{overflow-x:clip}
 
-/* INICIO — restore the intended Raider Crusader display face. */
+/* INICIO — keep Raider Crusader, but reduce the oversized wordmark by 20%. */
 .v3-hero h1{
   font-family:"Raider Crusader","Arial Black",Impact,Haettenschweiler,sans-serif!important;
+  font-size:clamp(67px,9.2vw,147px)!important;
 }
 
-/* LANZAMIENTOS — restore the larger V10 proportions previously used. */
+/* LANZAMIENTOS — keep the illustrated background and make the video the only protagonist. */
 .v10-static-releases{
-  padding:clamp(56px,6vw,84px) clamp(18px,5vw,72px)!important;
+  min-height:0!important;
+  height:auto!important;
+  padding:32px clamp(18px,5vw,72px) 36px!important;
   background-image:url("https://i.imgur.com/5RFUeiu.png")!important;
   background-size:cover!important;
   background-position:center center!important;
   background-repeat:no-repeat!important;
 }
 .v10-static-releases .v10-static-heading{
-  width:min(1120px,100%)!important;
-  margin:0 auto clamp(28px,3vw,42px)!important;
+  width:min(980px,100%)!important;
+  margin:0 auto 18px!important;
 }
 .v10-static-releases .v10-static-heading h2{
-  font-size:clamp(46px,5.6vw,78px)!important;
+  font-size:clamp(42px,5vw,68px)!important;
   line-height:.88!important;
 }
 .v10-static-releases .v10-static-carousel{
-  width:min(1120px,100%)!important;
-  grid-template-columns:48px minmax(0,1fr) 48px!important;
+  width:min(980px,100%)!important;
+  grid-template-columns:56px minmax(0,1fr) 56px!important;
   gap:14px!important;
 }
 .v10-static-releases .v10-static-arrow{
-  width:46px!important;
-  height:46px!important;
-  font-size:22px!important;
+  position:relative!important;
+  z-index:4!important;
+  width:54px!important;
+  height:54px!important;
+  border:2px solid rgba(9,6,6,.62)!important;
+  background:rgba(242,238,232,.92)!important;
+  color:#090606!important;
+  box-shadow:0 7px 18px rgba(0,0,0,.14)!important;
+  font-size:29px!important;
+  font-weight:900!important;
+}
+.v10-static-releases .v10-static-arrow:hover{
+  background:#e50914!important;
+  border-color:#e50914!important;
+  color:#fff!important;
 }
 .v10-static-releases .v10-static-release-slide{
   display:block!important;
+}
+.v10-static-releases .v10-static-release-copy{
+  display:none!important;
 }
 .v10-static-releases .v10-static-frame{
   position:relative!important;
   width:100%!important;
   aspect-ratio:16/9!important;
   overflow:hidden!important;
-  background:#000!important;
-  border:1px solid rgba(9,6,6,.16)!important;
-  box-shadow:0 24px 60px rgba(42,26,20,.12)!important;
+  background:transparent!important;
+  border:0!important;
+  box-shadow:none!important;
+  outline:0!important;
 }
 .v10-static-releases .v10-static-frame iframe{
   position:absolute!important;
@@ -52,23 +71,28 @@ html,body{overflow-x:clip}
   width:100%!important;
   height:100%!important;
   border:0!important;
+  display:block!important;
 }
 .v10-static-releases .v10-static-catalog{
-  margin:22px auto 0!important;
+  margin:16px auto 0!important;
 }
 
 @media(max-width:800px){
-  .v10-static-releases{padding:48px 16px!important}
-  .v10-static-releases .v10-static-heading{margin-bottom:24px!important}
-  .v10-static-releases .v10-static-heading h2{font-size:clamp(40px,12vw,62px)!important}
+  .v3-hero h1{font-size:clamp(59px,16.8vw,110px)!important}
+  .v10-static-releases{padding:28px 16px 32px!important}
+  .v10-static-releases .v10-static-heading{margin-bottom:18px!important}
+  .v10-static-releases .v10-static-heading h2{font-size:clamp(38px,10.5vw,54px)!important}
   .v10-static-releases .v10-static-carousel{grid-template-columns:1fr 1fr!important;gap:10px!important}
   .v10-static-releases .v10-static-stage{grid-column:1/-1!important;grid-row:1!important}
-  .v10-static-releases .v10-static-arrow{grid-row:2!important;width:100%!important;height:42px!important}
+  .v10-static-releases .v10-static-arrow{grid-row:2!important;width:100%!important;height:44px!important;font-size:24px!important}
   .v10-static-releases .v10-static-arrow[data-prev]{grid-column:1!important}
   .v10-static-releases .v10-static-arrow[data-next]{grid-column:2!important}
 }
+@media(max-width:560px){
+  .v3-hero h1{font-size:clamp(53px,15.2vw,83px)!important}
+}
 @media(max-width:460px){
-  .v10-static-releases .v10-static-heading h2{font-size:42px!important}
+  .v10-static-releases .v10-static-heading h2{font-size:40px!important}
 }
 
 @media (max-width:700px){
