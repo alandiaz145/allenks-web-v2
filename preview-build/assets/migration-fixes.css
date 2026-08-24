@@ -167,3 +167,309 @@ html body .v10-static-releases .v10-static-catalog{
   .music-page-featured-heading h2,.music-page-remixes-heading h2{font-size:clamp(44px,13.5vw,64px);letter-spacing:-.055em;max-width:100%}
   .project-detail-heading h2{font-size:clamp(52px,15.5vw,82px);max-width:100%}
 }
+
+/* ===== HOME DIRECTION PASS — 23/08/2026 =====
+   Scope is intentionally limited to content AFTER Releases + nav labels.
+   Hero and Releases remain the visual source of truth. */
+
+/* Navigation: keep it compact and turn the old Projects destination into Content. */
+html body .v3-nav a:last-child,
+html body .v3-mobile-panel>a:nth-of-type(4){
+  font-size:0!important;
+}
+html body .v3-nav a:last-child::after,
+html body .v3-mobile-panel>a:nth-of-type(4)::after{
+  content:"CONTENIDO";
+  font-size:inherit;
+}
+html body .v3-nav a:last-child::after{font-size:12px!important}
+html body .v3-mobile-panel>a:nth-of-type(4)::after{font-size:clamp(28px,8vw,48px)!important}
+
+/* Shared editorial language for every section after releases. */
+html body .v10-static-live,
+html body .v10-static-projects{
+  min-height:0!important;
+  height:auto!important;
+  padding:30px clamp(18px,5vw,72px) 36px!important;
+}
+html body .v10-static-live .v10-static-heading,
+html body .v10-static-projects .v10-static-heading{
+  width:min(980px,100%)!important;
+  margin:0 auto 18px!important;
+}
+html body .v10-static-live .v10-static-heading span,
+html body .v10-static-projects .v10-static-heading span{
+  font-family:Arial,Helvetica,sans-serif!important;
+  font-size:11px!important;
+  font-weight:900!important;
+  letter-spacing:.16em!important;
+  text-transform:uppercase!important;
+}
+html body .v10-static-live .v10-static-heading h2,
+html body .v10-static-projects .v10-static-heading h2{
+  font-family:"Raider Crusader","Arial Black",Impact,Haettenschweiler,sans-serif!important;
+  font-size:clamp(40px,4.8vw,64px)!important;
+  line-height:.88!important;
+  letter-spacing:-.035em!important;
+  margin:.18em 0 0!important;
+}
+
+/* EN VIVO — same width/scale as Releases, one clear focal video. */
+html body .v10-static-live{
+  background:#090606!important;
+  color:#f2eee8!important;
+}
+html body .v10-static-live .v10-static-carousel{
+  width:min(980px,100%)!important;
+  margin:0 auto!important;
+  grid-template-columns:62px minmax(0,1fr) 62px!important;
+  gap:12px!important;
+  align-items:center!important;
+}
+html body .v10-static-live .v10-static-stage{
+  background:transparent!important;
+  border:0!important;
+  box-shadow:none!important;
+}
+html body .v10-static-live .v10-static-live-frame{
+  aspect-ratio:16/9!important;
+  background:#000!important;
+  border:0!important;
+  box-shadow:none!important;
+}
+html body .v10-static-live .v10-static-live-caption{
+  display:flex!important;
+  justify-content:space-between!important;
+  align-items:flex-end!important;
+  gap:16px!important;
+  padding:12px 0 0!important;
+  border:0!important;
+  background:transparent!important;
+}
+html body .v10-static-live .v10-static-live-caption span{
+  font-size:10px!important;
+  letter-spacing:.16em!important;
+  font-weight:900!important;
+  opacity:.66!important;
+}
+html body .v10-static-live .v10-static-live-caption strong{
+  font-family:"Raider Crusader","Arial Black",Impact,sans-serif!important;
+  font-size:clamp(22px,2.6vw,34px)!important;
+  line-height:.92!important;
+  letter-spacing:-.02em!important;
+}
+html body .v10-static-live .v10-static-live-caption b{
+  font-size:11px!important;
+  letter-spacing:.12em!important;
+}
+html body .v10-static-live .v10-static-arrow{
+  width:58px!important;
+  height:58px!important;
+  display:grid!important;
+  place-items:center!important;
+  border:2px solid #f2eee8!important;
+  background:#090606!important;
+  color:#f2eee8!important;
+  font-size:32px!important;
+  font-weight:900!important;
+  box-shadow:none!important;
+}
+html body .v10-static-live .v10-static-arrow:hover{
+  background:#e50914!important;
+  border-color:#e50914!important;
+  color:#fff!important;
+}
+html body .v10-static-live .v10-static-next{
+  width:min(980px,100%)!important;
+  margin:22px auto 0!important;
+  padding:16px 0 0!important;
+  border-top:1px solid rgba(242,238,232,.25)!important;
+  display:flex!important;
+  align-items:flex-end!important;
+  justify-content:space-between!important;
+  gap:18px!important;
+}
+html body .v10-static-live .v10-static-next>span{
+  font-size:10px!important;
+  font-weight:900!important;
+  letter-spacing:.16em!important;
+}
+html body .v10-static-live .v10-static-next strong{
+  font-family:"Raider Crusader","Arial Black",Impact,sans-serif!important;
+  font-size:clamp(24px,3vw,38px)!important;
+  line-height:.9!important;
+}
+html body .v10-static-live .v10-static-next small{
+  font-size:10px!important;
+  letter-spacing:.1em!important;
+  opacity:.7!important;
+}
+
+/* Old Projects section becomes CONTENT: production, tutorials, resources and downloads. */
+html body .v10-static-projects{
+  background:#f2eee8!important;
+  color:#090606!important;
+}
+html body .v10-static-projects .v10-static-heading>span{
+  font-size:0!important;
+}
+html body .v10-static-projects .v10-static-heading>span::after{
+  content:"TUTORIALES · RECURSOS · DESCARGAS";
+  font-size:11px!important;
+}
+html body .v10-static-projects .v10-static-heading h2{
+  font-size:0!important;
+}
+html body .v10-static-projects .v10-static-heading h2::after{
+  content:"CONTENIDO";
+  font-family:"Raider Crusader","Arial Black",Impact,sans-serif!important;
+  font-size:clamp(40px,4.8vw,64px)!important;
+  line-height:.88!important;
+  letter-spacing:-.035em!important;
+}
+html body .v10-static-projects .v10-static-project-layout{
+  width:min(980px,100%)!important;
+  margin:0 auto!important;
+  display:grid!important;
+  grid-template-columns:minmax(0,1.35fr) minmax(280px,.65fr)!important;
+  gap:28px!important;
+  align-items:start!important;
+}
+html body .v10-static-projects .v10-static-project-video-frame{
+  aspect-ratio:16/9!important;
+  border:0!important;
+  background:#000!important;
+  box-shadow:none!important;
+}
+html body .v10-static-projects .v10-static-project-video-label{
+  padding:10px 0 0!important;
+  border:0!important;
+  background:transparent!important;
+}
+html body .v10-static-projects .v10-static-project-video-label span,
+html body .v10-static-projects .v10-static-project-copy>span{
+  font-size:10px!important;
+  font-weight:900!important;
+  letter-spacing:.16em!important;
+}
+html body .v10-static-projects .v10-static-project-video-label strong{
+  font-family:"Raider Crusader","Arial Black",Impact,sans-serif!important;
+  font-size:22px!important;
+}
+html body .v10-static-projects .v10-static-project-copy{
+  padding:0!important;
+  background:transparent!important;
+  border:0!important;
+}
+html body .v10-static-projects .v10-static-project-copy h3{
+  font-family:"Raider Crusader","Arial Black",Impact,sans-serif!important;
+  font-size:clamp(36px,4.2vw,58px)!important;
+  line-height:.86!important;
+  letter-spacing:-.035em!important;
+  margin:10px 0 16px!important;
+}
+html body .v10-static-projects .v10-static-project-copy p{
+  font-family:Arial,Helvetica,sans-serif!important;
+  font-size:14px!important;
+  line-height:1.55!important;
+  max-width:46ch!important;
+}
+html body .v10-static-projects .v10-static-tags{
+  display:flex!important;
+  flex-wrap:wrap!important;
+  gap:7px!important;
+  margin:16px 0!important;
+}
+html body .v10-static-projects .v10-static-tags span{
+  border:1px solid #090606!important;
+  padding:7px 9px!important;
+  font-size:9px!important;
+  font-weight:900!important;
+  letter-spacing:.1em!important;
+}
+html body .v10-static-projects .v10-static-project-copy>a{
+  display:inline-flex!important;
+  margin-top:14px!important;
+  padding:11px 14px!important;
+  border:2px solid #090606!important;
+  background:#090606!important;
+  color:#f2eee8!important;
+  font-size:11px!important;
+  font-weight:900!important;
+  letter-spacing:.08em!important;
+}
+
+/* Footer: stop repeating the social wall already present in the header. */
+html body .v10-static-footer{
+  background:#e50914!important;
+  color:#090606!important;
+  padding:30px clamp(18px,5vw,72px) 18px!important;
+}
+html body .v10-static-footer .v10-static-footer-main{
+  width:min(980px,100%)!important;
+  margin:0 auto!important;
+  display:grid!important;
+  grid-template-columns:1fr 1fr!important;
+  gap:30px!important;
+  align-items:end!important;
+}
+html body .v10-static-footer .v10-static-footer-brand img{
+  max-width:110px!important;
+}
+html body .v10-static-footer .v10-static-footer-brand strong,
+html body .v10-static-footer .v10-static-footer-cta h2{
+  font-family:"Raider Crusader","Arial Black",Impact,sans-serif!important;
+}
+html body .v10-static-footer .v10-static-footer-cta h2{
+  font-size:clamp(42px,5.5vw,76px)!important;
+  line-height:.83!important;
+  letter-spacing:-.045em!important;
+  margin:8px 0 14px!important;
+}
+html body .v10-static-footer .v10-static-footer-cta>a{
+  display:inline-flex!important;
+  border:2px solid #090606!important;
+  padding:10px 13px!important;
+  color:#090606!important;
+  font-size:11px!important;
+  font-weight:900!important;
+}
+html body .v10-static-footer .v10-static-socials{
+  display:none!important;
+}
+html body .v10-static-footer .v10-static-footer-bottom{
+  width:min(980px,100%)!important;
+  margin:26px auto 0!important;
+  padding-top:12px!important;
+  border-top:1px solid rgba(9,6,6,.35)!important;
+  font-size:10px!important;
+  font-weight:900!important;
+  letter-spacing:.08em!important;
+}
+
+@media(max-width:800px){
+  html body .v10-static-live,
+  html body .v10-static-projects{padding:24px 16px 28px!important}
+  html body .v10-static-live .v10-static-heading,
+  html body .v10-static-projects .v10-static-heading{margin-bottom:14px!important}
+  html body .v10-static-live .v10-static-heading h2,
+  html body .v10-static-projects .v10-static-heading h2::after{font-size:38px!important}
+  html body .v10-static-live .v10-static-carousel{
+    grid-template-columns:1fr 1fr!important;
+    gap:10px!important;
+  }
+  html body .v10-static-live .v10-static-stage{grid-column:1/-1!important;grid-row:1!important}
+  html body .v10-static-live .v10-static-arrow{grid-row:2!important;width:100%!important;height:44px!important;font-size:25px!important}
+  html body .v10-static-live .v10-static-arrow[data-prev]{grid-column:1!important}
+  html body .v10-static-live .v10-static-arrow[data-next]{grid-column:2!important}
+  html body .v10-static-live .v10-static-live-caption{padding-top:10px!important}
+  html body .v10-static-live .v10-static-live-caption strong{font-size:24px!important}
+  html body .v10-static-live .v10-static-next{margin-top:18px!important;display:block!important}
+  html body .v10-static-live .v10-static-next div{margin-top:8px!important}
+  html body .v10-static-projects .v10-static-project-layout{grid-template-columns:1fr!important;gap:22px!important}
+  html body .v10-static-projects .v10-static-project-copy h3{font-size:40px!important}
+  html body .v10-static-footer{padding:26px 16px 16px!important}
+  html body .v10-static-footer .v10-static-footer-main{grid-template-columns:1fr!important;gap:22px!important}
+  html body .v10-static-footer .v10-static-footer-brand img{max-width:86px!important}
+  html body .v10-static-footer .v10-static-footer-cta h2{font-size:46px!important}
+}
