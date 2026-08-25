@@ -527,3 +527,125 @@ html body main.ak-editorial footer.v10-static-footer .v10-static-footer-bottom{
     text-align:left!important;
   }
 }
+
+/* Desktop scale pass — wider chapters and one shared type hierarchy. */
+@media(min-width:1001px){
+  html body main.ak-editorial{
+    --ak-chapter-width:1280px;
+    --ak-footer-width:1500px;
+    --ak-chapter-title:clamp(58px,4.25vw,76px);
+    --ak-chapter-kicker:12px;
+  }
+
+  html body main.ak-editorial section.v10-static-releases,
+  html body main.ak-editorial section.v10-static-live,
+  html body main.ak-editorial section.v10-static-projects{
+    padding-left:clamp(24px,3vw,52px)!important;
+    padding-right:clamp(24px,3vw,52px)!important;
+  }
+
+  html body main.ak-editorial section.v10-static-releases .v10-static-heading,
+  html body main.ak-editorial section.v10-static-live .v10-static-heading,
+  html body main.ak-editorial section.v10-static-projects .v10-static-heading{
+    width:min(var(--ak-chapter-width),100%)!important;
+  }
+
+  html body main.ak-editorial section.v10-static-releases .v10-static-heading>h2,
+  html body main.ak-editorial section.v10-static-live .v10-static-heading>h2,
+  html body main.ak-editorial section.v10-static-projects .v10-static-heading>h2::after{
+    font-size:var(--ak-chapter-title)!important;
+    line-height:.88!important;
+  }
+
+  html body main.ak-editorial section.v10-static-releases .v10-static-heading>span,
+  html body main.ak-editorial section.v10-static-live .v10-static-heading>span,
+  html body main.ak-editorial section.v10-static-projects .v10-static-heading>span::after{
+    font-size:var(--ak-chapter-kicker)!important;
+    line-height:1.15!important;
+    letter-spacing:.15em!important;
+  }
+
+  html body main.ak-editorial section.v10-static-releases .v10-static-carousel,
+  html body main.ak-editorial section.v10-static-live .v10-static-carousel,
+  html body main.ak-editorial section.v10-static-live .v10-static-next,
+  html body main.ak-editorial section.v10-static-projects .v10-static-project-layout{
+    width:min(var(--ak-chapter-width),100%)!important;
+  }
+
+  html body main.ak-editorial section.v10-static-releases .v10-static-carousel,
+  html body main.ak-editorial section.v10-static-live .v10-static-carousel{
+    grid-template-columns:64px minmax(0,1fr) 64px!important;
+    gap:16px!important;
+  }
+
+  html body main.ak-editorial section.v10-static-releases .v10-static-arrow,
+  html body main.ak-editorial section.v10-static-live .v10-static-arrow{
+    width:64px!important;
+    height:64px!important;
+  }
+
+  html body main.ak-editorial section.v10-static-projects .v10-static-project-layout{
+    grid-template-columns:minmax(0,1.4fr) minmax(320px,.6fr)!important;
+    gap:clamp(34px,3vw,52px)!important;
+    align-items:center!important;
+  }
+
+  html body main.ak-editorial section.v10-static-projects .v10-static-project-copy h3{
+    font-size:clamp(38px,3vw,54px)!important;
+  }
+
+  html body main.ak-editorial section.v10-static-projects .v10-static-project-copy p{
+    font-size:15px!important;
+  }
+
+  html body main.ak-editorial footer.v10-static-footer{
+    min-height:0!important;
+    display:block!important;
+    padding:calc(var(--v3-header) + 44px) clamp(24px,3vw,52px) 20px!important;
+  }
+
+  html body main.ak-editorial footer.v10-static-footer .v10-footer-grid{
+    width:min(var(--ak-footer-width),100%)!important;
+    grid-template-rows:auto auto!important;
+    gap:20px!important;
+    align-content:start!important;
+  }
+
+  html body main.ak-editorial footer.v10-static-footer .v10-footer-project{
+    min-height:0!important;
+    grid-template-columns:minmax(220px,.78fr) minmax(280px,1fr)!important;
+    padding:22px!important;
+    gap:22px!important;
+  }
+
+  html body main.ak-editorial footer.v10-static-footer .v10-footer-project>header{
+    justify-content:flex-start!important;
+  }
+
+  html body main.ak-editorial footer.v10-static-footer .v10-footer-project>header>a{
+    margin-top:auto!important;
+  }
+
+  html body main.ak-editorial footer.v10-static-footer .v10-footer-project h2{
+    font-size:clamp(38px,3.15vw,54px)!important;
+  }
+
+  html body main.ak-editorial footer.v10-static-footer .v10-footer-project .v10-footer-project-type{
+    font-size:17px!important;
+  }
+
+  html body main.ak-editorial footer.v10-static-footer .v10-footer-project .v10-footer-project-description{
+    max-width:280px!important;
+    font-size:14px!important;
+  }
+
+  html body main.ak-editorial footer.v10-static-footer .v10-footer-logo-card,
+  html body main.ak-editorial footer.v10-static-footer .v10-footer-connect{
+    min-height:170px!important;
+  }
+
+  html body main.ak-editorial footer.v10-static-footer .v10-static-footer-bottom{
+    width:min(var(--ak-footer-width),100%)!important;
+    margin-top:20px!important;
+  }
+}
