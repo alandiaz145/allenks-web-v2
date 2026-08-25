@@ -1,8 +1,3 @@
-/* Migration-only technical fixes: preserve the public design while preventing mobile overflow. */
-html,body{overflow-x:clip}
-@media (max-width:700px){
-  .projects-hero h1{font-size:clamp(48px,13vw,72px);letter-spacing:-.065em;max-width:100%;white-space:nowrap}
-  .store-hero h1{font-size:clamp(60px,18vw,88px);letter-spacing:-.075em;max-width:100%}
-  .music-page-featured-heading h2,.music-page-remixes-heading h2{font-size:clamp(44px,13.5vw,64px);letter-spacing:-.055em;max-width:100%}
-  .project-detail-heading h2{font-size:clamp(52px,15.5vw,82px);max-width:100%}
-}
+@import url("https://raw.githack.com/alandiaz145/allenks-web-v2/f13192a6cbc55bf212685df2ceabf940f3224dd1/preview-build/assets/migration-fixes.css");
+@import url("./en-vivo-bg.css");
+@import url("./home-screen-layout.css");

@@ -1,70 +1,96 @@
 import Link from "next/link";
-import { tickerItems } from "../site-data";
+import { site } from "../site-data";
 
 type NavItem = {
   label: string;
   key: string;
-  href?: string;
-  disabled?: boolean;
+  href: string;
 };
 
 const nav: NavItem[] = [
-  { label: "Inicio", href: "/", key: "inicio" },
-  { label: "Música", href: "/musica", key: "musica" },
-  { label: "Tienda", href: "/tienda", key: "tienda" },
-  { label: "Sorteos", key: "sorteos", disabled: true },
-  { label: "Proyectos", href: "/proyectos", key: "proyectos" },
-  { label: "Asesoramiento", key: "asesoramiento", disabled: true },
+  { label: "MÚSICA", href: "/musica", key: "musica" },
+  { label: "EN VIVO", href: "/#en-vivo", key: "live" },
+  { label: "TIENDA", href: "/tienda", key: "tienda" },
+  { label: "PROYECTOS", href: "/proyectos", key: "proyectos" },
 ];
 
-const musicTicker = [
-  "ALLEN KS · ARTISTA INDEPENDIENTE",
-  "NUEVO RELEASE · 22.08.2026",
-  "BUENOS AIRES · ARGENTINA",
-  "DUBSTEP · DRUM & BASS · RIDDIM",
-  "SETS · REMIXES · PRODUCCIÓN",
-  "AKA DUBSTEP WACHO",
+const socials = [
+  { label: "Instagram", href: site.instagram, icon: "instagram" },
+  { label: "SoundCloud", href: site.soundcloud, icon: "soundcloud" },
+  { label: "YouTube", href: site.youtube, icon: "youtube" },
+  { label: "Spotify", href: site.spotify, icon: "spotify" },
 ];
 
 export default function SiteHeader({ active }: { active: string }) {
-  const showTicker = active === "inicio" || active === "musica";
-  const ticker = active === "musica" ? musicTicker : tickerItems;
   return (
-    <>
-      {showTicker && (
-        <div className="ticker" aria-label="Novedades de ALLEN KS">
-          <div className="ticker-track">
-            {[0, 1].map((copy) => (
-              <div className="ticker-group" aria-hidden={copy === 1} key={copy}>
-                {ticker.map((item) => <span key={`${copy}-${item}`}>{item}</span>)}
-              </div>
+    <header className="site-header site-header--top">
+      <Link className="brand brand-text-only" href="/" aria-label="ALLEN KS — Inicio">
+        <strong>ALLEN KS</strong>
+      </Link>
+
+      <nav className="desktop-nav" aria-label="Navegación principal">
+        {nav.map((item) => (
+          <Link
+            className={active === item.key ? "active" : ""}
+            href={item.href}
+            key={item.key}
+          >
+            {item.label}
+          </Link>
+        ))}
+      </nav>
+
+      <div className="header-socials" aria-label="Redes de ALLEN KS">
+        {socials.map((item) => (
+          <a
+            href={item.href}
+            target="_blank"
+            rel="noreferrer"
+            aria-label={item.label}
+            key={item.label}
+          >
+            <img
+              src={`https://cdn.simpleicons.org/${item.icon}/ffffff`}
+              alt=""
+              width="18"
+              height="18"
+            />
+          </a>
+        ))}
+      </div>
+
+      <details className="mobile-nav">
+        <summary aria-label="Abrir menú"><span /><span /></summary>
+        <nav aria-label="Navegación móvil">
+          {nav.map((item) => (
+            <Link
+              className={active === item.key ? "active" : ""}
+              href={item.href}
+              key={item.key}
+            >
+              {item.label}
+            </Link>
+          ))}
+          <div className="mobile-socials">
+            {socials.map((item) => (
+              <a
+                href={item.href}
+                target="_blank"
+                rel="noreferrer"
+                aria-label={item.label}
+                key={item.label}
+              >
+                <img
+                  src={`https://cdn.simpleicons.org/${item.icon}/090606`}
+                  alt=""
+                  width="19"
+                  height="19"
+                />
+              </a>
             ))}
           </div>
-        </div>
-      )}
-      <header className={`site-header${showTicker ? "" : " site-header--top"}`}>
-        <Link className="brand" href="/" aria-label="ALLEN KS — Inicio">
-          <img src="/assets/allen-ks-logo.png" alt="" width="926" height="609" />
-          <strong>ALLEN KS</strong>
-        </Link>
-        <nav className="desktop-nav" aria-label="Navegación principal">
-          {nav.map((item) => item.disabled ? (
-            <span className="nav-disabled" key={item.key} aria-disabled="true">{item.label}</span>
-          ) : (
-            <Link className={active === item.key ? "active" : ""} href={item.href!} key={item.key}>{item.label}</Link>
-          ))}
         </nav>
-        <details className="mobile-nav">
-          <summary aria-label="Abrir menú"><span /><span /></summary>
-          <nav aria-label="Navegación móvil">
-            {nav.map((item) => item.disabled ? (
-              <span className="mobile-disabled" key={item.key}>{item.label}</span>
-            ) : (
-              <Link className={active === item.key ? "active" : ""} href={item.href!} key={item.key}>{item.label}</Link>
-            ))}
-          </nav>
-        </details>
-      </header>
-    </>
+      </details>
+    </header>
   );
 }

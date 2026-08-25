@@ -2,6 +2,8 @@ import type { Metadata } from "next";
 import "./migration-base.css";
 import "./migration-sections.css";
 import "./migration-responsive.css";
+import "./v3-clean.css";
+import "./v10.css";
 
 export const metadata: Metadata = {
   metadataBase: new URL("https://www.allenks.com.ar"),
@@ -16,7 +18,7 @@ export const metadata: Metadata = {
     description: "Artista argentino, creador de Otra Noche y fundador de Spartans Label.",
     url: "https://www.allenks.com.ar/",
   },
-  other: { "theme-color": "#f2eee8" },
+  other: { "theme-color": "#090606" },
   icons: { icon: "/favicon.svg", shortcut: "/favicon.svg" },
 };
 

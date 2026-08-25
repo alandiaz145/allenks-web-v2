@@ -1,0 +1,79 @@
+@import url('https://fonts.cdnfonts.com/css/raider-crusader');
+
+/* Persisted migration fixes. Keep these overrides isolated from EN VIVO / PROYECTOS. */
+html,body{overflow-x:clip}
+
+/* INICIO — restore the intended Raider Crusader display face. */
+.v3-hero h1{
+  font-family:"Raider Crusader","Arial Black",Impact,Haettenschweiler,sans-serif!important;
+}
+
+/* LANZAMIENTOS — restore the larger V10 proportions previously used. */
+.v10-static-releases{
+  padding:clamp(56px,6vw,84px) clamp(18px,5vw,72px)!important;
+  background-image:url("https://i.imgur.com/5RFUeiu.png")!important;
+  background-size:cover!important;
+  background-position:center center!important;
+  background-repeat:no-repeat!important;
+}
+.v10-static-releases .v10-static-heading{
+  width:min(1120px,100%)!important;
+  margin:0 auto clamp(28px,3vw,42px)!important;
+}
+.v10-static-releases .v10-static-heading h2{
+  font-size:clamp(46px,5.6vw,78px)!important;
+  line-height:.88!important;
+}
+.v10-static-releases .v10-static-carousel{
+  width:min(1120px,100%)!important;
+  grid-template-columns:48px minmax(0,1fr) 48px!important;
+  gap:14px!important;
+}
+.v10-static-releases .v10-static-arrow{
+  width:46px!important;
+  height:46px!important;
+  font-size:22px!important;
+}
+.v10-static-releases .v10-static-release-slide{
+  display:block!important;
+}
+.v10-static-releases .v10-static-frame{
+  position:relative!important;
+  width:100%!important;
+  aspect-ratio:16/9!important;
+  overflow:hidden!important;
+  background:#000!important;
+  border:1px solid rgba(9,6,6,.16)!important;
+  box-shadow:0 24px 60px rgba(42,26,20,.12)!important;
+}
+.v10-static-releases .v10-static-frame iframe{
+  position:absolute!important;
+  inset:0!important;
+  width:100%!important;
+  height:100%!important;
+  border:0!important;
+}
+.v10-static-releases .v10-static-catalog{
+  margin:22px auto 0!important;
+}
+
+@media(max-width:800px){
+  .v10-static-releases{padding:48px 16px!important}
+  .v10-static-releases .v10-static-heading{margin-bottom:24px!important}
+  .v10-static-releases .v10-static-heading h2{font-size:clamp(40px,12vw,62px)!important}
+  .v10-static-releases .v10-static-carousel{grid-template-columns:1fr 1fr!important;gap:10px!important}
+  .v10-static-releases .v10-static-stage{grid-column:1/-1!important;grid-row:1!important}
+  .v10-static-releases .v10-static-arrow{grid-row:2!important;width:100%!important;height:42px!important}
+  .v10-static-releases .v10-static-arrow[data-prev]{grid-column:1!important}
+  .v10-static-releases .v10-static-arrow[data-next]{grid-column:2!important}
+}
+@media(max-width:460px){
+  .v10-static-releases .v10-static-heading h2{font-size:42px!important}
+}
+
+@media (max-width:700px){
+  .projects-hero h1{font-size:clamp(48px,13vw,72px);letter-spacing:-.065em;max-width:100%;white-space:nowrap}
+  .store-hero h1{font-size:clamp(60px,18vw,88px);letter-spacing:-.075em;max-width:100%}
+  .music-page-featured-heading h2,.music-page-remixes-heading h2{font-size:clamp(44px,13.5vw,64px);letter-spacing:-.055em;max-width:100%}
+  .project-detail-heading h2{font-size:clamp(52px,15.5vw,82px);max-width:100%}
+}

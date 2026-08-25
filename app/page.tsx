@@ -1,44 +1,125 @@
-import Countdown from "./components/Countdown";
 import Footer from "./components/Footer";
 import LazyEmbed from "./components/LazyEmbed";
+import MediaCarousel from "./components/MediaCarousel";
 import SiteHeader from "./components/SiteHeader";
 import { site } from "./site-data";
 
+const releaseItems = [
+  {
+    src: site.upcomingSoundCloudEmbed,
+    title: "BASS SO HEAVY — ALLEN KS",
+    eyebrow: "NUEVO LANZAMIENTO",
+    heading: "BASS SO HEAVY",
+    meta: "22 AGO 2026",
+    note: "ID ORIGINAL · YA DISPONIBLE",
+  },
+  {
+    src: site.latestSoundCloudEmbed,
+    title: "GETTING STARTED — ALLEN KS",
+    eyebrow: "LANZAMIENTO ANTERIOR",
+    heading: "GETTING STARTED",
+    meta: "174 BPM",
+    note: "ALLEN KS · ORIGINAL",
+  },
+];
+
+const liveItems = site.liveYouTubeEmbeds.map((src, index) => ({
+  src,
+  title: `ALLEN KS en vivo — set ${index + 1}`,
+  eyebrow: index === 0 ? "IKI B2B ALLEN KS" : "ALLEN KS EN VIVO",
+  heading: index === 0 ? "OTRA NOCHE" : `SET ${String(index + 1).padStart(2, "0")}`,
+}));
+
 export default function HomePage() {
   return (
-    <main id="inicio">
+    <main id="top">
       <SiteHeader active="inicio" />
-      <section className="home-hero section-dark">
-        <div className="hero-copy">
-          <div className="section-index"><span>01</span><span>DJ · PRODUCTOR · PROMOTOR</span></div>
-          <h1>ALLEN <em>KS</em></h1>
+
+      <section className="home-hero home-hero-cover section-dark">
+        <div className="hero-cover-overlay" aria-hidden="true" />
+        <div className="hero-cover-grid" aria-hidden="true" />
+        <div className="hero-copy hero-copy-clean">
+          <h1 className="hero-wordmark">ALLEN KS</h1>
           <p className="hero-aka">AKA DUBSTEP WACHO</p>
-          <p className="hero-lead">Artista argentino, creador de Otra Noche y fundador de Spartans Label. Descubrí su música, próximas fechas y proyectos.</p>
-          <div className="hero-actions"><a className="button button-red" href="#lanzamientos">ESCUCHAR AHORA ↘</a><a className="button button-ghost" href="#en-vivo">VER EN VIVO ↘</a></div>
-        </div>
-        <figure className="hero-photo-card"><img src="/assets/allen-ks-portada.jpg" alt="ALLEN KS tocando en vivo frente al público" /><figcaption>DJ SET EN VIVO · OTRA NOCHE FT. DANCING BUDHAS<br />2026</figcaption></figure>
-      </section>
-      <div className="word-marquee"><div><span>NUEVA MÚSICA</span><b>✦</b><span>SETS</span><b>✦</b><span>REMIXES</span><b>✦</b><span>COLABORACIONES</span><b>✦</b><span>NUEVA MÚSICA</span><b>✦</b><span>SETS</span></div></div>
-      <section id="lanzamientos" className="releases-section section-paper">
-        <div className="section-head"><div><div className="section-index"><span>02</span><span>LANZAMIENTOS</span></div><h2>LANZAMIENTOS</h2></div><a className="text-link" href="/musica">VER TODO EL CATÁLOGO →</a></div>
-        <div className="release-grid">
-          <article className="release-card"><div className="release-card-head"><span>ÚLTIMO LANZAMIENTO</span><b>174 BPM</b></div><h3>GETTING STARTED</h3><LazyEmbed className="square-embed" src={site.latestSoundCloudEmbed} title="GETTING STARTED de ALLEN KS" /></article>
-          <article className="release-card release-card-dark"><div className="release-card-head"><span>PRÓXIMO LANZAMIENTO</span><b>22 AGO 2026</b></div><h3>BASS SO HEAVY</h3><div className="countdown-row"><Countdown /></div><LazyEmbed className="square-embed" src={site.upcomingSoundCloudEmbed} title="BASS SO HEAVY — ID preview de ALLEN KS" /><p className="microcopy">ID ORIGINAL · ESCUCHA PREVIA</p></article>
+          <p className="hero-lead">
+            Artista argentino, creador de Otra Noche y fundador de Spartans Label.
+            Descubrí su música, próximas fechas y proyectos.
+          </p>
+          <div className="hero-actions">
+            <a className="button button-red" href="#lanzamientos">ESCUCHAR AHORA ↘</a>
+            <a className="button button-ghost" href="#en-vivo">VER EN VIVO ↘</a>
+          </div>
         </div>
       </section>
-      <section id="en-vivo" className="live-section section-dark">
-        <div className="section-head section-head-light"><div><div className="section-index"><span>03</span><span>ESCENARIOS & FECHAS</span></div><h2>EN VIVO</h2><p className="section-intro">Próximas fechas, DJ sets y momentos de ALLEN KS.</p></div></div>
-        <div className="live-grid">
-          <article className="live-video-card"><LazyEmbed className="video-embed" src={site.liveYouTubeEmbed} title="ALLEN KS en vivo" /><div className="live-caption"><span>EXPERIENCIA EN DIRECTO</span><strong>ALLEN KS EN VIVO</strong></div></article>
-          <aside className="agenda"><div className="agenda-title"><span>AGENDA</span><strong>PRÓXIMAS FECHAS</strong></div><article className="date-row confirmed"><time><b>16</b><span>AGO</span></time><div><strong>BUENOS AIRES</strong><p>FREE PARTY · MULTIGÉNERO</p></div><span className="status">CONFIRMADA</span></article>{[1,2].map(item=><article className="date-row" key={item}><time><b>00</b><span>MES</span></time><div><strong>CIUDAD / PROVINCIA</strong><p>LUGAR O FESTIVAL</p></div><span className="status">A CONFIRMAR</span></article>)}<a className="button button-red full" href={site.bookingWhatsapp} target="_blank" rel="noreferrer">CONTRATAR A ALLEN KS ↗</a></aside>
+
+      <section id="lanzamientos" className="v10-releases section-paper">
+        <header className="v10-centered-heading">
+          <span>MÚSICA NUEVA · ALLEN KS</span>
+          <h2>LANZAMIENTOS</h2>
+        </header>
+        <MediaCarousel items={releaseItems} variant="release" />
+        <div className="v10-section-link-wrap">
+          <a className="text-link" href="/musica">VER TODO EL CATÁLOGO →</a>
         </div>
       </section>
-      <section className="projects-home section-paper">
-        <div className="section-head"><div><div className="section-index"><span>04</span><span>UNIVERSO ALLEN KS</span></div><h2>PROYECTOS</h2></div><a className="text-link" href="/proyectos">CONOCER LOS PROYECTOS →</a></div>
-        <div className="projects-intro"><h3>No es sólo música. Es la escena que construyo alrededor.</h3><p>Spartans Label lleva la música hacia afuera. Otra Noche trae a los artistas a un encuentro en la pista, junto a la comunidad.</p></div>
-        <div className="project-grid"><a className="project-card project-card-dark" href="/proyectos#spartans"><span>01 · SELLO INDEPENDIENTE</span><h3>SPARTANS<br />LABEL</h3><p>Dubstep y Bass Music latinoamericano: artistas, lanzamientos y demos.</p><b>CONOCER SPARTANS → ↗</b></a><a className="project-card project-card-red" href="/proyectos#otra-noche"><span>02 · FIESTAS & COMUNIDAD</span><h3>OTRA<br />NOCHE</h3><p>Fiestas, DJs, sets y cruces alrededor de la cultura bass.</p><b>CONOCER OTRA NOCHE → ↗</b></a></div>
+
+      <section id="en-vivo" className="v10-live section-dark">
+        <header className="v10-centered-heading v10-centered-heading--light">
+          <span>SETS · SHOWS · MOMENTOS</span>
+          <h2>EN VIVO</h2>
+        </header>
+
+        <MediaCarousel items={liveItems} variant="live" />
+
+        <div className="v10-next-show">
+          <div className="v10-next-show-label">PRÓXIMAS FECHAS</div>
+          <div className="v10-next-show-date">
+            <strong>05 SEPTIEMBRE</strong>
+            <span>FREE PARTY · MULTIGÉNERO</span>
+          </div>
+        </div>
       </section>
-      <section className="contact-cta section-dark"><img src="/assets/allen-ks-logo.png" alt="ALLEN KS" /><div><p>BOOKINGS · COLABS · PRODUCCIÓN</p><h2>¿TENÉS UNA<br />IDEA?</h2><span>Fechas, colaboraciones, producción y propuestas.</span></div><a className="button button-red" href={site.whatsapp} target="_blank" rel="noreferrer">HABLEMOS ↗</a></section>
+
+      <section id="proyectos" className="v10-projects section-paper">
+        <header className="v10-centered-heading">
+          <span>PRODUCCIÓN · RECURSOS · CONTENIDO</span>
+          <h2>PROYECTOS</h2>
+        </header>
+
+        <div className="v10-project-layout">
+          <div className="v10-project-video">
+            <LazyEmbed
+              className="video-embed"
+              src={site.productionYouTubeEmbed}
+              title="ALLEN KS — contenido de producción"
+            />
+            <div className="v10-project-video-label">
+              <span>PRODUCTION CONTENT</span>
+              <strong>ALLEN KS / FL STUDIO</strong>
+            </div>
+          </div>
+
+          <div className="v10-project-copy">
+            <span className="v10-kicker">ABRIR EL PROYECTO</span>
+            <h3>MENOS SECRETO.<br />MÁS PROCESO.</h3>
+            <p>
+              Explicaciones de producción, proyectos de FL Studio, breakdowns y contenido
+              pensado para mostrar cómo construyo mis tracks desde adentro.
+            </p>
+            <div className="v10-project-tags">
+              <span>FLPs</span>
+              <span>PRODUCCIÓN</span>
+              <span>CONTENIDO EDUCATIVO</span>
+              <span>DESCARGAS GRATIS</span>
+            </div>
+            <p className="v10-project-note">
+              Próximamente también voy a ir liberando recursos y descargas gratuitas para productores.
+            </p>
+            <a className="button button-red" href="/proyectos">VER PROYECTOS →</a>
+          </div>
+        </div>
+      </section>
+
       <Footer />
     </main>
   );
