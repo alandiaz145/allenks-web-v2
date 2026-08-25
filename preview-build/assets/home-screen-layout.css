@@ -5,6 +5,10 @@ html body main.ak-editorial section.v10-static-releases{
   display:flex!important;
   flex-direction:column!important;
   justify-content:center!important;
+  background-image:url("./releases-bg-original.png")!important;
+  background-size:cover!important;
+  background-position:center center!important;
+  background-repeat:no-repeat!important;
 }
 
 html body main.ak-editorial section.v10-static-live,
