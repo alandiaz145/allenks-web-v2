@@ -363,6 +363,10 @@ html body main.ak-editorial footer.v10-static-footer .v10-footer-project-media>s
   letter-spacing:.1em!important;
 }
 
+html body main.ak-editorial footer.v10-static-footer .v10-footer-project-mobile-link{
+  display:none!important;
+}
+
 html body main.ak-editorial footer.v10-static-footer .v10-footer-logo-card{
   min-height:150px!important;
   padding:24px!important;
@@ -709,5 +713,191 @@ html body main.ak-editorial footer.v10-static-footer .v10-static-footer-bottom{
   html body main.ak-editorial footer.v10-static-footer .v10-static-footer-bottom{
     width:min(var(--ak-footer-width),100%)!important;
     margin-top:20px!important;
+  }
+}
+
+/* Mobile composition pass: one compact header and centered chapter rhythm. */
+@media(max-width:800px){
+  html body main.ak-editorial header.v3-site-header{
+    grid-template-columns:auto minmax(0,1fr) auto!important;
+    padding:0 14px!important;
+  }
+
+  html body main.ak-editorial header.v3-site-header .v3-nav,
+  html body main.ak-editorial header.v3-site-header .v3-header-socials{
+    display:none!important;
+  }
+
+  html body main.ak-editorial header.v3-site-header .v3-mobile-nav{
+    display:block!important;
+    grid-column:3!important;
+  }
+
+  html body main.ak-editorial header.v3-site-header .v3-mobile-nav summary{
+    width:auto!important;
+    min-width:104px!important;
+    height:44px!important;
+    display:grid!important;
+    grid-template-columns:auto 19px!important;
+    grid-template-rows:repeat(3,2px)!important;
+    place-content:center!important;
+    align-content:center!important;
+    column-gap:10px!important;
+    row-gap:4px!important;
+    padding:0 11px!important;
+  }
+
+  html body main.ak-editorial header.v3-site-header .v3-mobile-nav summary::before{
+    content:"INICIO"!important;
+    grid-column:1!important;
+    grid-row:1 / 4!important;
+    align-self:center!important;
+    font-family:var(--v3-nav)!important;
+    font-size:11px!important;
+    font-weight:900!important;
+    line-height:1!important;
+    letter-spacing:.1em!important;
+    color:#fff!important;
+  }
+
+  html body main.ak-editorial header.v3-site-header .v3-mobile-nav summary>span{
+    grid-column:2!important;
+    width:19px!important;
+    height:2px!important;
+    margin:0!important;
+    background:#fff!important;
+  }
+
+  html body main.ak-editorial section.v3-hero{
+    background-position:47% center!important;
+  }
+
+  html body main.ak-editorial section.v10-static-releases .v10-static-heading{
+    transform:translateY(34px)!important;
+  }
+
+  html body main.ak-editorial section.v10-static-releases .v10-static-catalog{
+    transform:translateY(-14px)!important;
+  }
+
+  html body main.ak-editorial section.v10-static-live .v10-static-heading{
+    transform:translateY(-22px)!important;
+    text-align:center!important;
+  }
+
+  html body main.ak-editorial section.v10-static-live .v10-static-next{
+    align-items:center!important;
+    justify-items:center!important;
+    text-align:center!important;
+    gap:12px!important;
+  }
+
+  html body main.ak-editorial section.v10-static-live .v10-static-next>span{
+    width:min(270px,100%)!important;
+    text-align:center!important;
+  }
+
+  html body main.ak-editorial section.v10-static-live .v10-static-next>div{
+    width:100%!important;
+    justify-items:center!important;
+    text-align:center!important;
+  }
+
+  html body main.ak-editorial section.v10-static-live .v10-static-next strong{
+    justify-content:center!important;
+    gap:.4em!important;
+    font-size:clamp(32px,9.2vw,42px)!important;
+    letter-spacing:.01em!important;
+  }
+
+  html body main.ak-editorial section.v10-static-live .v10-static-next small{
+    text-align:center!important;
+  }
+
+  html body main.ak-editorial section.v10-static-projects .v10-static-project-video-label{
+    margin-left:auto!important;
+    margin-right:auto!important;
+    justify-content:center!important;
+    text-align:center!important;
+  }
+
+  html body main.ak-editorial section.v10-static-projects .v10-static-project-copy{
+    width:min(560px,100%)!important;
+    margin:18px auto 0!important;
+    padding:20px 16px!important;
+    background:rgba(255,255,255,.94)!important;
+    border:1px solid rgba(9,6,6,.2)!important;
+    box-shadow:6px 6px 0 rgba(9,6,6,.14)!important;
+    text-align:center!important;
+  }
+
+  html body main.ak-editorial section.v10-static-projects .v10-static-project-copy h3{
+    margin-top:0!important;
+    font-size:clamp(30px,9vw,38px)!important;
+  }
+
+  html body main.ak-editorial section.v10-static-projects .v10-static-tags{
+    justify-content:center!important;
+  }
+
+  html body main.ak-editorial section.v10-static-projects .v10-static-project-copy>a{
+    margin-left:auto!important;
+    margin-right:auto!important;
+  }
+
+  html body main.ak-editorial footer.v10-static-footer{
+    min-height:0!important;
+    display:block!important;
+    padding:calc(var(--v3-header) + 20px) 14px 16px!important;
+  }
+
+  html body main.ak-editorial footer.v10-static-footer .v10-footer-grid{
+    align-content:start!important;
+  }
+
+  html body main.ak-editorial footer.v10-static-footer .v10-footer-project{
+    grid-template-columns:1fr!important;
+    gap:12px!important;
+    padding:16px!important;
+  }
+
+  html body main.ak-editorial footer.v10-static-footer .v10-footer-project>header{
+    justify-content:flex-start!important;
+  }
+
+  html body main.ak-editorial footer.v10-static-footer .v10-footer-project>header>div>span,
+  html body main.ak-editorial footer.v10-static-footer .v10-footer-project>header>a{
+    display:none!important;
+  }
+
+  html body main.ak-editorial footer.v10-static-footer .v10-footer-project h2{
+    margin:0!important;
+  }
+
+  html body main.ak-editorial footer.v10-static-footer .v10-footer-project .v10-footer-project-type{
+    margin-top:7px!important;
+    color:#e50914!important;
+  }
+
+  html body main.ak-editorial footer.v10-static-footer .v10-footer-project .v10-footer-project-description{
+    max-width:none!important;
+    margin-top:10px!important;
+  }
+
+  html body main.ak-editorial footer.v10-static-footer .v10-footer-project-media>span{
+    display:none!important;
+  }
+
+  html body main.ak-editorial footer.v10-static-footer .v10-footer-project-mobile-link{
+    min-height:42px!important;
+    display:flex!important;
+    align-items:center!important;
+    justify-content:center!important;
+    margin-top:0!important;
+    background:#e50914!important;
+    color:#fff!important;
+    font-size:10px!important;
+    font-weight:900!important;
+    letter-spacing:.1em!important;
   }
 }
