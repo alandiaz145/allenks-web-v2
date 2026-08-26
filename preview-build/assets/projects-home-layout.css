@@ -19,6 +19,11 @@ body{overflow-x:hidden}
 }
 
 .projects-reframe .projects-hero{
+  width:100%!important;
+  max-width:none!important;
+  min-height:0;
+  aspect-ratio:1919/1079;
+  margin:0!important;
   background:var(--projects-paper) url("./projects-hero-bg.webp") center/100% 100% no-repeat;
 }
 
