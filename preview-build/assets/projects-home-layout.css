@@ -90,14 +90,14 @@ body{overflow-x:hidden}
 
 .projects-reframe .projects-chapter--otra{
   color:#fff;
-  background:#060507 url("./en-vivo-bg-original.png") center/cover no-repeat;
+  background:#060507 url("./projects-otra-noche-bg.webp") center/cover no-repeat;
 }
 
 .projects-reframe .projects-chapter--otra::before{
   content:"";
   position:absolute;
   inset:0;
-  background:rgba(3,2,5,.48);
+  background:rgba(3,2,5,.14);
 }
 
 .projects-reframe .projects-chapter--spartans{
