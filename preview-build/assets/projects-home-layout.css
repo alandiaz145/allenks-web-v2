@@ -21,8 +21,9 @@ body{overflow-x:hidden}
 .projects-reframe .projects-hero{
   width:100%!important;
   max-width:none!important;
-  min-height:0;
-  aspect-ratio:1919/1079;
+  height:100svh;
+  min-height:100svh;
+  aspect-ratio:auto;
   margin:0!important;
   background:var(--projects-paper) url("./projects-hero-bg.webp") center/100% 100% no-repeat;
 }
@@ -85,7 +86,8 @@ body{overflow-x:hidden}
   display:flex;
   flex-direction:column;
   justify-content:center;
-  min-height:auto;
+  min-height:100svh;
+  height:auto;
   padding:calc(var(--v3-header) + 30px) clamp(20px,6vw,94px) 48px;
 }
 
