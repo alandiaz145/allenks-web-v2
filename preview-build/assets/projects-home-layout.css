@@ -19,12 +19,7 @@ body{overflow-x:hidden}
 }
 
 .projects-reframe .projects-hero{
-  display:grid;
-  place-items:center;
-  padding:calc(var(--v3-header) + 52px) clamp(20px,6vw,94px) 64px;
-  color:var(--projects-ink);
-  text-align:center;
-  background:var(--projects-paper) url("./content-bg-original.png") center/cover no-repeat;
+  background:var(--projects-paper) url("./projects-hero-bg.webp") center/cover no-repeat;
 }
 
 .projects-reframe .projects-hero-copy{
@@ -255,7 +250,7 @@ body{overflow-x:hidden}
 }
 
 @media(max-width:800px){
-  .projects-reframe .projects-hero{padding:calc(var(--v3-header) + 42px) 16px 54px;background-position:center}
+  .projects-reframe .projects-hero{background-position:center}
   .projects-reframe .projects-hero-copy{padding:24px 16px;box-shadow:7px 7px 0 var(--projects-red)}
   .projects-reframe .projects-hero h1{font-size:clamp(60px,20vw,92px)}
   .projects-reframe .projects-chapter{padding:calc(var(--v3-header) + 34px) 16px 52px}
