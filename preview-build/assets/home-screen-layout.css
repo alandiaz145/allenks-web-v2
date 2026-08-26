@@ -236,6 +236,70 @@ html body main.ak-editorial section.v10-static-projects .v10-static-tags span{
   background:rgba(255,255,255,.52)!important;
 }
 
+html body main.ak-editorial section.v10-static-projects .v10-content-carousel{
+  width:100%!important;
+}
+
+html body main.ak-editorial section.v10-static-projects .v10-content-stage{
+  width:100%!important;
+}
+
+html body main.ak-editorial section.v10-static-projects .v10-content-slide{
+  display:none!important;
+}
+
+html body main.ak-editorial section.v10-static-projects .v10-content-slide.is-active{
+  display:block!important;
+}
+
+html body main.ak-editorial section.v10-static-projects .v10-static-project-video-frame{
+  position:relative!important;
+  width:100%!important;
+  aspect-ratio:16/9!important;
+  overflow:hidden!important;
+  background:#000!important;
+  border:1px solid rgba(9,6,6,.18)!important;
+}
+
+html body main.ak-editorial section.v10-static-projects .v10-static-project-video-frame iframe{
+  position:absolute!important;
+  inset:0!important;
+  width:100%!important;
+  height:100%!important;
+  border:0!important;
+}
+
+html body main.ak-editorial section.v10-static-projects .v10-content-controls{
+  margin-top:10px!important;
+  display:grid!important;
+  grid-template-columns:46px minmax(0,1fr) 46px!important;
+  align-items:center!important;
+  gap:10px!important;
+}
+
+html body main.ak-editorial section.v10-static-projects .v10-content-controls button{
+  width:46px!important;
+  height:42px!important;
+  border:1px solid #090606!important;
+  background:rgba(255,255,255,.76)!important;
+  color:#090606!important;
+  cursor:pointer!important;
+}
+
+html body main.ak-editorial section.v10-static-projects .v10-content-controls button:hover{
+  background:#e50914!important;
+  border-color:#e50914!important;
+  color:#fff!important;
+}
+
+html body main.ak-editorial section.v10-static-projects .v10-content-controls>span{
+  text-align:center!important;
+  color:#090606!important;
+  font-size:9px!important;
+  font-weight:900!important;
+  letter-spacing:.12em!important;
+}
+
 /* Bottom: two project cards above, brand and social/contact controls below. */
 html body main.ak-editorial footer.v10-static-footer{
   min-height:100svh!important;
@@ -773,11 +837,11 @@ html body main.ak-editorial footer.v10-static-footer .v10-static-footer-bottom{
   }
 
   html body main.ak-editorial section.v10-static-releases .v10-static-heading{
-    transform:translateY(34px)!important;
+    transform:translateY(52px)!important;
   }
 
   html body main.ak-editorial section.v10-static-releases .v10-static-catalog{
-    transform:translateY(-14px)!important;
+    transform:translateY(-30px)!important;
   }
 
   html body main.ak-editorial section.v10-static-live .v10-static-heading{
@@ -801,6 +865,7 @@ html body main.ak-editorial footer.v10-static-footer .v10-static-footer-bottom{
     width:100%!important;
     justify-items:center!important;
     text-align:center!important;
+    transform:translateY(10px)!important;
   }
 
   html body main.ak-editorial section.v10-static-live .v10-static-next strong{
@@ -819,6 +884,12 @@ html body main.ak-editorial footer.v10-static-footer .v10-static-footer-bottom{
     margin-right:auto!important;
     justify-content:center!important;
     text-align:center!important;
+  }
+
+  html body main.ak-editorial section.v10-static-projects::before,
+  html body main.ak-editorial section.v10-static-projects::after{
+    content:none!important;
+    display:none!important;
   }
 
   html body main.ak-editorial section.v10-static-projects .v10-static-project-copy{
@@ -872,11 +943,14 @@ html body main.ak-editorial footer.v10-static-footer .v10-static-footer-bottom{
 
   html body main.ak-editorial footer.v10-static-footer .v10-footer-project h2{
     margin:0!important;
+    width:100%!important;
+    text-align:center!important;
   }
 
   html body main.ak-editorial footer.v10-static-footer .v10-footer-project .v10-footer-project-type{
     margin-top:7px!important;
     color:#e50914!important;
+    text-align:center!important;
   }
 
   html body main.ak-editorial footer.v10-static-footer .v10-footer-project .v10-footer-project-description{

@@ -22,7 +22,7 @@
 <link rel="icon" href="./assets/allen-ks-favicon-512-square.png" sizes="512x512" type="image/png"/>
 <link rel="apple-touch-icon" href="./assets/allen-ks-favicon-180-square.png"/>
 <meta name="theme-color" content="#050505"/>
-<link rel="stylesheet" href="./assets/migration-fixes.css?v=20260825-mobile1">
+<link rel="stylesheet" href="./assets/migration-fixes.css?v=20260826-mobile2">
 <link rel="stylesheet" href="https://raw.githack.com/alandiaz145/allenks-web-v2/migration/current-public-20260821/preview-build/assets/v3-static.css">
 <link rel="stylesheet" href="https://raw.githack.com/alandiaz145/allenks-web-v2/migration/current-public-20260821/preview-build/assets/v4-home.css">
 <link rel="stylesheet" href="https://raw.githack.com/alandiaz145/allenks-web-v2/migration/current-public-20260821/preview-build/assets/v10-static.css">
@@ -31,6 +31,14 @@
 .v10-static-soundcloud-volume{position:absolute;z-index:4;top:12px;right:12px;display:flex;align-items:center;gap:8px;padding:8px 10px;background:rgba(9,6,6,.82);border:1px solid rgba(255,255,255,.28);color:#fff;font:900 9px/1 Arial,sans-serif;letter-spacing:.12em}
 .v10-static-soundcloud-volume input{width:92px;accent-color:#e50914;cursor:pointer}
 .v10-static-spotify{background:#121212}
+@media(max-width:1120px){
+  main.ak-editorial header.v3-site-header>nav.v3-nav,
+  main.ak-editorial header.v3-site-header>.v3-header-socials{display:none!important;visibility:hidden!important}
+  main.ak-editorial header.v3-site-header>.v3-mobile-nav{display:block!important;visibility:visible!important;grid-column:3!important}
+  main.ak-editorial .v3-mobile-panel>a{font-size:14px!important;line-height:1.2!important}
+  main.ak-editorial .v3-mobile-panel>a[href="./proyectos/"]{font-size:14px!important;line-height:1.2!important}
+  main.ak-editorial .v3-mobile-panel>a[href="./proyectos/"]::after{content:none!important}
+}
 @media(max-width:800px){.v10-static-soundcloud-volume{top:8px;right:8px}.v10-static-soundcloud-volume input{width:72px}}
 </style>
 </head>
@@ -345,15 +353,28 @@
 </header>
 <div class="v10-static-project-layout">
 <div class="v10-static-project-video">
+<div class="v10-content-carousel" data-v10-carousel>
+<div class="v10-content-stage">
+<article class="v10-content-slide is-active" data-v10-slide>
 <div class="v10-static-project-video-frame">
-<iframe title="ALLEN KS — contenido de estudio" data-src="https://www.youtube.com/embed/3u6WUPHy0fI?controls=1&amp;modestbranding=1&amp;playsinline=1&amp;rel=0&amp;start=19" width="100%" height="100%" frameBorder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerPolicy="strict-origin-when-cross-origin" allowFullScreen loading="lazy">
-</iframe>
+<iframe title="ALLEN KS — Open FLP" data-src="https://www.youtube.com/embed/TVL0ZiSOXPg?controls=1&amp;modestbranding=1&amp;playsinline=1&amp;rel=0" width="100%" height="100%" frameBorder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerPolicy="strict-origin-when-cross-origin" allowFullScreen loading="lazy"></iframe>
 </div>
-<div class="v10-static-project-video-label">
-<span>DETRÁS DEL TRACK</span>
-<strong>ALLEN KS / FL STUDIO</strong>
+<div class="v10-static-project-video-label"><span>OPEN FLP</span><strong>ALLEN KS / FL STUDIO</strong></div>
+</article>
+<article class="v10-content-slide" data-v10-slide hidden>
+<div class="v10-static-project-video-frame">
+<iframe title="ALLEN KS — Tutorial de producción" data-src="https://www.youtube.com/embed/QhPshjFLbMs?controls=1&amp;modestbranding=1&amp;playsinline=1&amp;rel=0" width="100%" height="100%" frameBorder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerPolicy="strict-origin-when-cross-origin" allowFullScreen loading="lazy"></iframe>
+</div>
+<div class="v10-static-project-video-label"><span>TUTORIAL</span><strong>ALLEN KS / PRODUCCIÓN</strong></div>
+</article>
+</div>
+<div class="v10-content-controls" aria-label="Cambiar tutorial">
+<button type="button" data-prev aria-label="Tutorial anterior">←</button>
+<span>DESLIZÁ ENTRE TUTORIALES</span>
+<button type="button" data-next aria-label="Tutorial siguiente">→</button>
 </div>
 </div>
+ </div>
 <div class="v10-static-project-copy">
 <h3>ASÍ CONSTRUYO<br>MIS TRACKS.</h3>
 <p>Explicaciones de producción, proyectos de FL Studio y contenido pensado para mostrar cómo construyo mis tracks desde adentro.</p>
@@ -370,7 +391,7 @@
 <footer class="v10-static-footer">
 <div class="v10-footer-grid">
 <article class="v10-footer-project v10-footer-project--otra">
-<header><div><span>01 · PROYECTO</span><h2>OTRA NOCHE</h2><p class="v10-footer-project-type">FIESTA DE DUBSTEP</p><p class="v10-footer-project-description">Fiesta independiente de Dubstep y Bass Music con DJs, sets en vivo y una comunidad que comparte la misma energía.</p></div><a href="./proyectos/#otra-noche" aria-label="Ver Otra Noche">↗</a></header>
+<header><div><span>01 · PROYECTO</span><h2>OTRA NOCHE</h2><p class="v10-footer-project-type">FIESTA DE DUBSTEP</p><p class="v10-footer-project-description">Fiesta argentina de Dubstep y Bass Music que abre espacio a DJs de la nueva y vieja escuela, pensada para quienes viven esta cultura de verdad.</p></div><a href="./proyectos/#otra-noche" aria-label="Ver Otra Noche">↗</a></header>
 <a class="v10-footer-project-media" href="./proyectos/#otra-noche" aria-label="Abrir Otra Noche"><img src="https://i.ytimg.com/vi/gj2hWnohCco/maxresdefault.jpg" alt="Otra Noche — IKI B2B ALLEN KS" loading="lazy"><span>VER PROYECTO →</span></a>
 <a class="v10-footer-project-mobile-link" href="./proyectos/#otra-noche">VER PROYECTO →</a>
 </article>
@@ -379,7 +400,7 @@
 <div class="v10-footer-project-media"><iframe title="Spartans Label — último lanzamiento" data-src="https://w.soundcloud.com/player/?url=https%3A%2F%2Fsoundcloud.com%2Fspartanslabel%2Foutswag&amp;color=%23e50914&amp;auto_play=false&amp;hide_related=true&amp;show_comments=false&amp;show_user=true&amp;show_reposts=false&amp;show_teaser=false&amp;visual=true&amp;show_artwork=true" width="100%" height="100%" scrolling="no" frameBorder="no" allow="autoplay; encrypted-media" loading="lazy"></iframe></div>
 <a class="v10-footer-project-mobile-link" href="./proyectos/#spartans">VER PROYECTO →</a>
 </article>
-<div class="v10-footer-logo-card"><img src="https://raw.githack.com/alandiaz145/allenks-web-v2/migration/current-public-20260821/preview-build/assets/allen-ks-logo.png" alt="ALLEN KS"><span>DJ · PRODUCER · DUBSTEP WACHO</span></div>
+<div class="v10-footer-logo-card"><img src="https://raw.githack.com/alandiaz145/allenks-web-v2/migration/current-public-20260821/preview-build/assets/allen-ks-logo.png" alt="ALLEN KS"><span>DJ · PRODUCER · PROMOTOR</span></div>
 <div class="v10-footer-connect">
 <nav aria-label="Redes sociales">
 <a href="https://www.instagram.com/dubstepwacho/" target="_blank" rel="noreferrer"><img src="https://cdn.simpleicons.org/instagram/ffffff" alt=""><span>INSTAGRAM</span></a>
