@@ -19,7 +19,7 @@ body{overflow-x:hidden}
 }
 
 .projects-reframe .projects-hero{
-  background:var(--projects-paper) url("./projects-hero-bg.webp") center/cover no-repeat;
+  background:var(--projects-paper) url("./projects-hero-bg.webp") center/100% 100% no-repeat;
 }
 
 .projects-reframe .projects-hero-copy{
@@ -97,7 +97,7 @@ body{overflow-x:hidden}
 
 .projects-reframe .projects-chapter--spartans{
   color:var(--projects-ink);
-  background:var(--projects-paper) url("./releases-bg-original.png") center/cover no-repeat;
+  background:var(--projects-paper) url("./projects-spartans-bg.webp") center/100% 100% no-repeat;
 }
 
 .projects-reframe .projects-chapter-inner{
