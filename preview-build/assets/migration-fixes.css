@@ -32,3 +32,33 @@ html body main.store-page .v3-mobile-panel>a:nth-of-type(4){
   line-height:1.2!important;
 }
 html body main.store-page .v3-mobile-panel>a:nth-of-type(4)::after{content:none!important}
+
+/* INICIO — Lanzamientos: dejar únicamente la playlist oficial de YouTube. */
+html body main.ak-editorial #lanzamientos .v10-static-carousel{
+  grid-template-columns:minmax(0,1fr)!important;
+}
+html body main.ak-editorial #lanzamientos .v10-static-arrow{
+  display:none!important;
+}
+html body main.ak-editorial #lanzamientos .v10-static-stage>.v10-static-slide:not(:first-child){
+  display:none!important;
+}
+html body main.ak-editorial #lanzamientos .v10-static-stage>.v10-static-slide:first-child{
+  display:block!important;
+}
+
+/* INICIO — próxima fecha. */
+html body main.ak-editorial #en-vivo .v10-date-day,
+html body main.ak-editorial #en-vivo .v10-date-month{
+  display:none!important;
+}
+html body main.ak-editorial #en-vivo .v10-static-next strong::after{
+  content:"19 SEPTIEMBRE";
+}
+html body main.ak-editorial #en-vivo .v10-static-next small{
+  font-size:0!important;
+}
+html body main.ak-editorial #en-vivo .v10-static-next small::after{
+  content:"WRECKAGE";
+  font-size:10px!important;
+}
