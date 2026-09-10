@@ -1,3 +1,34 @@
 @import url("https://raw.githack.com/alandiaz145/allenks-web-v2/f13192a6cbc55bf212685df2ceabf940f3224dd1/preview-build/assets/migration-fixes.css");
 @import url("./en-vivo-bg.css");
 @import url("./home-screen-layout.css?v=20260826-mobile2");
+
+/* TIENDA — restaurar el último enlace como texto real y dejar ::after solo para el underline. */
+html body main.store-page header.v3-site-header nav.v3-nav a:last-child{
+  font-family:var(--v3-nav)!important;
+  font-size:clamp(13px,.92vw,15px)!important;
+  line-height:1!important;
+  text-indent:0!important;
+  transform:none!important;
+}
+html body main.store-page header.v3-site-header nav.v3-nav a:last-child::before{content:none!important}
+html body main.store-page header.v3-site-header nav.v3-nav a:last-child::after{
+  content:""!important;
+  position:absolute!important;
+  left:14px!important;
+  right:14px!important;
+  bottom:0!important;
+  width:auto!important;
+  height:2px!important;
+  padding:0!important;
+  transform:none!important;
+  background:transparent!important;
+}
+html body main.store-page header.v3-site-header nav.v3-nav a:last-child:hover::after,
+html body main.store-page header.v3-site-header nav.v3-nav a:last-child:focus-visible::after{
+  background:var(--v3-red)!important;
+}
+html body main.store-page .v3-mobile-panel>a:nth-of-type(4){
+  font-size:14px!important;
+  line-height:1.2!important;
+}
+html body main.store-page .v3-mobile-panel>a:nth-of-type(4)::after{content:none!important}
