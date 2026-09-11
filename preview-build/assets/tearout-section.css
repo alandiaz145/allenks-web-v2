@@ -1,1 +1,34 @@
-.store-v2 .shop-pack.tearout-stage{position:relative!important;width:100%;aspect-ratio:1736/906;min-height:0!important;margin-top:var(--header);padding:0!important;overflow:hidden;background:#080808!important}.store-v2 .shop-pack.tearout-stage:before,.store-v2 .shop-pack.tearout-stage:after{content:none!important}.tearout-art{position:absolute;inset:0;z-index:0;background:url('./tearout-wallpaper.avif') center/100% 100% no-repeat}.tearout-functional{position:absolute;inset:0;z-index:2;pointer-events:none}.tearout-box-slot{position:absolute;left:17%;bottom:4.5%;width:29%;max-width:520px;display:flex;align-items:flex-end;justify-content:center}.tearout-box-slot img{display:block;width:100%;height:auto;filter:drop-shadow(0 22px 34px rgba(0,0,0,.58))}@media(max-width:780px){.store-v2 .shop-pack.tearout-stage{aspect-ratio:1736/906;margin-top:var(--header)}.tearout-art{background-size:cover;background-position:center}.tearout-box-slot{left:14%;bottom:4%;width:34%}}
+.store-v2 .shop-pack.tearout-stage{
+  position:relative!important;
+  width:100%;
+  aspect-ratio:1736/906;
+  min-height:0!important;
+  margin-top:var(--header);
+  padding:0!important;
+  overflow:hidden;
+  background:#080808!important;
+}
+.store-v2 .shop-pack.tearout-stage:before,
+.store-v2 .shop-pack.tearout-stage:after{
+  content:none!important;
+}
+.tearout-art{
+  position:absolute;
+  inset:0;
+  z-index:0;
+  background:url('./tearout-wallpaper.avif') center/100% 100% no-repeat;
+}
+.tearout-functional,
+.tearout-box-slot{
+  display:none!important;
+}
+@media (max-width:780px){
+  .store-v2 .shop-pack.tearout-stage{
+    aspect-ratio:1736/906;
+    margin-top:var(--header);
+  }
+  .tearout-art{
+    background-size:cover;
+    background-position:center;
+  }
+}
