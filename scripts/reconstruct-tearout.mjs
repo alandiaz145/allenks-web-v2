@@ -4,7 +4,7 @@ import { join } from "node:path";
 const root = process.cwd();
 const sourceDir = join(root, "asset-source", "tearout", "bg45");
 const targetDir = join(root, "preview-build", "assets");
-const target = join(targetDir, "tearout-wallpaper.avif");
+const target = join(targetDir, "tearout-wallpaper.webp");
 
 if (!existsSync(sourceDir)) {
   throw new Error("Missing Tearout wallpaper source chunks.");
