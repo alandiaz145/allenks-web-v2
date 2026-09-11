@@ -13,7 +13,8 @@ html = html.replace(/<style id="tearout-bg-[^"]+">[\s\S]*?<\/style>/g, "");
 html = html.replace(/<style id="tearout-bg-imgur-[^"]+">[\s\S]*?<\/style>/g, "");
 html = html.replace(/<style id="store-bg-imgur-[^"]+">[\s\S]*?<\/style>/g, "");
 html = html.replace(/<img src="\.\.\/assets\/store-merch\.webp[^"]*" alt="Remera Dubstep Is Life">/g, "");
+html = html.replace(/src="\.\.\/assets\/tearout-box\.avif[^"]*"/g, 'src="https://i.imgur.com/UZfjjCC.png"');
 html = html.replace("</head>", `${override}</head>`);
 
 writeFileSync(storeHtmlPath, html);
-console.log("Injected Imgur backgrounds and responsive Merch fixes into Tienda.");
+console.log("Injected Imgur backgrounds, high-quality Tearout product and responsive Merch fixes into Tienda.");
