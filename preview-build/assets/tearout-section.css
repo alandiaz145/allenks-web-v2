@@ -16,7 +16,10 @@
   position:absolute;
   inset:0;
   z-index:0;
-  background:url('./tearout-wallpaper.avif') center/100% 100% no-repeat;
+  background-image:url('./tearout-wallpaper.avif?v=20260911-2');
+  background-position:center;
+  background-size:100% 100%;
+  background-repeat:no-repeat;
 }
 .tearout-functional,
 .tearout-box-slot{
