@@ -7,7 +7,6 @@
   },
   "scripts": {
     "dev": "next dev",
-    "prebuild": "node scripts/reconstruct-tearout.mjs",
     "build": "node scripts/build-static.mjs",
     "start": "next start",
     "lint": "eslint . --ignore-pattern out --ignore-pattern .next --ignore-pattern preview-build --ignore-pattern site"
