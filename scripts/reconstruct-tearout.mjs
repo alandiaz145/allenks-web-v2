@@ -1,21 +1,16 @@
-import { existsSync, mkdirSync, readdirSync, readFileSync, writeFileSync } from "node:fs";
+import { existsSync, mkdirSync, readFileSync, writeFileSync } from "node:fs";
 import { join } from "node:path";
 
 const root = process.cwd();
-const sourceDir = join(root, "asset-source", "tearout", "bg45");
+const source = join(root, "asset-source", "tearout", "final-wallpaper.b64.txt");
 const targetDir = join(root, "preview-build", "assets");
-const target = join(targetDir, "tearout-wallpaper.avif");
+const target = join(targetDir, "tearout-wallpaper-final.avif");
 
-if (!existsSync(sourceDir)) {
-  throw new Error("Missing Tearout wallpaper source chunks.");
+if (!existsSync(source)) {
+  throw new Error("Missing Tearout wallpaper source.");
 }
 
-const chunks = readdirSync(sourceDir)
-  .filter((name) => name.endsWith(".txt"))
-  .sort()
-  .map((name) => readFileSync(join(sourceDir, name), "utf8").trim())
-  .join("");
-
 mkdirSync(targetDir, { recursive: true });
-writeFileSync(target, Buffer.from(chunks, "base64"));
+const base64 = readFileSync(source, "utf8").trim();
+writeFileSync(target, Buffer.from(base64, "base64"));
 console.log(`Rebuilt Tearout wallpaper: ${target}`);
