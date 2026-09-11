@@ -16,8 +16,8 @@ writeFileSync(assetPath, Buffer.from(base64, "base64"));
 
 if (!existsSync(storeHtmlPath)) throw new Error("Missing Tienda HTML.");
 let html = readFileSync(storeHtmlPath, "utf8");
-const override = `<style id="tearout-bg-20260911d">.tearout{background-image:url('../assets/tearout-bg.avif?v=20260911d')!important;background-size:cover!important;background-position:center center!important;background-repeat:no-repeat!important;background-color:#070708!important}.tearout:before,.tearout:after{content:none!important}.side-note{display:none!important}</style>`;
-html = html.replace(/<style id="tearout-bg-20260911d">[\s\S]*?<\/style>/, "");
+const override = `<style id="tearout-bg-20260911e">.tearout{background-image:url('../assets/tearout-bg.avif?v=20260911e')!important;background-size:cover!important;background-position:center center!important;background-repeat:no-repeat!important;background-color:#070708!important}.tearout:before,.tearout:after{content:none!important}.side-note{display:none!important}</style>`;
+html = html.replace(/<style id="tearout-bg-[^"]+">[\s\S]*?<\/style>/g, "");
 html = html.replace("</head>", `${override}</head>`);
 writeFileSync(storeHtmlPath, html);
 console.log("Rebuilt Tearout background and injected Tienda override.");
