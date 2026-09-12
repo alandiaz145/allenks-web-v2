@@ -26,11 +26,11 @@ home = home.replace(/<style id="homepage-wallpaper-fix-[^"]+">[\s\S]*?<\/style>/
 home = home.replace("</head>", `${homeOverride}</head>`);
 writeFileSync(homeHtmlPath, home);
 
-const sharedTopbarLink = '<link rel="stylesheet" href="/assets/shared-topbar.css">';
+const sharedTopbarLink = '<link rel="stylesheet" href="/assets/shared-topbar.css?v=20260911-root2">';
 
 function canonicalHeader(active, prefix) {
   const is = key => active === key ? ' class="active" aria-current="page"' : '';
-  return `<header class="site-header ak-canonical-header"><a class="brand" href="${prefix}" aria-label="ALLEN KS — Inicio">ALLEN KS</a><nav class="nav" aria-label="Navegación principal"><a${is('music')} href="${prefix}musica/">MÚSICA</a><a href="${prefix}#en-vivo">EN VIVO</a><a${is('store')} href="${prefix}tienda/">TIENDA</a><a${is('content')} href="${prefix}proyectos/">CONTENIDO</a></nav><div class="socials" aria-label="Redes de ALLEN KS"><a href="https://www.instagram.com/dubstepwacho/" target="_blank" rel="noreferrer" aria-label="Instagram"><img src="https://cdn.simpleicons.org/instagram/ffffff" alt=""></a><a href="https://soundcloud.com/allenksmusic" target="_blank" rel="noreferrer" aria-label="SoundCloud"><img src="https://cdn.simpleicons.org/soundcloud/ffffff" alt=""></a><a href="https://www.youtube.com/@allenksmusic" target="_blank" rel="noreferrer" aria-label="YouTube"><img src="https://cdn.simpleicons.org/youtube/ffffff" alt=""></a><a href="https://open.spotify.com/artist/2Qutt1ypoIqkTMZEELO8TZ" target="_blank" rel="noreferrer" aria-label="Spotify"><img src="https://cdn.simpleicons.org/spotify/ffffff" alt=""></a></div><details class="mobile-nav"><summary aria-label="Abrir menú"><span></span><span></span><span></span></summary><nav><a${is('music')} href="${prefix}musica/">MÚSICA</a><a href="${prefix}#en-vivo">EN VIVO</a><a${is('store')} href="${prefix}tienda/">TIENDA</a><a${is('content')} href="${prefix}proyectos/">CONTENIDO</a></nav></details></header>`;
+  return `<header class="site-header ak-canonical-header"><a class="brand" href="${prefix}" aria-label="ALLEN KS — Inicio">ALLEN KS</a><nav class="nav" aria-label="Navegación principal"><a${is('music')} href="${prefix}musica/">MÚSICA</a><a href="${prefix}#en-vivo">EN VIVO</a><a${is('store')} href="${prefix}tienda/">TIENDA</a><a${is('content')} href="${prefix}proyectos/">CONTENIDO</a></nav><div class="socials" aria-label="Redes de ALLEN KS"><a href="https://www.instagram.com/dubstepwacho/" target="_blank" rel="noreferrer" aria-label="Instagram"><img src="https://cdn.simpleicons.org/instagram/ffffff" alt=""></a><a href="https://soundcloud.com/allenksmusic" target="_blank" rel="noreferrer" aria-label="SoundCloud"><img src="https://cdn.simpleicons.org/soundcloud/ffffff" alt=""></a><a href="https://www.youtube.com/@allenksmusic" target="_blank" rel="noreferrer" aria-label="YouTube"><img src="https://cdn.simpleicons.org/youtube/ffffff" alt=""></a><a href="https://open.spotify.com/artist/2Qutt1ypoIqkTMZEELO8TZ" target="_blank" rel="noreferrer" aria-label="Spotify"><img src="https://cdn.simpleicons.org/spotify/ffffff" alt=""></a></div><details class="mobile-nav"><summary aria-label="Abrir menú">☰</summary><nav><a${is('music')} href="${prefix}musica/">MÚSICA</a><a href="${prefix}#en-vivo">EN VIVO</a><a${is('store')} href="${prefix}tienda/">TIENDA</a><a${is('content')} href="${prefix}proyectos/">CONTENIDO</a></nav></details></header>`;
 }
 
 function canonicalizePage(path) {
@@ -39,8 +39,14 @@ function canonicalizePage(path) {
   const rel = relative(previewDir, path).replaceAll('\\', '/');
   const prefix = rel === 'index.html' ? './' : '../';
   const active = rel.startsWith('musica/') ? 'music' : rel.startsWith('tienda/') ? 'store' : rel.startsWith('proyectos/') ? 'content' : '';
-  page = page.replace(/<header\b[^>]*class="[^"]*site-header[^"]*"[^>]*>[\s\S]*?<\/header>/i, canonicalHeader(active, prefix));
-  page = page.replace(/<link rel="stylesheet" href="\/assets\/shared-topbar\.css">/g, '');
+  const header = canonicalHeader(active, prefix);
+
+  // Remove any page-specific header wherever it currently lives, then mount
+  // the exact same canonical header directly under <body> on every route.
+  page = page.replace(/<header\b[^>]*class="[^"]*site-header[^"]*"[^>]*>[\s\S]*?<\/header>/i, '');
+  page = page.replace(/(<body\b[^>]*>)/i, `$1${header}`);
+
+  page = page.replace(/<link rel="stylesheet" href="\/assets\/shared-topbar\.css(?:\?[^\"]*)?">/g, '');
   page = page.replace('</head>', `${sharedTopbarLink}</head>`);
   writeFileSync(path, page);
 }
@@ -55,4 +61,4 @@ function walk(dir) {
 }
 
 walk(previewDir);
-console.log("Applied Tienda fixes, restored homepage wallpaper, and rewrote every public header to one exact canonical topbar.");
+console.log("Applied Tienda fixes, restored homepage wallpaper, and mounted one canonical topbar at body root on every public page.");
