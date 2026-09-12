@@ -1,5 +1,5 @@
 import { existsSync, readFileSync, readdirSync, statSync, writeFileSync } from "node:fs";
-import { join } from "node:path";
+import { join, relative } from "node:path";
 
 const root = process.cwd();
 const previewDir = join(root, "preview-build");
@@ -27,23 +27,32 @@ home = home.replace("</head>", `${homeOverride}</head>`);
 writeFileSync(homeHtmlPath, home);
 
 const sharedTopbarLink = '<link rel="stylesheet" href="/assets/shared-topbar.css">';
-function injectSharedTopbar(dir) {
+
+function canonicalHeader(active, prefix) {
+  const is = key => active === key ? ' class="active" aria-current="page"' : '';
+  return `<header class="site-header ak-canonical-header"><a class="brand" href="${prefix}" aria-label="ALLEN KS — Inicio">ALLEN KS</a><nav class="nav" aria-label="Navegación principal"><a${is('music')} href="${prefix}musica/">MÚSICA</a><a href="${prefix}#en-vivo">EN VIVO</a><a${is('store')} href="${prefix}tienda/">TIENDA</a><a${is('content')} href="${prefix}proyectos/">CONTENIDO</a></nav><div class="socials" aria-label="Redes de ALLEN KS"><a href="https://www.instagram.com/dubstepwacho/" target="_blank" rel="noreferrer" aria-label="Instagram"><img src="https://cdn.simpleicons.org/instagram/ffffff" alt=""></a><a href="https://soundcloud.com/allenksmusic" target="_blank" rel="noreferrer" aria-label="SoundCloud"><img src="https://cdn.simpleicons.org/soundcloud/ffffff" alt=""></a><a href="https://www.youtube.com/@allenksmusic" target="_blank" rel="noreferrer" aria-label="YouTube"><img src="https://cdn.simpleicons.org/youtube/ffffff" alt=""></a><a href="https://open.spotify.com/artist/2Qutt1ypoIqkTMZEELO8TZ" target="_blank" rel="noreferrer" aria-label="Spotify"><img src="https://cdn.simpleicons.org/spotify/ffffff" alt=""></a></div><details class="mobile-nav"><summary aria-label="Abrir menú"><span></span><span></span><span></span></summary><nav><a${is('music')} href="${prefix}musica/">MÚSICA</a><a href="${prefix}#en-vivo">EN VIVO</a><a${is('store')} href="${prefix}tienda/">TIENDA</a><a${is('content')} href="${prefix}proyectos/">CONTENIDO</a></nav></details></header>`;
+}
+
+function canonicalizePage(path) {
+  let page = readFileSync(path, 'utf8');
+  if (!page.includes('site-header')) return;
+  const rel = relative(previewDir, path).replaceAll('\\', '/');
+  const prefix = rel === 'index.html' ? './' : '../';
+  const active = rel.startsWith('musica/') ? 'music' : rel.startsWith('tienda/') ? 'store' : rel.startsWith('proyectos/') ? 'content' : '';
+  page = page.replace(/<header\b[^>]*class="[^"]*site-header[^"]*"[^>]*>[\s\S]*?<\/header>/i, canonicalHeader(active, prefix));
+  page = page.replace(/<link rel="stylesheet" href="\/assets\/shared-topbar\.css">/g, '');
+  page = page.replace('</head>', `${sharedTopbarLink}</head>`);
+  writeFileSync(path, page);
+}
+
+function walk(dir) {
   for (const name of readdirSync(dir)) {
     const path = join(dir, name);
     const stat = statSync(path);
-    if (stat.isDirectory()) {
-      injectSharedTopbar(path);
-      continue;
-    }
-    if (!name.endsWith('.html')) continue;
-    let page = readFileSync(path, 'utf8');
-    if (!page.includes('site-header')) continue;
-    page = page.replace(/<link rel="stylesheet" href="\/assets\/shared-topbar\.css">/g, '');
-    page = page.replace(/>PROYECTOS<\/a>/g, '>CONTENIDO</a>');
-    page = page.replace('</head>', `${sharedTopbarLink}</head>`);
-    writeFileSync(path, page);
+    if (stat.isDirectory()) walk(path);
+    else if (name.endsWith('.html')) canonicalizePage(path);
   }
 }
 
-injectSharedTopbar(previewDir);
-console.log("Applied Tienda fixes, restored homepage wallpaper, and enforced one canonical topbar on every page.");
+walk(previewDir);
+console.log("Applied Tienda fixes, restored homepage wallpaper, and rewrote every public header to one exact canonical topbar.");
