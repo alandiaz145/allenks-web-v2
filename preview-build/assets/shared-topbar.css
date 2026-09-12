@@ -1,0 +1,26 @@
+:root{--ak-topbar-h:76px;--ak-topbar-red:#ff2428}
+
+/* Canonical ALLEN KS top bar — copied from /tienda/. Use .v3-site-header on every new page. */
+.v3-site-header{height:var(--ak-topbar-h)!important;position:fixed!important;top:0!important;left:0!important;right:0!important;z-index:100!important;display:grid!important;grid-template-columns:1fr auto 1fr!important;align-items:center!important;gap:0!important;padding:0 4.6vw!important;background:rgba(5,5,6,.97)!important;border-bottom:1px solid #202024!important;color:#fff!important;backdrop-filter:none!important}
+.v3-site-header .v3-brand{justify-self:start!important;font:900 italic 25px/1 Arial,Helvetica,sans-serif!important;letter-spacing:-1.5px!important;color:#fff!important;white-space:nowrap!important;text-transform:none!important}
+.v3-site-header .v3-nav{height:100%!important;display:flex!important;align-items:center!important;justify-content:center!important;gap:46px!important}
+.v3-site-header .v3-nav a{position:relative!important;height:100%!important;display:flex!important;align-items:center!important;padding:0!important;font:900 12px/1 Arial,Helvetica,sans-serif!important;letter-spacing:1.8px!important;color:#fff!important;text-transform:uppercase!important}
+.v3-site-header .v3-nav a:after{content:""!important;position:absolute!important;left:0!important;right:0!important;bottom:0!important;height:3px!important;background:transparent!important}
+.v3-site-header .v3-nav a:hover:after,.v3-site-header .v3-nav a.is-active:after,.v3-site-header .v3-nav a[aria-current="page"]:after{background:var(--ak-topbar-red)!important}
+.v3-site-header .v3-header-socials{justify-self:end!important;display:flex!important;align-items:center!important;gap:8px!important}
+.v3-site-header .v3-header-socials a{width:35px!important;height:35px!important;display:grid!important;place-items:center!important;border:1px solid #35363b!important;background:#0a0a0c!important}
+.v3-site-header .v3-header-socials img{width:16px!important;height:16px!important;display:block!important}
+.v3-site-header .v3-mobile-nav{display:none!important;position:relative!important}
+
+@media(max-width:1120px){
+  .v3-site-header{height:64px!important;grid-template-columns:1fr auto!important;padding:0 18px!important}
+  .v3-site-header>.v3-nav,.v3-site-header>.v3-header-socials{display:none!important}
+  .v3-site-header>.v3-mobile-nav{display:block!important;grid-column:2!important;justify-self:end!important}
+  .v3-site-header .v3-mobile-nav summary{width:auto!important;height:auto!important;border:0!important;display:block!important;list-style:none!important;cursor:pointer!important;font-size:26px!important;line-height:1!important}
+  .v3-site-header .v3-mobile-nav summary::-webkit-details-marker{display:none!important}
+  .v3-site-header .v3-mobile-nav summary span{display:none!important}
+  .v3-site-header .v3-mobile-nav summary:after{content:"☰"!important;color:#fff!important}
+  .v3-site-header .v3-mobile-panel{position:absolute!important;right:-18px!important;top:41px!important;width:100vw!important;display:grid!important;gap:12px!important;padding:18px!important;background:#070708!important;border:0!important;border-bottom:1px solid #333!important;box-shadow:none!important}
+  .v3-site-header .v3-mobile-panel>a{min-height:auto!important;display:block!important;padding:0!important;border:0!important;background:transparent!important;font:900 12px/1.4 Arial,Helvetica,sans-serif!important;letter-spacing:1.5px!important;color:#fff!important;text-transform:uppercase!important}
+  .v3-site-header .v3-mobile-socials{display:none!important}
+}
