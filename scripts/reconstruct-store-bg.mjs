@@ -37,12 +37,13 @@ function injectSharedTopbar(dir) {
     }
     if (!name.endsWith('.html')) continue;
     let page = readFileSync(path, 'utf8');
-    if (!page.includes('v3-site-header')) continue;
+    if (!page.includes('site-header')) continue;
     page = page.replace(/<link rel="stylesheet" href="\/assets\/shared-topbar\.css">/g, '');
+    page = page.replace(/>PROYECTOS<\/a>/g, '>CONTENIDO</a>');
     page = page.replace('</head>', `${sharedTopbarLink}</head>`);
     writeFileSync(path, page);
   }
 }
 
 injectSharedTopbar(previewDir);
-console.log("Applied Tienda fixes, restored homepage wallpaper, and standardized the canonical site topbar.");
+console.log("Applied Tienda fixes, restored homepage wallpaper, and enforced one canonical topbar on every page.");
