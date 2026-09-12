@@ -1,9 +1,10 @@
-import { existsSync, readFileSync, writeFileSync } from "node:fs";
+import { existsSync, readFileSync, readdirSync, statSync, writeFileSync } from "node:fs";
 import { join } from "node:path";
 
 const root = process.cwd();
-const storeHtmlPath = join(root, "preview-build", "tienda", "index.html");
-const homeHtmlPath = join(root, "preview-build", "index.html");
+const previewDir = join(root, "preview-build");
+const storeHtmlPath = join(previewDir, "tienda", "index.html");
+const homeHtmlPath = join(previewDir, "index.html");
 
 if (!existsSync(storeHtmlPath)) throw new Error("Missing Tienda HTML.");
 if (!existsSync(homeHtmlPath)) throw new Error("Missing home HTML.");
@@ -25,4 +26,23 @@ home = home.replace(/<style id="homepage-wallpaper-fix-[^"]+">[\s\S]*?<\/style>/
 home = home.replace("</head>", `${homeOverride}</head>`);
 writeFileSync(homeHtmlPath, home);
 
-console.log("Applied Tienda image sizing fixes and restored homepage wallpaper.");
+const sharedTopbarLink = '<link rel="stylesheet" href="/assets/shared-topbar.css">';
+function injectSharedTopbar(dir) {
+  for (const name of readdirSync(dir)) {
+    const path = join(dir, name);
+    const stat = statSync(path);
+    if (stat.isDirectory()) {
+      injectSharedTopbar(path);
+      continue;
+    }
+    if (!name.endsWith('.html')) continue;
+    let page = readFileSync(path, 'utf8');
+    if (!page.includes('v3-site-header')) continue;
+    page = page.replace(/<link rel="stylesheet" href="\/assets\/shared-topbar\.css">/g, '');
+    page = page.replace('</head>', `${sharedTopbarLink}</head>`);
+    writeFileSync(path, page);
+  }
+}
+
+injectSharedTopbar(previewDir);
+console.log("Applied Tienda fixes, restored homepage wallpaper, and standardized the canonical site topbar.");
