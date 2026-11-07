@@ -1,0 +1,30 @@
+name: Verify THE SOUND static review
+on:
+  pull_request:
+    branches: [main]
+  push:
+    branches: [redesign/the-sound-review-20261107]
+permissions:
+  contents: read
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+      - name: Build static public site and isolated online preview
+        run: |
+          node scripts/build-static.mjs
+          node scripts/build-online-preview.mjs
+      - name: Test routes, assets, embeds, editable data and preview isolation
+        run: node --test tests/static-site.test.mjs
+      - name: Check browser JavaScript syntax
+        run: node --check preview-build/assets/the-sound.js
+      - name: Check generated pages are committed
+        run: git diff --exit-code -- preview-build preview-online
+      - uses: actions/upload-artifact@v4
+        with:
+          name: allenks-the-sound-review
+          path: out

@@ -1,0 +1,69 @@
+{
+  "socials": {
+    "Instagram": "https://www.instagram.com/allenksmusic/",
+    "SoundCloud": "https://soundcloud.com/allenksmusic",
+    "YouTube": "https://www.youtube.com/@allenksmusic",
+    "Spotify": "https://open.spotify.com/artist/2Qutt1ypoIqkTMZEELO8TZ"
+  },
+  "releases": [
+    {
+      "title": "BUST IT",
+      "type": "Original",
+      "video": "ki1cUmKv_5Y",
+      "url": "https://www.youtube.com/watch?v=ki1cUmKv_5Y"
+    },
+    {
+      "title": "RIDDIM RIOT",
+      "type": "Original",
+      "url": "https://soundcloud.com/allenksmusic/riddim-riot"
+    },
+    {
+      "title": "DAMAGE",
+      "type": "Remix",
+      "subtitle": "Virtual Riot & DIESEL · ALLEN KS Remix",
+      "url": "https://soundcloud.com/allenksmusic/virtual-riot-diesel-damage-allen-ks-remix-feat-shaquille-oneal"
+    }
+  ],
+  "sets": [
+    {
+      "title": "IKI B2B ALLEN KS",
+      "subtitle": "Otra Noche · Live set",
+      "video": "gj2hWnohCco",
+      "start": 3522
+    },
+    {
+      "title": "OTRA NOCHE / VLOG #3",
+      "subtitle": "Dubstep en Argentina · Archivo",
+      "video": "fo5r5zwix6A",
+      "start": 0
+    },
+    {
+      "title": "BARDO FIESTA / VLOG #2",
+      "subtitle": "Dubstep en Argentina · Archivo",
+      "video": "t1Ax3fmWiYE",
+      "start": 0
+    }
+  ],
+  "shows": [],
+  "content": [
+    {
+      "title": "Euronymous / Walkthrough #1",
+      "subtitle": "Ghostemane · Dubstep Remix / FL Studio",
+      "video": "TVL0ZiSOXPg"
+    }
+  ],
+  "projects": [
+    {
+      "title": "SPARTANS LABEL",
+      "subtitle": "Sello independiente de Dubstep & Bass. Un espacio para el sonido de la escena.",
+      "url": "https://soundcloud.com/spartanslabel",
+      "label": "Escuchar el sello"
+    },
+    {
+      "title": "OTRA NOCHE",
+      "subtitle": "Bass, encuentros y cultura underground. Mi música también se vive en la pista.",
+      "url": "https://www.youtube.com/watch?v=gj2hWnohCco&t=3522s",
+      "label": "Ver el B2B con IKI"
+    }
+  ]
+}
