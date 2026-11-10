@@ -152,7 +152,7 @@
       </div>
     </section>`;
   }
-  const promoLines = ["DESCARGA GRATUITA", "DISPONIBLE EN SOUNDCLOUD", "EXPLORÁ MI MÚSICA", "ALLEN KS · DUBSTEP / BASS"];
+  const promoLines = ["ESCUCHÁ ONLINE", "DISFRUTÁ MI MÚSICA", "EXPLORÁ EL CATÁLOGO", "ALLEN KS · DUBSTEP / BASS"];
   function player() {
     const t = data.tracks[selected];
     return `<section class="player-wrap container" aria-label="Reproductor musical">
@@ -160,7 +160,7 @@
         <a class="player-cover" id="player-cover-link" href="${trackHref(t)}" aria-label="Abrir página de ${t.title}">${artwork(t, "player-art")}</a>
         <div class="player-controls"><button class="player-skip-btn" type="button" data-skip="-10" aria-label="Retroceder 10 segundos">−10</button><button class="player-main-btn" id="player-main-btn" type="button" aria-label="Reproducir o pausar">${icon("play", 30)}</button><button class="player-skip-btn" type="button" data-skip="10" aria-label="Adelantar 10 segundos">+10</button></div>
         <div class="player-meta"><strong id="player-title">${t.title}</strong><span>ALLEN KS</span></div>
-        <div class="player-promo" id="player-promo" aria-live="off"><span id="player-promo-label">${promoLines[0]}</span><a class="player-download-link" id="player-download-link" href="${playerDownloadHref(t)}">${icon("download",16)} DESCARGAR</a></div>
+        <div class="player-promo" id="player-promo" aria-live="off"><span id="player-promo-label">${promoLines[0]}</span><a class="player-download-link" id="player-download-link" href="${playerDownloadHref(t)}">${icon("arrow",16)} VER FICHA</a></div>
         <div class="time-label"><span id="current-time">0:00</span> / <span id="total-time">${t.durationLabel}</span></div>
         <div class="player-progress-wrap" id="player-progress" role="progressbar" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0" aria-label="Progreso de reproducción. Usá los botones de diez segundos para avanzar o retroceder."><div class="player-progress-track"><span id="player-progress-fill" class="player-progress-fill"></span><span id="player-progress-thumb" class="player-progress-thumb"></span></div></div>
         <div class="player-volume">${icon("volume", 17)} <input type="range" id="volume-range" min="0" max="1" step=".05" value=".85" aria-label="Volumen" /></div>
@@ -262,7 +262,7 @@
   }
   function catalogPagination(kind, itemCount) {
     const total = Math.max(1, Math.ceil(itemCount / CATALOG_PAGE_SIZE));
-    if (total === 1) return `<p class="catalog-page-info">${itemCount} ${kind === "catalog" ? "TEMAS" : "COLABORACIONES"}</p>`;
+    if (total === 1) return `<p class="catalog-page-info">${itemCount} ${kind === "catalog" ? "TEMAS" : "CANCIONES"}</p>`;
     const current = catalogState[kind];
     const visiblePages = [...new Set([1, total, current - 1, current, current + 1].filter(n => n >= 1 && n <= total))].sort((a,b) => a-b);
     let lastPage = 0;
