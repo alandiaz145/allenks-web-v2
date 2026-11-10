@@ -52,7 +52,11 @@
       const existing = new Set(data.tracks.map(track => comparable(track.title)));
       // Existing manually reviewed records retain their downloads and IDs.
       for (const track of data.tracks) {
-        const audioFile = listing.names.find(file => comparable(titleFromFilename(file)) === comparable(track.title));
+        const titleKey = comparable(track.title);
+        const audioFile = listing.names.find(file => {
+          const fileTitle = comparable(titleFromFilename(file));
+          return fileTitle === titleKey || (titleKey.length >= 8 && fileTitle.endsWith(titleKey));
+        });
         if (audioFile && !track.audio) track.audio = mediaUrl("stream", audioFile);
         if (!track.artwork) {
           const cover = coverFor(track.title, audioFile || "", covers);
@@ -65,7 +69,7 @@
         if (typeof filename !== "string" || !/\.mp3$/i.test(filename)) continue;
         const title = titleFromFilename(filename);
         const key = comparable(title);
-        if (!title || existing.has(key)) continue;
+        if (!title || existing.has(key) || [...existing].some(item => item.length >= 8 && key.endsWith(item))) continue;
         const repeated = seen.has(key);
         seen.set(key, (seen.get(key) || 0) + 1);
         const type = reviewType(title, filename);
