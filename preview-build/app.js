@@ -301,9 +301,9 @@
               ${track.salesEnabled===false ? `<span class="download-option unavailable"><span><strong>STEMS Y PROYECTO FLP</strong><small>Disponibilidad y archivos pendientes de confirmar</small></span><b>PRONTO</b></span>` : `<a class="download-option purchase" href="${whatsappLink(track,"STEMS")}" target="_blank" rel="noopener noreferrer"><span><strong>COMPRAR STEMS ${icon("arrow", 19)}</strong><small>Consulta por WhatsApp para esta canción</small></span><b>US$9.99</b></a>
               <a class="download-option purchase" href="${whatsappLink(track,"FLP")}" target="_blank" rel="noopener noreferrer"><span><strong>COMPRAR PROYECTO FLP ${icon("arrow", 19)}</strong><small>Consulta por WhatsApp para esta canción</small></span><b>US$9.99</b></a>`}
             </div>
-            <p class="track-purchase-note">STEMS y FLP se solicitan por mensaje. La compra no se cobra automáticamente en esta página.</p>
+            ${track.salesEnabled===false ? `<p class="track-purchase-note">Esta ficha es informativa. La reproducción, descarga y venta de archivos no están habilitadas.</p>` : `<p class="track-purchase-note">STEMS y FLP se solicitan por mensaje. La compra no se cobra automáticamente en esta página.</p>`}
           </div>
-        </section>` + player() + journeyLinks();
+        </section>` + (track.audio ? player() : "") + journeyLinks();
   }
   function livePage() {
     const e = data.event;
