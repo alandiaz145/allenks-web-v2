@@ -224,7 +224,7 @@
       <div class="section-header"><h2><span class="acid-slash"></span>CATÁLOGO OFICIAL</h2><span class="catalog-count">${tracks.length} FICHAS · ${count} MP3 DISPONIBLES</span></div>
       <div class="catalog-grid release-grid" id="catalog-grid" aria-live="polite">${catalogCards("catalog", tracks)}</div>
       <div id="catalog-pages">${catalogPagination("catalog", tracks.length)}</div>
-      <p class="catalog-note">Inventario tomado de Allen KS Control. Las fichas pendientes se completarán con los MP3 y artes originales, sin reemplazarlos por archivos inventados.</p>
+      <p class="catalog-note">Temas contrastados con ALLEN KS Control. Los MP3 habilitados se sirven desde un almacenamiento privado mediante enlaces de descarga individuales; las versiones sin confirmar siguen en revisión.</p>
     </section>`;
   }
   function collaborations() {
