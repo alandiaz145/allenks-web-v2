@@ -1,0 +1,9 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1920 1000" preserveAspectRatio="xMidYMid slice">
+ <defs>
+  <linearGradient id="a" x1="0" y1="0" x2=".95" y2=".4"><stop stop-color="#a8efff"/><stop offset=".21" stop-color="#03bfea"/><stop offset=".32" stop-color="#efffff"/><stop offset=".53" stop-color="#8052f7"/><stop offset=".69" stop-color="#3d9af4"/><stop offset=".81" stop-color="#e8faff"/><stop offset="1" stop-color="#9c6dff"/></linearGradient>
+  <filter id="g"><feGaussianBlur stdDeviation="16"/></filter>
+ </defs>
+ <path d="M655 1051c200-178 354-229 583-285 267-65 474-154 764-257l76 268c-379 70-595 229-935 269Z" fill="url(#a)" opacity=".96"/>
+ <path d="M638 1055c230-199 405-238 638-285 248-51 477-158 747-250" fill="none" stroke="#d9ffff" stroke-width="8"/>
+ <path d="M925 996c232-112 499-141 785-268" fill="none" stroke="#00ecff" stroke-width="24" opacity=".62" filter="url(#g)"/>
+</svg>
