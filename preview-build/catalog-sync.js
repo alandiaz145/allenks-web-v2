@@ -8,6 +8,14 @@
   const endpoint = "https://allenks-music-media.allenbeatsadb.workers.dev/catalog.json";
   const escapeHtml = value => String(value).replace(/[&<>"']/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;","\"":"&quot;","'":"&#39;"})[c]);
   const comparable = value => String(value).normalize("NFD").replace(/[\u0300-\u036f]/g, "").toUpperCase().replace(/[^A-Z0-9]+/g, "");
+  const mediaUrl = (type, filename) => `${endpoint.replace(/\/catalog\.json$/, "")}/${type}/${encodeURIComponent(filename)}`;
+  const coverFor = (title, filename, covers) => {
+    const key = comparable(title);
+    const candidates = covers.map(name => ({name, key: comparable(name.replace(/\.(png|jpe?g|webp)$/i, "").replace(/^ALLEN\s*KS\s*[-–]\s*/i, ""))}));
+    const exact = candidates.find(c => c.key === key);
+    const close = key.length > 8 ? candidates.find(c => c.key.includes(key) || key.includes(c.key) && c.key.length > 8) : null;
+    return (exact || close)?.name || null;
+  };
   const titleFromFilename = filename => filename
     .replace(/\.mp3$/i, "")
     .replace(/^ALLEN\s*KS\s*[-–.]\s*/i, "")
@@ -23,7 +31,9 @@
   };
   const reviewType = (title, filename) => {
     const name = `${title} ${filename}`;
-    if (/\bREMIX\b|REMIX CONTEST/i.test(name)) return "Remix";
+    if (/NEOKRONO|REMIX CONTEST/i.test(name)) return "Remix contest";
+    if (/SKRILLEX|VIRTUAL RIOT|YSY.?A|METRO BOOMIN|MALEVO|RYNOME|HERMEX|REVENANT/i.test(name)) return "Mi remix";
+    if (/\bREMIX\b/i.test(name)) return "Remix / por clasificar";
     if (/\bVIP\b|\bEDIT\b/i.test(name)) return "VIP / Edit";
     if (/\bFT\.?\b|\bFEAT\.?\b|\bX\b|ALLEN\s*KS\s*,/i.test(name)) return "Colaboración";
     return "Original / por confirmar";
@@ -38,7 +48,17 @@
       if (!response.ok) throw new Error("catalogue unavailable");
       const listing = await response.json();
       if (!Array.isArray(listing.names)) throw new Error("catalogue invalid");
+      const covers = Array.isArray(listing.covers) ? listing.covers : [];
       const existing = new Set(data.tracks.map(track => comparable(track.title)));
+      // Existing manually reviewed records retain their downloads and IDs.
+      for (const track of data.tracks) {
+        const audioFile = listing.names.find(file => comparable(titleFromFilename(file)) === comparable(track.title));
+        if (audioFile && !track.audio) track.audio = mediaUrl("stream", audioFile);
+        if (!track.artwork) {
+          const cover = coverFor(track.title, audioFile || "", covers);
+          if (cover) track.artwork = mediaUrl("cover", cover);
+        }
+      }
       const seen = new Map();
       const additions = [];
       for (const filename of listing.names) {
@@ -50,11 +70,13 @@
         seen.set(key, (seen.get(key) || 0) + 1);
         const type = reviewType(title, filename);
         const ambiguous = /^(from PIECES|LOOK AT ME NOW|REVENANT|SHOCK DAMAGE|B\.U\.H\.O)/i.test(title);
+        const cover = coverFor(title, filename, covers);
         additions.push({
           id: stableId(filename), title: escapeHtml(title), category: /Remix|Colaboración/.test(type) ? "collaboration" : "catalogue",
           sourceFile: escapeHtml(filename), versionType: type,
           reviewStatus: thirdParty(filename) ? "REVISAR DERECHOS" : repeated ? "POSIBLE DUPLICADO" : ambiguous ? "REVISAR TÍTULO" : "AUDIO POR VALIDAR",
-          artwork: null, audio: null, download: null, durationLabel: "--:--", theme: ["lime","cyan","purple","acid"][additions.length % 4],
+          artwork: cover ? mediaUrl("cover", cover) : null,
+          audio: mediaUrl("stream", filename), download: null, durationLabel: "--:--", theme: ["lime","cyan","purple","acid"][additions.length % 4],
           filesPending: true, salesEnabled: false
         });
       }
