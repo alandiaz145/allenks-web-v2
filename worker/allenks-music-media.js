@@ -1,4 +1,4 @@
-// R2 private bucket gateway. Only explicitly listed recordings/covers are public.
+// R2 gateway: all MP3s are streamable by Alan's authorization; downloads remain allowlisted.
 // Deploy to allenks-music-media.allenbeatsadb.workers.dev with MUSIC_BUCKET binding.
 const MEDIA = Object.freeze({
   "audio/alternative-ending": "audio/ALLEN KS - ALTERNATIVE ENDING.mp3",
@@ -45,8 +45,10 @@ export default {
     // unreleased recordings and remixes. Never expose R2 keys, sizes or URLs.
     if (url.pathname === "/catalog.json" && !url.search) {
       const result = await env.MUSIC_BUCKET.list({prefix: "audio/", limit: 1000});
+      const covers = await env.MUSIC_BUCKET.list({prefix: "covers/", limit: 1000});
       const body = JSON.stringify({
-        names: result.objects.map(object => object.key.slice("audio/".length)),
+        names: result.objects.map(object => object.key.slice("audio/".length)).filter(name => /\.mp3$/i.test(name)),
+        covers: covers.objects.map(object => object.key.slice("covers/".length)).filter(name => /\.(png|jpe?g|webp)$/i.test(name)),
         truncated: Boolean(result.truncated)
       });
       return new Response(request.method === "HEAD" ? null : body, {
@@ -57,13 +59,22 @@ export default {
     try { name = decodeURIComponent(url.pathname.slice(1)); }
     catch { return new Response("Not found", {status: 404, headers: {...common, ...cors}}); }
     const download = name.startsWith("download/");
-    const key = MEDIA[download ? `audio/${name.slice(9)}` : name];
+    const streaming = name.startsWith("stream/");
+    const cover = name.startsWith("cover/");
+    const filename = name.slice(streaming ? 7 : cover ? 6 : 0);
+    const validSingleFile = filename && !/[\\/\u0000-\u001f]/.test(filename);
+    const key = streaming && validSingleFile && /\.mp3$/i.test(filename)
+      ? `audio/${filename}`
+      : cover && validSingleFile && /\.(png|jpe?g|webp)$/i.test(filename)
+      ? `covers/${filename}`
+      : MEDIA[download ? `audio/${name.slice(9)}` : name];
     if (!key || url.search) return new Response("Not found", {status: 404, headers: {...common, ...cors}});
 
     const object = await env.MUSIC_BUCKET.get(key, {range: request.headers});
     if (!object) return new Response("Not found", {status: 404, headers: {...common, ...cors}});
     const headers = new Headers({...common, ...cors});
     object.writeHttpMetadata(headers);
+    if (streaming) headers.set("Content-Type", "audio/mpeg");
     if (download) {
       const filename = key.split("/").pop().replace(/[\r\n"\\]/g, "");
       headers.set("Content-Disposition", `attachment; filename="${filename}"`);

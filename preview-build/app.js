@@ -28,6 +28,17 @@
     catalog: Math.max(1, Number.parseInt(new URLSearchParams(window.location.search).get("catalogo"), 10) || 1),
     collaborations: Math.max(1, Number.parseInt(new URLSearchParams(window.location.search).get("colaboraciones"), 10) || 1)
   };
+  let collabFilter = "all";
+  function collaborationTracks() {
+    const tracks = data.tracks.filter(t => t.category === "collaboration");
+    return tracks.filter(t => {
+      if (collabFilter === "all") return true;
+      const type = t.versionType || "";
+      if (collabFilter === "contest") return type === "Remix contest";
+      if (collabFilter === "remixes") return /Mi remix|Remix \/ por clasificar/.test(type);
+      return !/Remix contest|Mi remix|Remix \/ por clasificar/.test(type);
+    });
+  }
   const asset = (url, cls = "", alt = "") => url ? `<img class="${cls}" src="${url}" alt="${alt}" loading="lazy" />` : "";
   const trackHref = track => `/cancion/?tema=${encodeURIComponent(track.id)}`;
   const whatsappLink = (track, format) => {
@@ -71,7 +82,7 @@
   function footer() {
     return `<footer class="site-footer"><div class="footer-aura"></div><div class="footer-inner">
       <div class="footer-top"><a class="footer-brand" href="/">ALLEN KS</a><nav aria-label="Navegación de pie de página">${routes.map(r => `<a href="${r.path}">${r.label}</a>`).join("")}</nav><div class="footer-social">${socials()}</div></div>
-      <div class="footer-bottom"><span>© 2026 ALLEN KS. Todos los derechos reservados.</span><span>Argentina ${icon("location", 18)}</span></div>
+      <div class="footer-bottom"><span>© 2026 ALLEN KS. Todos los derechos reservados. <a href="/musica#terminos-musica">Condiciones de uso</a></span><span>Argentina ${icon("location", 18)}</span></div>
     </div></footer>`;
   }
   function sectionTitle(title, description = "") {
@@ -112,7 +123,7 @@
     return `<article class="release-card"><a class="release-art-link" href="${trackHref(track)}" aria-label="Abrir página de ${track.title}">${artwork(track)}</a>
       <h3><a href="${trackHref(track)}" aria-label="Ver detalles de ${track.title}">${track.title}</a></h3>
       ${track.artists ? `<p class="release-artist-label">${track.artists}</p>` : ""}
-      ${track.reviewStatus ? `<p class="catalog-review-tag">${track.versionType} · ${track.reviewStatus}</p>` : ""}
+      ${track.versionType && !/por confirmar|por clasificar/.test(track.versionType) ? `<p class="catalog-review-tag">${track.versionType}</p>` : ""}
       <div class="release-actions">
         ${track.audio ? `<button class="pill-btn play-btn" type="button" data-play="${index}" aria-label="Reproducir ${track.title}" aria-pressed="false">${icon("play", 15)} PLAY</button>` : `<span class="pill-btn no-audio-badge">${track.sourceFile ? "EN REVISIÓN" : "SIN AUDIO"}</span>`}
         <a class="pill-btn download-btn" href="${trackHref(track)}" aria-label="Ficha de ${track.title}">${track.download ? icon("download", 15) : icon("arrow",15)} ${track.download ? "DESCARGAR" : "VER FICHA"}</a>
@@ -217,24 +228,25 @@
           <div><span class="eyebrow">ARCHIVOS DEL ARTISTA</span><h2>FREE<br>DOWNLOADS<span class="accent-dot">.</span></h2></div>
           <div><p>Descargá mi música directamente desde la web. Cada canción tiene su propia página con MP3, portada y opciones de producción.</p><p class="small-note">Las portadas oficiales se habilitan para descargar cuando estén disponibles.</p><a class="callout-cta" href="#catalogo">EXPLORAR CATÁLOGO ${icon("arrow", 19)}</a></div>
         </div></section>`
-      + collaborations() + journeyLinks();
+      + collaborations() + `<section class="music-terms container" id="terminos-musica"><h2>CONDICIONES DE USO</h2><p>La música disponible para escuchar en este sitio no autoriza su distribución, reventa, reupload, explotación comercial ni publicación en plataformas sin permiso expreso de sus respectivos titulares. Para solicitar autorización, escribí a <a href="mailto:soyallenks@gmail.com">soyallenks@gmail.com</a>. Los remixes y colaboraciones conservan los derechos correspondientes a sus autores.</p></section>` + journeyLinks();
   }
   function catalog() {
     const tracks = data.tracks.filter(t=>t.category!=="collaboration");
     const count = tracks.filter(t=>t.audio).length;
     return `<section class="catalog-section container" id="catalogo">
-      <div class="section-header"><h2><span class="acid-slash"></span>CATÁLOGO OFICIAL</h2><span class="catalog-count">${tracks.length} FICHAS · ${count} MP3 DISPONIBLES</span></div>
+      <div class="section-header"><h2><span class="acid-slash"></span>CATÁLOGO OFICIAL</h2><span class="catalog-count">${tracks.length} CANCIONES · ${count} PARA ESCUCHAR</span></div>
       <div class="catalog-grid release-grid" id="catalog-grid" aria-live="polite">${catalogCards("catalog", tracks)}</div>
       <div id="catalog-pages">${catalogPagination("catalog", tracks.length)}</div>
-      <p class="catalog-note">${data.catalogSource?.updatedAutomatically ? `Inventario sincronizado automáticamente con Cloudflare (${data.catalogSource.detected} archivos MP3 detectados). Los nuevos temas tienen ficha de revisión, sin activar escuchas ni descargas.` : "Catálogo de respaldo. La actualización automática de Cloudflare no está disponible temporalmente."} Decime qué título o portada corregir y lo ajustamos.</p>
+      <p class="catalog-note">Explorá mis producciones, versiones y temas favoritos. Algunas canciones incluyen descarga gratuita desde su propia ficha.</p>
     </section>`;
   }
   function collaborations() {
-    const tracks=data.tracks.filter(t=>t.category==="collaboration");
-    return `<section class="collaborations-section container" id="colaboraciones">${sectionTitle("COLABORACIONES", "Remixes, versiones y producciones compartidas.")}
+    const tracks=collaborationTracks();
+    return `<section class="collaborations-section container" id="colaboraciones">${sectionTitle("COLABORACIONES Y REMIXES", "Producciones compartidas, reinterpretaciones y remix contests.")}
+      <div class="collab-filters" role="group" aria-label="Filtrar colaboraciones y remixes"><button type="button" data-collab-filter="all" class="active" aria-pressed="true">TODOS</button><button type="button" data-collab-filter="collabs">COLABORACIONES</button><button type="button" data-collab-filter="remixes">MIS REMIXES</button><button type="button" data-collab-filter="contest">REMIX CONTEST</button></div>
       <div class="catalog-grid release-grid" id="collaborations-grid" aria-live="polite">${catalogCards("collaborations", tracks)}</div>
       <div id="collaborations-pages">${catalogPagination("collaborations", tracks.length)}</div>
-      <p class="catalog-note">Portadas, audios y permisos de descarga pendientes de cargar desde los archivos originales.</p>
+      <p class="catalog-note">Disfrutá la música y descubrí artistas con los que compartimos escena. Los créditos y permisos de cada versión se respetan.</p>
     </section>`;
   }
   function catalogCards(kind, tracks) {
@@ -262,7 +274,7 @@
     return `<nav class="catalog-pagination" aria-label="Páginas de ${kind === "catalog" ? "música" : "colaboraciones"}"><button type="button" class="catalog-page-arrow" data-catalog-nav="${kind}" data-page="${current - 1}" ${current === 1 ? "disabled" : ""} aria-label="Página anterior">←</button>${numberButtons}<button type="button" class="catalog-page-arrow" data-catalog-nav="${kind}" data-page="${current + 1}" ${current === total ? "disabled" : ""} aria-label="Página siguiente">→</button><span class="catalog-page-info">PÁGINA ${current} DE ${total}</span></nav>`;
   }
   function changeCatalogPage(kind, newPage) {
-    const tracks = data.tracks.filter(t => kind === "catalog" ? t.category !== "collaboration" : t.category === "collaboration");
+    const tracks = kind === "catalog" ? data.tracks.filter(t => t.category !== "collaboration") : collaborationTracks();
     const total = Math.max(1, Math.ceil(tracks.length / CATALOG_PAGE_SIZE));
     if (!Number.isInteger(newPage) || newPage < 1 || newPage > total || newPage === catalogState[kind]) return;
     catalogState[kind] = newPage;
@@ -288,20 +300,20 @@
   function trackPage() {
     const track = data.tracks[requestedTrackIndex];
     if (!track) return notFound();
-    return pageHero(track.download ? "ALLEN KS / DESCARGAS" : "ALLEN KS / ARCHIVO", track.title, track.download ? "Escuchá el tema y elegí qué archivos querés descargar o consultar." : "Ficha de catálogo para revisar título, versión, portada y permisos.")
+    return pageHero(track.download ? "ALLEN KS / DESCARGAS" : "ALLEN KS / MÚSICA", track.title, track.download ? "Escuchá el tema y elegí qué archivos querés descargar o consultar." : "Escuchá esta producción desde mi catálogo musical.")
       + `<section class="track-detail container">
           <div class="track-detail-art">${artwork(track, "detail-art")}</div>
           <div class="track-detail-content">
-            <span class="eyebrow">${track.download ? "FREE DOWNLOAD" : "ARCHIVO EN REVISIÓN"} / ${track.id.toUpperCase().replace(/-/g," ")}</span>
+            <span class="eyebrow">${track.download ? "FREE DOWNLOAD" : "ESCUCHAR ONLINE"} / ALLEN KS</span>
             <h2>${track.title}</h2><p>ALLEN KS · DUBSTEP / BASS</p>
-            ${track.sourceFile ? `<div class="catalog-file-review"><strong>${track.versionType} · ${track.reviewStatus}</strong><span>Archivo detectado: ${track.sourceFile}</span><span>${track.artwork ? "Portada asociada" : "Portada pendiente de asociar"}</span><small>La ficha se creó automáticamente. No se habilitan reproducciones o descargas sin revisión.</small></div>` : ""}
+            ${track.versionType && !/por confirmar|por clasificar/.test(track.versionType) ? `<p class="catalog-review-tag">${track.versionType}</p>` : ""}
             <div class="download-options" id="descargas">
-              ${track.download ? `<a class="download-option available" href="${track.download}" download="ALLEN KS - ${track.title}.mp3"><span><strong>${icon("download", 20)} DESCARGAR MP3</strong><small>Archivo de audio</small></span><b>GRATIS</b></a>` : `<span class="download-option unavailable"><span><strong>DESCARGAR MP3</strong><small>Audio pendiente</small></span><b>PRONTO</b></span>`}
+              ${track.download ? `<a class="download-option available" href="${track.download}" download="ALLEN KS - ${track.title}.mp3"><span><strong>${icon("download", 20)} DESCARGAR MP3</strong><small>Archivo de audio</small></span><b>GRATIS</b></a>` : `<span class="download-option unavailable"><span><strong>SOLO REPRODUCCIÓN</strong><small>Descarga no habilitada para esta versión</small></span><b>ESCUCHÁ ONLINE</b></span>`}
               ${track.artwork ? `<a class="download-option available" href="${track.artwork}" download="ALLEN KS - ${track.title} - Artwork"><span><strong>${icon("download", 20)} DESCARGAR ARTWORK</strong><small>Portada oficial</small></span><b>GRATIS</b></a>` : `<span class="download-option unavailable"><span><strong>DESCARGAR ARTWORK</strong><small>Portada oficial pendiente de cargar</small></span><b>PRONTO</b></span>`}
               ${track.salesEnabled===false ? `<span class="download-option unavailable"><span><strong>STEMS Y PROYECTO FLP</strong><small>Disponibilidad y archivos pendientes de confirmar</small></span><b>PRONTO</b></span>` : `<a class="download-option purchase" href="${whatsappLink(track,"STEMS")}" target="_blank" rel="noopener noreferrer"><span><strong>COMPRAR STEMS ${icon("arrow", 19)}</strong><small>Consulta por WhatsApp para esta canción</small></span><b>US$9.99</b></a>
               <a class="download-option purchase" href="${whatsappLink(track,"FLP")}" target="_blank" rel="noopener noreferrer"><span><strong>COMPRAR PROYECTO FLP ${icon("arrow", 19)}</strong><small>Consulta por WhatsApp para esta canción</small></span><b>US$9.99</b></a>`}
             </div>
-            ${track.salesEnabled===false ? `<p class="track-purchase-note">Esta ficha es informativa. La reproducción, descarga y venta de archivos no están habilitadas.</p>` : `<p class="track-purchase-note">STEMS y FLP se solicitan por mensaje. La compra no se cobra automáticamente en esta página.</p>`}
+            ${track.salesEnabled===false ? `<p class="track-purchase-note">Disponible para escuchar. Para permisos de uso o distribución, escribí a soyallenks@gmail.com.</p>` : `<p class="track-purchase-note">STEMS y FLP se solicitan por mensaje. La compra no se cobra automáticamente en esta página.</p>`}
           </div>
         </section>` + (track.audio ? player() : "") + journeyLinks();
   }
@@ -581,6 +593,22 @@
         const button = e.target.closest("button[data-catalog-nav]");
         if (button) changeCatalogPage(kind, Number(button.dataset.page));
       });
+    });
+    document.querySelector(".collab-filters")?.addEventListener("click", e => {
+      const button = e.target.closest("button[data-collab-filter]");
+      if (!button) return;
+      collabFilter = button.dataset.collabFilter;
+      catalogState.collaborations = 1;
+      document.querySelectorAll("[data-collab-filter]").forEach(item => {
+        const active = item === button;
+        item.classList.toggle("active", active);
+        item.setAttribute("aria-pressed", String(active));
+      });
+      const tracks = collaborationTracks();
+      document.getElementById("collaborations-grid").innerHTML = catalogCards("collaborations", tracks);
+      document.getElementById("collaborations-pages").innerHTML = catalogPagination("collaborations", tracks.length);
+      bindTrackButtons(document.getElementById("collaborations-grid"));
+      refreshPlayButton();
     });
     document.querySelector("#player-main-btn")?.addEventListener("click", togglePlay);
     document.querySelectorAll("[data-skip]").forEach(btn => btn.addEventListener("click", () => skipSeconds(Number(btn.dataset.skip))));

@@ -21,7 +21,10 @@
       this._volume = .85;
       this._request = 0;
       this._timer = null;
-      this._nativeMode = !Boolean(window.AudioContext || window.webkitAudioContext);
+      // iOS Safari requires playback to start directly from the user's tap.
+      // Native <audio> also streams large MP3s without decoding them into RAM.
+      const ios = /iPad|iPhone|iPod/.test(navigator.userAgent) || (navigator.platform === "MacIntel" && navigator.maxTouchPoints > 1);
+      this._nativeMode = ios || !Boolean(window.AudioContext || window.webkitAudioContext);
       this.isLoading = false;
       const events = ["loadedmetadata", "canplay", "play", "playing", "pause", "timeupdate", "seeking", "seeked", "ended", "error", "waiting"];
       for (const name of events) native.addEventListener(name, () => {
