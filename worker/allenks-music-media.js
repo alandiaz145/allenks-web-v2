@@ -41,6 +41,18 @@ export default {
     } : {};
     if (request.method === "OPTIONS") return new Response(null, {status: 204, headers: {...common, ...cors}});
     if (request.method !== "GET" && request.method !== "HEAD") return new Response("Method not allowed", {status: 405, headers: {...common, ...cors}});
+    // Alan explicitly authorized public listing of all MP3 names, including
+    // unreleased recordings and remixes. Never expose R2 keys, sizes or URLs.
+    if (url.pathname === "/catalog.json" && !url.search) {
+      const result = await env.MUSIC_BUCKET.list({prefix: "audio/", limit: 1000});
+      const body = JSON.stringify({
+        names: result.objects.map(object => object.key.slice("audio/".length)),
+        truncated: Boolean(result.truncated)
+      });
+      return new Response(request.method === "HEAD" ? null : body, {
+        headers: {...common, ...cors, "Content-Type": "application/json; charset=utf-8", "Cache-Control": "public, max-age=300"}
+      });
+    }
     let name;
     try { name = decodeURIComponent(url.pathname.slice(1)); }
     catch { return new Response("Not found", {status: 404, headers: {...common, ...cors}}); }

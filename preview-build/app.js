@@ -1,6 +1,7 @@
-(() => {
+(async () => {
   "use strict";
   const data = window.ALLENKS_CONTENT;
+  if (window.ALLENKS_CATALOG_READY) await window.ALLENKS_CATALOG_READY;
   const app = document.querySelector("#app");
   const audio = new window.PreciseAudio(document.querySelector("#audio-engine"));
   const toast = document.querySelector("#toast");
@@ -111,8 +112,9 @@
     return `<article class="release-card"><a class="release-art-link" href="${trackHref(track)}" aria-label="Abrir página de ${track.title}">${artwork(track)}</a>
       <h3><a href="${trackHref(track)}" aria-label="Ver detalles de ${track.title}">${track.title}</a></h3>
       ${track.artists ? `<p class="release-artist-label">${track.artists}</p>` : ""}
+      ${track.reviewStatus ? `<p class="catalog-review-tag">${track.versionType} · ${track.reviewStatus}</p>` : ""}
       <div class="release-actions">
-        ${track.audio ? `<button class="pill-btn play-btn" type="button" data-play="${index}" aria-label="Reproducir ${track.title}" aria-pressed="false">${icon("play", 15)} PLAY</button>` : `<span class="pill-btn no-audio-badge">SIN AUDIO</span>`}
+        ${track.audio ? `<button class="pill-btn play-btn" type="button" data-play="${index}" aria-label="Reproducir ${track.title}" aria-pressed="false">${icon("play", 15)} PLAY</button>` : `<span class="pill-btn no-audio-badge">${track.sourceFile ? "EN REVISIÓN" : "SIN AUDIO"}</span>`}
         <a class="pill-btn download-btn" href="${trackHref(track)}" aria-label="Ficha de ${track.title}">${track.download ? icon("download", 15) : icon("arrow",15)} ${track.download ? "DESCARGAR" : "VER FICHA"}</a>
       </div>
     </article>`;
@@ -224,7 +226,7 @@
       <div class="section-header"><h2><span class="acid-slash"></span>CATÁLOGO OFICIAL</h2><span class="catalog-count">${tracks.length} FICHAS · ${count} MP3 DISPONIBLES</span></div>
       <div class="catalog-grid release-grid" id="catalog-grid" aria-live="polite">${catalogCards("catalog", tracks)}</div>
       <div id="catalog-pages">${catalogPagination("catalog", tracks.length)}</div>
-      <p class="catalog-note">Temas contrastados con ALLEN KS Control. Los MP3 habilitados se sirven desde un almacenamiento privado mediante enlaces de descarga individuales; las versiones sin confirmar siguen en revisión.</p>
+      <p class="catalog-note">${data.catalogSource?.updatedAutomatically ? `Inventario sincronizado automáticamente con Cloudflare (${data.catalogSource.detected} archivos MP3 detectados). Los nuevos temas tienen ficha de revisión, sin activar escuchas ni descargas.` : "Catálogo de respaldo. La actualización automática de Cloudflare no está disponible temporalmente."} Decime qué título o portada corregir y lo ajustamos.</p>
     </section>`;
   }
   function collaborations() {
@@ -286,12 +288,13 @@
   function trackPage() {
     const track = data.tracks[requestedTrackIndex];
     if (!track) return notFound();
-    return pageHero("ALLEN KS / DESCARGAS", track.title, "Escuchá el tema y elegí qué archivos querés descargar o consultar.")
+    return pageHero(track.download ? "ALLEN KS / DESCARGAS" : "ALLEN KS / ARCHIVO", track.title, track.download ? "Escuchá el tema y elegí qué archivos querés descargar o consultar." : "Ficha de catálogo para revisar título, versión, portada y permisos.")
       + `<section class="track-detail container">
           <div class="track-detail-art">${artwork(track, "detail-art")}</div>
           <div class="track-detail-content">
-            <span class="eyebrow">FREE DOWNLOAD / ${track.id.toUpperCase().replace(/-/g," ")}</span>
+            <span class="eyebrow">${track.download ? "FREE DOWNLOAD" : "ARCHIVO EN REVISIÓN"} / ${track.id.toUpperCase().replace(/-/g," ")}</span>
             <h2>${track.title}</h2><p>ALLEN KS · DUBSTEP / BASS</p>
+            ${track.sourceFile ? `<div class="catalog-file-review"><strong>${track.versionType} · ${track.reviewStatus}</strong><span>Archivo detectado: ${track.sourceFile}</span><span>${track.artwork ? "Portada asociada" : "Portada pendiente de asociar"}</span><small>La ficha se creó automáticamente. No se habilitan reproducciones o descargas sin revisión.</small></div>` : ""}
             <div class="download-options" id="descargas">
               ${track.download ? `<a class="download-option available" href="${track.download}" download="ALLEN KS - ${track.title}.mp3"><span><strong>${icon("download", 20)} DESCARGAR MP3</strong><small>Archivo de audio</small></span><b>GRATIS</b></a>` : `<span class="download-option unavailable"><span><strong>DESCARGAR MP3</strong><small>Audio pendiente</small></span><b>PRONTO</b></span>`}
               ${track.artwork ? `<a class="download-option available" href="${track.artwork}" download="ALLEN KS - ${track.title} - Artwork"><span><strong>${icon("download", 20)} DESCARGAR ARTWORK</strong><small>Portada oficial</small></span><b>GRATIS</b></a>` : `<span class="download-option unavailable"><span><strong>DESCARGAR ARTWORK</strong><small>Portada oficial pendiente de cargar</small></span><b>PRONTO</b></span>`}
