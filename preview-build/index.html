@@ -12,13 +12,20 @@
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Archivo+Black&family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet" />
-  <link rel="stylesheet" href="/style.css?v=20261113-visual1" />
+  <link rel="stylesheet" href="/style.css?v=20261113-radio-loader1" />
   <script defer src="/content.js?v=20261110-r2"></script>
   <script defer src="/player-engine.js?v=20261110-ios"></script>
   <script defer src="/catalog-sync.js?v=20261110-stream2"></script>
-  <script defer src="/app.js?v=20261113-bookings-hide1"></script>
+  <script defer src="/app.js?v=20261113-radio-loader1"></script>
 </head>
 <body>
+  <div id="initial-loader" class="initial-loader" role="status" aria-label="Cargando sitio" aria-live="off">
+    <div class="initial-loader-inner"><span class="initial-loader-brand">ALLEN KS</span>
+      <strong class="initial-loader-number"><span id="initial-loader-percent">0</span><span>%</span></strong>
+      <div class="initial-loader-track" aria-hidden="true"><span id="initial-loader-bar"></span></div>
+      <span class="initial-loader-caption">CARGANDO</span>
+    </div>
+  </div>
   <div id="app"></div>
   <audio id="audio-engine" preload="metadata"></audio>
   <div id="toast" class="toast" aria-live="polite" role="status"></div>
