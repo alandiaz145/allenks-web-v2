@@ -13,9 +13,10 @@
     { path: "/contacto", label: "Contacto" }
   ];
   const path = window.location.pathname.replace(/\/$/, "") || "/";
-  const page = ["/", "/musica", "/en-vivo", "/proyectos", "/contacto", "/sobre-mi", "/cancion", "/spotify", "/soundcloud", "/apple-music", "/whatsapp", "/instagram", "/youtube", "/tiktok"].includes(path) ? path : "/404";
-  const requestedTrackId = new URLSearchParams(window.location.search).get("tema");
-  const requestedTrackIndex = data.tracks.findIndex(t => t.id === requestedTrackId);
+  const knownPaths = ["/", "/musica", "/en-vivo", "/proyectos", "/contacto", "/sobre-mi", "/cancion", "/spotify", "/soundcloud", "/apple-music", "/whatsapp", "/instagram", "/youtube", "/tiktok"];
+  let page = knownPaths.includes(path) ? path : "/404";
+  let requestedTrackId = new URLSearchParams(window.location.search).get("tema");
+  let requestedTrackIndex = data.tracks.findIndex(t => t.id === requestedTrackId);
   let selected = page === "/cancion" && requestedTrackIndex >= 0 ? requestedTrackIndex : 0;
   let pendingSeekPercent = null;
   let resumeAfterSkip = false;
@@ -29,9 +30,33 @@
     collaborations: Math.max(1, Number.parseInt(new URLSearchParams(window.location.search).get("colaboraciones"), 10) || 1)
   };
   let collabFilter = "all";
+  const searchState = { query: "", genre: "all", bpm: "all" };
+  const normalize = value => String(value || "").normalize("NFD").replace(/[\u0300-\u036f]/g, "").toLowerCase();
+  function matchesSearch(track) {
+    const q = normalize(searchState.query.trim());
+    const searchable = normalize([track.title, track.artists, track.versionType, track.genre, track.bpm].join(" "));
+    if (q && !searchable.includes(q)) return false;
+    if (searchState.genre !== "all" && normalize(track.genre || "") !== normalize(searchState.genre)) return false;
+    if (searchState.bpm !== "all") {
+      const bpm = Number(track.bpm);
+      if (!Number.isFinite(bpm) || bpm <= 0) return false;
+      const [low, high] = searchState.bpm.split("-").map(Number);
+      if (bpm < low || bpm > high) return false;
+    }
+    return true;
+  }
+  const catalogueTracks = () => data.tracks.filter(t => t.category !== "collaboration" && matchesSearch(t));
+  const compactTitle = track => {
+    const name = String(track.title || "").trim();
+    const remix = name.match(/^.+?[-–]\s*(.+?)\s*\((?:ALLEN\s*KS\s*)?REMIX\)$/i);
+    if (remix) return remix[1].trim() + " (REMIX)";
+    if (/^DUBSSIVE\s+FT\.?\s*ALLEN\s*[-–]/i.test(name)) return name.replace(/^DUBSSIVE\s+FT\.?\s*ALLEN\s*[-–]\s*/i, "");
+    return name;
+  };
   function collaborationTracks() {
     const tracks = data.tracks.filter(t => t.category === "collaboration");
     return tracks.filter(t => {
+      if (!matchesSearch(t)) return false;
       if (collabFilter === "all") return true;
       const type = t.versionType || "";
       if (collabFilter === "contest") return type === "Remix contest";
@@ -39,7 +64,7 @@
       return !/Remix contest|Mi remix|Remix \/ por clasificar/.test(type);
     });
   }
-  const asset = (url, cls = "", alt = "") => url ? `<img class="${cls}" src="${url}" alt="${alt}" loading="lazy" />` : "";
+  const asset = (url, cls = "", alt = "") => url ? `<img class="${cls}" src="${url}" alt="${alt}" loading="lazy" decoding="async" />` : "";
   const trackHref = track => `/cancion/?tema=${encodeURIComponent(track.id)}`;
   const whatsappLink = (track, format) => {
     const message = `Hola, quiero comprar los ${format === "STEMS" ? "stems" : "archivos FLP"} de "${track.title}" de ALLEN KS (US$9.99). ¿Me pasás la información?`;
@@ -121,7 +146,7 @@
   }
   function releaseCard(track, index) {
     return `<article class="release-card"><a class="release-art-link" href="${trackHref(track)}" aria-label="Abrir página de ${track.title}">${artwork(track)}</a>
-      <h3><a href="${trackHref(track)}" aria-label="Ver detalles de ${track.title}">${track.title}</a></h3>
+      <h3><a href="${trackHref(track)}" aria-label="Ver detalles de ${track.title}" title="${track.title.replace(/"/g,"&quot;")}">${compactTitle(track)}</a></h3>
       ${track.artists ? `<p class="release-artist-label">${track.artists}</p>` : ""}
       ${track.versionType && !/por confirmar|por clasificar/.test(track.versionType) ? `<p class="catalog-review-tag">${track.versionType}</p>` : ""}
       <div class="release-actions">
@@ -216,14 +241,17 @@
     </section>`;
   }
   function home() {
-    return hero() + releases() + player() + ticket() + projectsShort() + liveBookingCTA("/assets/hero/allen-ks-booking-dj.png");
+    return hero() + releases() + ticket() + projectsShort() + liveBookingCTA("/assets/hero/allen-ks-booking-dj.png");
   }
   function pageHero(kicker, title, desc) {
-    return `<section class="inner-hero"><div class="inner-hero-ribbon"></div><div class="container inner-hero-content"><span class="eyebrow">${kicker}</span><h1>${title}</h1><p>${desc}</p></div></section>`;
+    const breadcrumb = page === "/cancion"
+      ? '<nav class="track-breadcrumb" aria-label="Ruta de navegación"><a href="/">ALLEN KS</a><span aria-hidden="true">/</span><a href="/musica">DISCOGRAFÍA</a></nav>'
+      : '<span class="eyebrow">' + kicker + '</span>';
+    return `<section class="inner-hero"><div class="inner-hero-ribbon"></div><div class="container inner-hero-content">${breadcrumb}<h1>${title}</h1><p>${desc}</p></div></section>`;
   }
   function musicPage() {
     return pageHero("ALLEN KS / DISCOGRAFÍA", "MI MÚSICA", "Dubstep, Bass y exploración sonora desde Buenos Aires. Escuchá los lanzamientos y descargá los archivos habilitados.")
-      + catalog() + releases() + player()
+      + catalog() + releases()
       + `<section class="inner-section container" id="free-downloads"><div class="split-callout">
           <div><span class="eyebrow">ARCHIVOS DEL ARTISTA</span><h2>FREE<br>DOWNLOADS<span class="accent-dot">.</span></h2></div>
           <div><p>Descargá mi música directamente desde la web. Cada canción tiene su propia página con MP3, portada y opciones de producción.</p><p class="small-note">Las portadas oficiales se habilitan para descargar cuando estén disponibles.</p><a class="callout-cta" href="#catalogo">EXPLORAR CATÁLOGO ${icon("arrow", 19)}</a></div>
@@ -231,14 +259,40 @@
       + collaborations() + `<section class="music-terms container" id="terminos-musica"><h2>CONDICIONES DE USO</h2><p>La música disponible para escuchar en este sitio no autoriza su distribución, reventa, reupload, explotación comercial ni publicación en plataformas sin permiso expreso de sus respectivos titulares. Para solicitar autorización, escribí a <a href="mailto:soyallenks@gmail.com">soyallenks@gmail.com</a>. Los remixes y colaboraciones conservan los derechos correspondientes a sus autores.</p></section>` + journeyLinks();
   }
   function catalog() {
-    const tracks = data.tracks.filter(t=>t.category!=="collaboration");
-    const count = tracks.filter(t=>t.audio).length;
+    const tracks = catalogueTracks();
     return `<section class="catalog-section container" id="catalogo">
-      <div class="section-header"><h2><span class="acid-slash"></span>CATÁLOGO OFICIAL</h2><span class="catalog-count">${tracks.length} CANCIONES · ${count} PARA ESCUCHAR</span></div>
+      <div class="section-header"><h2><span class="acid-slash"></span>CATÁLOGO OFICIAL</h2><span class="catalog-count">${tracks.length} CANCIONES</span></div>
+      ${searchControls()}
       <div class="catalog-grid release-grid" id="catalog-grid" aria-live="polite">${catalogCards("catalog", tracks)}</div>
       <div id="catalog-pages">${catalogPagination("catalog", tracks.length)}</div>
       <p class="catalog-note">Explorá mis producciones, versiones y temas favoritos. Algunas canciones incluyen descarga gratuita desde su propia ficha.</p>
     </section>`;
+  }
+  function searchControls() {
+    const genres = [...new Set(data.tracks.map(t => String(t.genre || "").trim()).filter(Boolean))].sort();
+    return `<div class="music-search" role="search" aria-label="Buscar canciones">
+      <label><span>BUSCAR CANCIÓN</span><input id="music-search-input" type="search" placeholder="Título, artista o versión..." autocomplete="off" /></label>
+      <label><span>GÉNERO</span><select id="music-genre"><option value="all">Todos los géneros</option>${genres.map(g => `<option value="${g.replace(/"/g, "&quot;")}">${g}</option>`).join("")}</select></label>
+      <label><span>BPM</span><select id="music-bpm"><option value="all">Todos los BPM</option><option value="60-109">60–109</option><option value="110-139">110–139</option><option value="140-159">140–159</option><option value="160-179">160–179</option><option value="180-999">180+</option></select></label>
+    </div>`;
+  }
+  function refreshMusicSearch() {
+    if (page !== "/musica") return;
+    catalogState.catalog = 1;
+    catalogState.collaborations = 1;
+    const originals = catalogueTracks(), collabs = collaborationTracks();
+    const catalogGrid = document.querySelector("#catalog-grid");
+    const collabGrid = document.querySelector("#collaborations-grid");
+    if (catalogGrid) catalogGrid.innerHTML = catalogCards("catalog", originals);
+    if (collabGrid) collabGrid.innerHTML = catalogCards("collaborations", collabs);
+    const firstPages = document.querySelector("#catalog-pages");
+    const secondPages = document.querySelector("#collaborations-pages");
+    if (firstPages) firstPages.innerHTML = catalogPagination("catalog", originals.length);
+    if (secondPages) secondPages.innerHTML = catalogPagination("collaborations", collabs.length);
+    document.querySelector(".catalog-count")?.replaceChildren(document.createTextNode(`${originals.length} CANCIONES`));
+    bindTrackButtons(catalogGrid || document);
+    if (collabGrid) bindTrackButtons(collabGrid);
+    refreshPlayButton();
   }
   function collaborations() {
     const tracks=collaborationTracks();
@@ -274,7 +328,7 @@
     return `<nav class="catalog-pagination" aria-label="Páginas de ${kind === "catalog" ? "música" : "colaboraciones"}"><button type="button" class="catalog-page-arrow" data-catalog-nav="${kind}" data-page="${current - 1}" ${current === 1 ? "disabled" : ""} aria-label="Página anterior">←</button>${numberButtons}<button type="button" class="catalog-page-arrow" data-catalog-nav="${kind}" data-page="${current + 1}" ${current === total ? "disabled" : ""} aria-label="Página siguiente">→</button><span class="catalog-page-info">PÁGINA ${current} DE ${total}</span></nav>`;
   }
   function changeCatalogPage(kind, newPage) {
-    const tracks = kind === "catalog" ? data.tracks.filter(t => t.category !== "collaboration") : collaborationTracks();
+    const tracks = kind === "catalog" ? catalogueTracks() : collaborationTracks();
     const total = Math.max(1, Math.ceil(tracks.length / CATALOG_PAGE_SIZE));
     if (!Number.isInteger(newPage) || newPage < 1 || newPage > total || newPage === catalogState[kind]) return;
     catalogState[kind] = newPage;
@@ -300,7 +354,7 @@
   function trackPage() {
     const track = data.tracks[requestedTrackIndex];
     if (!track) return notFound();
-    return pageHero(track.download ? "ALLEN KS / DESCARGAS" : "ALLEN KS / MÚSICA", track.title, track.download ? "Escuchá el tema y elegí qué archivos querés descargar o consultar." : "Escuchá esta producción desde mi catálogo musical.")
+    return pageHero(track.download ? "ALLEN KS / DESCARGAS" : "ALLEN KS / MÚSICA", compactTitle(track), track.download ? "Escuchá el tema y elegí qué archivos querés descargar o consultar." : "Escuchá esta producción desde mi catálogo musical.")
       + `<section class="track-detail container">
           <div class="track-detail-art">${artwork(track, "detail-art")}</div>
           <div class="track-detail-content">
@@ -315,7 +369,7 @@
             </div>
             ${track.salesEnabled===false ? `<p class="track-purchase-note">Disponible para escuchar. Para permisos de uso o distribución, escribí a soyallenks@gmail.com.</p>` : `<p class="track-purchase-note">STEMS y FLP se solicitan por mensaje. La compra no se cobra automáticamente en esta página.</p>`}
           </div>
-        </section>` + (track.audio ? player() : "") + journeyLinks();
+        </section>` + journeyLinks();
   }
   function livePage() {
     const e = data.event;
@@ -448,13 +502,20 @@
     const views = { "/":home, "/musica":musicPage, "/cancion":trackPage, "/en-vivo":livePage, "/proyectos":projectsPage, "/sobre-mi":aboutPage, "/contacto":contactPage,
       "/spotify":()=>socialHubPage("spotify"), "/soundcloud":()=>socialHubPage("soundcloud"), "/apple-music":()=>socialHubPage("apple-music"), "/whatsapp":whatsappPage,
       "/instagram":()=>socialHubPage("instagram"), "/youtube":()=>socialHubPage("youtube"), "/tiktok":()=>socialHubPage("tiktok") };
-    app.innerHTML = header() + `<main id="main-content">${(views[page] || notFound)()}</main>` + footer();
+    app.innerHTML = header() + `<main id="main-content">${(views[page] || notFound)()}</main>` + footer() + player() + '<div id="artwork-load-status" class="artwork-load-status" role="status" aria-live="off"></div>';
     document.title = `${page === "/" ? "Sitio Oficial" : page === "/sobre-mi" ? "Sobre mí" : page === "/cancion" && requestedTrackIndex >= 0 ? `${data.tracks[requestedTrackIndex].title} — Descargas` : (routes.find(r=>r.path===page)?.label || page.slice(1).toUpperCase())} — ALLEN KS`;
     bindEvents();
-    if (document.querySelector("#music-player") && data.tracks[selected]?.audio) {
+    if (!audio.getAttribute("src") && data.tracks[selected]?.audio) {
       audio.src = data.tracks[selected].audio;
       audio.load();
     }
+    const currentLabel = document.querySelector("#current-time");
+    const totalLabel = document.querySelector("#total-time");
+    if (currentLabel) currentLabel.textContent = formatTime(audio.currentTime || 0);
+    if (totalLabel) totalLabel.textContent = Number.isFinite(audio.duration) && audio.duration > 0 ? formatTime(audio.duration) : data.tracks[selected].durationLabel;
+    setPlayerProgress(Number.isFinite(audio.duration) && audio.duration > 0 ? audio.currentTime / audio.duration * 100 : 0);
+    refreshPlayButton();
+    observeVisibleArtwork();
   }
   function formatTime(seconds) {
     if (!Number.isFinite(seconds)) return "0:00";
@@ -610,6 +671,12 @@
       bindTrackButtons(document.getElementById("collaborations-grid"));
       refreshPlayButton();
     });
+    document.querySelector("#music-search-input")?.addEventListener("input", e => { searchState.query = e.target.value; refreshMusicSearch(); });
+    document.querySelector("#music-genre")?.addEventListener("change", e => { searchState.genre = e.target.value; refreshMusicSearch(); });
+    document.querySelector("#music-bpm")?.addEventListener("change", e => { searchState.bpm = e.target.value; refreshMusicSearch(); });
+    document.querySelector("#music-search-input") && (document.querySelector("#music-search-input").value = searchState.query);
+    document.querySelector("#music-genre") && (document.querySelector("#music-genre").value = searchState.genre);
+    document.querySelector("#music-bpm") && (document.querySelector("#music-bpm").value = searchState.bpm);
     document.querySelector("#player-main-btn")?.addEventListener("click", togglePlay);
     document.querySelectorAll("[data-skip]").forEach(btn => btn.addEventListener("click", () => skipSeconds(Number(btn.dataset.skip))));
     const promo = document.querySelector("#player-promo");
@@ -657,6 +724,50 @@
     }
     if (window.location.hash) setTimeout(() => document.getElementById(window.location.hash.slice(1))?.scrollIntoView({ block: "start" }), 70);
   }
+  function observeVisibleArtwork() {
+    const status = document.querySelector("#artwork-load-status");
+    if (!status) return;
+    const imgs = [...document.querySelectorAll("main img")].filter(img => {
+      const rect = img.getBoundingClientRect();
+      return rect.top < window.innerHeight * 1.7 && rect.bottom >= 0;
+    });
+    const pending = imgs.filter(img => !img.complete);
+    if (!pending.length) return;
+    const draw = () => {
+      if (!status.isConnected) return;
+      const done = imgs.filter(img => img.complete).length;
+      const percent = Math.round(done / imgs.length * 100);
+      status.textContent = `CARGANDO PORTADAS · ${percent}%`;
+      status.style.setProperty("--loaded", percent + "%");
+      status.classList.toggle("is-visible", done < imgs.length);
+    };
+    pending.forEach(img => { img.addEventListener("load", draw, {once:true}); img.addEventListener("error", draw, {once:true}); });
+    draw();
+  }
+  function applyLocation() {
+    const path = window.location.pathname.replace(/\/$/, "") || "/";
+    page = knownPaths.includes(path) ? path : "/404";
+    requestedTrackId = new URLSearchParams(window.location.search).get("tema");
+    requestedTrackIndex = data.tracks.findIndex(t => t.id === requestedTrackId);
+  }
+  document.addEventListener("click", event => {
+    const anchor = event.target.closest("a[href]");
+    if (!anchor || event.defaultPrevented || event.button !== 0 || event.metaKey || event.ctrlKey || event.shiftKey || event.altKey || anchor.target || anchor.hasAttribute("download")) return;
+    const target = new URL(anchor.href, window.location.href);
+    if (target.origin !== window.location.origin || !/^https?:$/.test(target.protocol)) return;
+    if (target.pathname === window.location.pathname && target.search === window.location.search && target.hash) return;
+    event.preventDefault();
+    history.pushState({}, "", target);
+    applyLocation();
+    render();
+    window.scrollTo({top:0,behavior:"instant"});
+    if (target.hash) requestAnimationFrame(() => document.getElementById(decodeURIComponent(target.hash.slice(1)))?.scrollIntoView());
+  });
+  window.addEventListener("popstate", () => {
+    applyLocation();
+    render();
+    window.scrollTo(0,0);
+  });
   audio.volume = .85;
   audio.addEventListener("timeupdate", () => {
     if (pendingSeekPercent !== null) return;
