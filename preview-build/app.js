@@ -64,7 +64,7 @@
       return !/Remix contest|Mi remix|Remix \/ por clasificar/.test(type);
     });
   }
-  const asset = (url, cls = "", alt = "") => url ? `<img class="${cls}" src="${url}" alt="${alt}" loading="lazy" decoding="async" />` : "";
+  const asset = (url, cls = "", alt = "") => url ? `<img class="${cls}" src="${url}" alt="${alt}" loading="${/hero|detail-priority/.test(cls) ? "eager" : "lazy"}" decoding="async" ${/hero|detail-priority/.test(cls) ? 'fetchpriority="high"' : ""} />` : "";
   const trackHref = track => `/cancion/?tema=${encodeURIComponent(track.id)}`;
   const whatsappLink = (track, format) => {
     const message = `Hola, quiero comprar los ${format === "STEMS" ? "stems" : "archivos FLP"} de "${track.title}" de ALLEN KS (US$9.99). ¿Me pasás la información?`;
@@ -139,7 +139,7 @@
   }
   function artwork(track, kind = "") {
     return track.artwork
-      ? `<div class="release-cover ${kind}">${asset(track.artwork, "release-image", `Portada de ${track.title}`)}</div>`
+      ? `<div class="release-cover ${kind}">${asset(track.artwork, `release-image ${kind === "detail-art" ? "detail-priority" : ""}`, `Portada de ${track.title}`)}</div>`
       : `<div class="release-cover ${kind} cover-${track.theme}" role="img" aria-label="Espacio para portada original de ${track.title}">
           <span class="cover-melt one"></span><span class="cover-melt two"></span><span class="cover-melt three"></span>
         </div>`;
@@ -193,7 +193,7 @@
     </section>`;
   }
   function playerDownloadHref(track) {
-    return page === "/" ? "/musica" : page === "/musica" ? trackHref(track) : track.download || "#descargas";
+    return trackHref(track);
   }
   function eventPoster() {
     if (data.event.artwork) return `<div class="event-poster">${asset(data.event.artwork, "event-poster-image", "Flyer OTRA NOCHE × OVERDRIVE")}</div>`;
@@ -273,7 +273,7 @@
     const genres = [...new Set(data.tracks.map(t => String(t.genre || "").trim()).filter(Boolean))].sort();
     return `<div class="music-search" role="search" aria-label="Buscar canciones">
       <label><span>BUSCAR CANCIÓN</span><input id="music-search-input" type="search" placeholder="Título, artista o versión..." autocomplete="off" /></label>
-      <label><span>GÉNERO</span><select id="music-genre"><option value="all">Todos los géneros</option>${genres.map(g => `<option value="${g.replace(/"/g, "&quot;")}">${g}</option>`).join("")}</select></label>
+      <label><span>GÉNERO</span><select id="music-genre"><option value="all">${genres.length ? "Todos los géneros" : "Géneros por clasificar"}</option>${genres.map(g => `<option value="${g.replace(/"/g, "&quot;")}">${g}</option>`).join("")}</select></label>
       <label><span>BPM</span><select id="music-bpm"><option value="all">Todos los BPM</option><option value="60-109">60–109</option><option value="110-139">110–139</option><option value="140-159">140–159</option><option value="160-179">160–179</option><option value="180-999">180+</option></select></label>
     </div>`;
   }
