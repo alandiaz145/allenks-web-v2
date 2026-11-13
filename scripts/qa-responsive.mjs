@@ -41,6 +41,14 @@ for(const [label,width,height] of [['mobile',390,844],['tablet',768,1024],['desk
   await page.screenshot({path:'qa-artifacts/'+label+'-player.png'});
   await page.locator('.booking-cta').scrollIntoViewIfNeeded();
   await page.waitForTimeout(650);
+  if(label!=='tablet') {
+    check(label+' floating player hides before Bookings',await page.locator('.player-wrap').evaluate(el=>el.classList.contains('is-offscreen')));
+    await page.locator('#lanzamientos').scrollIntoViewIfNeeded();
+    await page.waitForTimeout(350);
+    check(label+' floating player reappears above Bookings',await page.locator('.player-wrap').evaluate(el=>!el.classList.contains('is-offscreen')));
+    await page.locator('.booking-cta').scrollIntoViewIfNeeded();
+    await page.waitForTimeout(350);
+  }
   await page.screenshot({path:'qa-artifacts/'+label+'-bookings.png'});
   if(label==='mobile') {
     const b=await page.evaluate(()=>{
