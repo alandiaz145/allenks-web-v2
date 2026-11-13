@@ -576,3 +576,60 @@ a:focus-visible,button:focus-visible,input:focus-visible,textarea:focus-visible,
  .editorial-promo-cover{padding:13px;gap:7px}.editorial-promo-kicker{font-size:7px}.editorial-promo-title{font-size:clamp(17px,5vw,25px);letter-spacing:-.7px}.editorial-promo-cover small{font-size:7px}.editorial-promo-arrow{right:11px;bottom:9px}.editorial-promo-arrow svg{width:17px;height:17px}
  .editorial-promo-action{font-size:9px}.catalog-pagination{gap:7px}.catalog-pagination button{min-width:35px;height:35px;padding:0 8px;font-size:12px}.catalog-pagination .catalog-page-info{width:100%;margin:4px 0 0}
 }
+
+
+/* ALLEN KS — navegación continua, reproductor persistente y catálogo flexible */
+body{padding-bottom:154px}
+#app>.player-wrap{position:fixed;bottom:calc(14px + env(safe-area-inset-bottom,0px));left:50%;transform:translateX(-50%);width:min(calc(100% - 32px),1170px);max-width:1170px;margin:0;z-index:200;filter:drop-shadow(0 8px 24px #17102740)}
+#app>.player-wrap .music-player{height:104px;grid-template-columns:65px 120px minmax(130px,1fr) minmax(120px,1fr) 85px;padding:10px 24px 24px;gap:12px;border-radius:18px;box-shadow:0 5px 20px #3f266b66,0 2px 0 #19e6f5}
+#app>.player-wrap .player-cover{width:60px;height:60px}
+#app>.player-wrap .player-meta{min-width:0}
+#app>.player-wrap .player-meta strong{display:block;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;font-size:clamp(13px,1.6vw,18px)}
+#app>.player-wrap .player-promo{min-width:0}
+#app>.player-wrap .player-progress-wrap{bottom:9px}
+.release-grid,.catalog-grid{min-width:0}
+.release-card{min-width:0}
+.release-card h3,.release-card h3 a{white-space:normal;overflow-wrap:anywhere;word-break:normal;max-width:100%}
+.release-card h3{font-size:clamp(13px,1.25vw,18px);line-height:1.18;min-height:2.35em;letter-spacing:-.5px;margin:11px 0 7px;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
+.release-artist-label{overflow-wrap:anywhere}
+.track-detail-content,.inner-hero-content{min-width:0}
+.track-detail-content h2{font-size:clamp(28px,4.2vw,65px);line-height:1.06;overflow-wrap:anywhere;letter-spacing:-1.7px}
+.inner-hero-content h1{font-size:clamp(42px,7vw,105px);line-height:1.02;overflow-wrap:anywhere}
+.track-breadcrumb{display:flex;align-items:center;flex-wrap:wrap;gap:12px;color:#6245e4;font-size:12px;font-weight:900;letter-spacing:.13em;margin-bottom:18px}
+.track-breadcrumb a:hover{text-decoration:underline;text-underline-offset:4px}
+.music-search{display:grid;grid-template-columns:minmax(220px,2fr) minmax(135px,1fr) minmax(135px,1fr);gap:12px;margin:12px 0 24px}
+.music-search label{display:flex;flex-direction:column;gap:6px;min-width:0;color:#5c566d;font-size:10px;font-weight:900;letter-spacing:.09em}
+.music-search input,.music-search select{height:44px;min-width:0;width:100%;background:#fff;border:1px solid #d5cde9;border-radius:14px;color:#171323;padding:0 13px;font-weight:650;font-size:13px;outline-offset:2px}
+.music-search input:focus,.music-search select:focus{border-color:#7547eb;box-shadow:0 0 0 3px #7547eb19}
+.artwork-load-status{position:fixed;z-index:220;top:0;left:0;padding:6px 11px 11px;background:#14111dea;color:#fff;border-radius:0 0 12px 0;font-size:11px;font-weight:800;letter-spacing:.08em;opacity:0;pointer-events:none;transition:opacity .2s}
+.artwork-load-status.is-visible{opacity:1}
+.artwork-load-status:after{content:"";position:absolute;bottom:0;left:0;width:var(--loaded,0%);height:3px;background:#dfff22;transition:width .14s}
+@media(max-width:820px){
+body{padding-bottom:142px}
+#app>.player-wrap{width:calc(100% - 16px);bottom:calc(8px + env(safe-area-inset-bottom,0px))}
+#app>.player-wrap .music-player{height:115px;grid-template-columns:58px 115px minmax(0,1fr);grid-template-rows:61px 24px;gap:5px 9px;padding:9px 12px 21px}
+#app>.player-wrap .player-cover{width:54px;height:54px}
+#app>.player-wrap .player-meta strong{font-size:15px}
+#app>.player-wrap .player-promo,#app>.player-wrap .player-volume{display:none}
+#app>.player-wrap .time-label{right:14px;bottom:24px}
+#app>.player-wrap .player-progress-wrap{left:14px;right:14px;bottom:8px}
+.music-search{grid-template-columns:1fr 1fr}
+.music-search label:first-child{grid-column:1/-1}
+.inner-hero-content h1{font-size:clamp(36px,9vw,72px)}
+}
+@media(max-width:570px){
+#app>.player-wrap .music-player{height:106px;grid-template-columns:45px 108px minmax(0,1fr);grid-template-rows:52px 24px;padding:8px 10px 19px;border-radius:14px;gap:4px 8px}
+#app>.player-wrap .player-cover{width:42px;height:42px}
+#app>.player-wrap .player-meta strong{font-size:13px}
+#app>.player-wrap .player-meta span{font-size:10px}
+#app>.player-wrap .player-controls{gap:3px}
+#app>.player-wrap .player-skip-btn{font-size:9px}
+#app>.player-wrap .player-main-btn{width:37px;height:37px}
+#app>.player-wrap .player-progress-wrap{bottom:7px}
+#app>.player-wrap .time-label{bottom:20px}
+.release-card h3{font-size:clamp(12px,3.2vw,15px);min-height:2.4em}
+.track-detail-content h2{font-size:clamp(27px,8vw,43px);letter-spacing:-1px}
+.music-search{gap:8px}
+.music-search input,.music-search select{font-size:12px}
+}
+@media(prefers-reduced-motion:reduce){.artwork-load-status:after{transition:none}}
