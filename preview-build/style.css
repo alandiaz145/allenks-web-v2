@@ -811,3 +811,9 @@ html.player-inline-mode #app>.site-footer{padding-bottom:0!important}
 .artwork-load-status{top:83px;left:14px;border-radius:9px;padding:6px 10px 10px;max-width:calc(100vw - 28px);font-size:10px;background:#181322c9}
 @media(max-width:820px){.artwork-load-status{top:74px;left:14px}}
 @media(max-width:570px){.hero{height:1020px}.portrait-holder{height:51%;width:85%;right:-8%;bottom:-2%}}
+
+
+/* Mobile hero portrait visible earlier, while the two action buttons remain unobstructed. */
+@media(max-width:570px){
+  .portrait-holder{bottom:94px;height:51%;width:85%;right:-8%}
+}
