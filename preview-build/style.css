@@ -633,3 +633,95 @@ body{padding-bottom:142px}
 .music-search input,.music-search select{font-size:12px}
 }
 @media(prefers-reduced-motion:reduce){.artwork-load-status:after{transition:none}}
+
+
+/* UX refinements 2026-11-13: player, mobile hero, ticket and booking */
+html,body{min-height:100%;background:#f8f8fc}
+body{padding-bottom:0!important}
+#app>.site-footer{padding-bottom:120px}
+html.player-inline-mode #app>.site-footer{padding-bottom:0}
+#app>.player-wrap{filter:drop-shadow(0 10px 22px #21163e44);z-index:200}
+#app>.player-wrap .music-player{height:96px;grid-template-columns:64px 138px minmax(130px,1fr) minmax(160px,1.35fr) 75px;gap:15px;padding:12px 24px;border-radius:19px;overflow:visible;align-items:center}
+#app>.player-wrap .player-cover{height:58px;width:58px}
+#app>.player-wrap .player-controls{margin-left:8px;gap:5px;min-width:0}
+#app>.player-wrap .player-meta{margin-left:5px;min-width:0}
+#app>.player-wrap .player-meta strong{font-size:clamp(13px,1.4vw,18px)}
+#app>.player-wrap .player-promo{height:64px;min-width:0;gap:8px;padding:0 9px}
+#app>.player-wrap .player-promo span{font-size:clamp(12px,1.22vw,17px);white-space:normal;line-height:1.05}
+#app>.player-wrap .player-download-link{min-width:0;padding:10px 12px;font-size:10px}
+#app>.player-wrap .time-label{font-size:11px;position:static;white-space:nowrap;align-self:center;justify-self:center;margin:0}
+#app>.player-wrap .player-volume{display:none}
+#app>.player-wrap .player-progress-wrap{display:none!important}
+.player-dock-toggle{position:absolute;right:8px;top:-14px;border:1px solid #c6b8ee;border-radius:50%;width:28px;height:28px;display:grid;place-items:center;font-size:17px;font-weight:900;color:#211744;background:#fff;cursor:pointer;z-index:20;box-shadow:0 3px 10px #1d16453a}
+.player-dock-toggle:hover{background:#e9e0ff}
+#app .player-wrap.is-inline{position:relative;left:auto;bottom:auto;transform:none;width:min(calc(100% - 40px),1170px);max-width:1170px;margin:25px auto 45px;z-index:3}
+#app .player-wrap.is-inline .music-player{height:105px;grid-template-columns:65px 138px minmax(130px,1fr) minmax(160px,1.2fr) 75px;gap:15px;padding:14px 24px;border-radius:20px}
+#app .player-wrap.is-inline .player-cover{height:59px;width:59px}
+#app .player-wrap.is-inline .player-meta strong{font-size:clamp(13px,1.4vw,18px)}
+#app .player-wrap.is-inline .player-promo{height:64px}
+#app .player-wrap.is-inline .player-progress-wrap{display:none!important}
+#app .player-wrap.is-inline .time-label{position:static;font-size:11px;white-space:nowrap}
+.ticket-link{cursor:default}
+.ticket-details-link{position:absolute;inset:0;z-index:4;border-radius:30px}
+.ticket-details-link:focus-visible{outline:3px solid #12e7f8;outline-offset:4px}
+.ticket-qr{z-index:6;cursor:pointer}
+.ticket-qr:focus-visible{outline:3px solid #eaff00;outline-offset:6px}
+.collab-search{max-width:620px;margin:6px 0 22px}
+.collab-search label{display:block;margin-bottom:8px;color:#5c566d;font-weight:900;letter-spacing:.08em;font-size:10px}
+.collab-search input{display:block;width:100%;height:44px;border:1px solid #d5cde9;border-radius:14px;background:#fff;color:#171323;padding:0 13px;font-size:13px;font-weight:650;outline-offset:2px}
+.collab-search input:focus{border-color:#7547eb;box-shadow:0 0 0 3px #7547eb19}
+@media(max-width:1180px){
+#app>.player-wrap .music-player{grid-template-columns:60px 124px minmax(100px,1fr) minmax(130px,1.1fr) 70px;gap:11px}
+#app>.player-wrap .player-controls{margin-left:5px}
+#app>.player-wrap .player-meta{margin-left:3px}
+#app>.player-wrap .player-promo span{font-size:12px}
+#app .player-wrap.is-inline .music-player{grid-template-columns:60px 124px minmax(100px,1fr) minmax(125px,1.1fr) 70px;gap:11px}
+}
+@media(max-width:820px){
+html[data-page="/"] .site-header .brand{visibility:hidden}
+#app>.site-footer{padding-bottom:108px}
+#app>.player-wrap{width:calc(100% - 16px);bottom:calc(7px + env(safe-area-inset-bottom,0px))}
+#app>.player-wrap .music-player{height:93px;grid-template-columns:54px 116px minmax(0,1fr) 60px;grid-template-rows:1fr;gap:9px;padding:12px 12px;border-radius:16px}
+#app>.player-wrap .player-cover{width:50px;height:50px}
+#app>.player-wrap .player-controls{grid-column:2;grid-row:1;margin-left:0}
+#app>.player-wrap .player-meta{grid-column:3;grid-row:1;margin-left:0;min-width:0}
+#app>.player-wrap .player-meta strong{font-size:13px}
+#app>.player-wrap .player-meta span{font-size:10px}
+#app>.player-wrap .player-promo,#app>.player-wrap .player-volume{display:none}
+#app>.player-wrap .time-label{grid-column:4;grid-row:1;font-size:10px;position:static;justify-self:center}
+#app>.player-wrap .player-progress-wrap{display:none!important}
+#app .player-wrap.is-inline{width:calc(100% - 40px)}
+#app .player-wrap.is-inline .music-player{height:102px;grid-template-columns:54px 116px minmax(0,1fr) 60px;grid-template-rows:1fr;gap:9px;padding:12px}
+#app .player-wrap.is-inline .player-promo{display:none}
+#app .player-wrap.is-inline .time-label{grid-column:4;grid-row:1}
+.hero-copy .genre-sticker{position:relative;top:auto;left:auto;display:table;margin:16px 0 0 clamp(190px,38vw,280px);transform:rotate(-7deg);font-size:clamp(24px,4.2vw,32px)}
+.hero-copy .hero-subtitle{margin-top:24px}
+.portrait-holder{right:-8%;width:73%;height:62%;bottom:-2%}
+}
+@media(max-width:570px){
+#app>.player-wrap .music-player{height:83px;grid-template-columns:42px 108px minmax(0,1fr);gap:8px;padding:9px 10px;grid-template-rows:1fr}
+#app>.player-wrap .player-cover{width:40px;height:40px}
+#app>.player-wrap .player-controls{gap:4px}
+#app>.player-wrap .player-skip-btn{width:29px;height:29px;font-size:9px}
+#app>.player-wrap .player-main-btn{width:38px;height:38px}
+#app>.player-wrap .player-meta{padding-right:0}
+#app>.player-wrap .player-meta strong{font-size:12px}
+#app>.player-wrap .time-label{position:absolute;right:12px;bottom:5px;font-size:9px;opacity:.85}
+#app .player-wrap.is-inline .music-player{height:88px;grid-template-columns:42px 108px minmax(0,1fr);gap:8px;padding:9px 10px}
+#app .player-wrap.is-inline .player-cover{width:40px;height:40px}
+#app .player-wrap.is-inline .time-label{position:absolute;right:12px;bottom:5px}
+#app>.site-footer{padding-bottom:97px}
+.hero{height:825px}
+.hero-copy{top:90px}
+.hero-copy h1{font-size:clamp(69px,21vw,106px)}
+.hero-copy .genre-sticker{position:relative;top:auto;left:auto;margin:14px 0 0 49%;font-size:clamp(18px,5vw,26px);padding:9px 12px 5px;max-width:46%}
+.hero-copy .hero-subtitle{margin-top:17px}
+.portrait-holder{height:60%;width:98%;right:-15%;bottom:-4%}
+.ticket-card{border-radius:30px}
+.ticket-qr{z-index:6}
+.booking-cta{min-height:595px}
+.booking-cta-home .booking-portrait{width:86%;height:66%;right:-33px;bottom:-33px}
+.booking-copy{z-index:3}
+.booking-whatsapp{margin-top:95px;position:relative;z-index:4}
+.booking-copy .eyebrow{font-size:11px}
+}
