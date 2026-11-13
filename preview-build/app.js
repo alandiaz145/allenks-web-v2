@@ -31,6 +31,8 @@
   };
   let collabFilter = "all";
   let playerInline = false;
+  let playerCompact = sessionStorage.getItem("allenks-player-compact") === "1" ? true
+    : sessionStorage.getItem("allenks-player-compact") === "0" ? false : null;
   let playerVisibilityFrame = 0;
   let initialLoadFinished = false;
   const searchState = { query: "", genre: "all", bpm: "all" };
@@ -530,7 +532,7 @@
     if (!wrap) return;
     const target = page === "/" ? document.querySelector("#lanzamientos")
       : page === "/musica" ? document.querySelector("#catalogo") : null;
-    const inline = Boolean(playerInline && target);
+    const inline = Boolean(page === "/" && playerInline && target);
     // Restore the fixed layout to the root: its CSS deliberately uses #app > .player-wrap.
     if (inline) target.insertAdjacentElement("afterend", wrap);
     else if (wrap.parentElement !== app) app.appendChild(wrap);
@@ -538,9 +540,11 @@
     document.documentElement.classList.toggle("player-inline-mode", inline);
     const toggle = document.querySelector("#player-dock-toggle");
     if (toggle) {
-      toggle.textContent = inline ? "↗" : "−";
-      toggle.setAttribute("aria-label", inline ? "Volver a reproductor flotante" : "Colocar reproductor debajo del catálogo o lanzamientos");
-      toggle.title = inline ? "Volver a modo flotante" : "Volver a su lugar en la página";
+      const compact = page !== "/" && document.querySelector(".player-wrap")?.classList.contains("is-compact");
+      toggle.textContent = inline || compact ? "↗" : "−";
+      toggle.setAttribute("aria-label", page === "/" ? (inline ? "Expandir reproductor flotante" : "Ubicar reproductor en la página") : (compact ? "Expandir reproductor" : "Minimizar reproductor abajo a la izquierda"));
+      toggle.title = toggle.getAttribute("aria-label");
+      toggle.setAttribute("aria-expanded", String(!inline && !compact));
     }
     updateFloatingPlayerPlacement();
   }
@@ -559,7 +563,17 @@
     const footer = document.querySelector(".site-footer");
     const footerTop = footer ? footer.getBoundingClientRect().top : window.innerHeight;
     const approachingFooter = footerTop <= window.innerHeight * .78;
-    wrap.classList.toggle("is-offscreen", !inline && (!revealed || approachingBookings || approachingFooter));
+    const internal = page !== "/";
+    const compact = internal && (playerCompact === true || (playerCompact === null && revealed && approachingFooter));
+    wrap.classList.toggle("is-compact", compact);
+    wrap.classList.toggle("is-offscreen", !inline && !compact && (!revealed || approachingBookings || approachingFooter));
+    const toggle = document.querySelector("#player-dock-toggle");
+    if (toggle && internal) {
+      toggle.textContent = compact ? "↗" : "−";
+      toggle.setAttribute("aria-label", compact ? "Expandir reproductor" : "Minimizar reproductor abajo a la izquierda");
+      toggle.setAttribute("aria-expanded", String(!compact));
+      toggle.title = toggle.getAttribute("aria-label");
+    }
     if (inline) {
       wrap.style.removeProperty("--floating-bottom");
       return;
@@ -747,7 +761,11 @@
     document.querySelector("#music-bpm") && (document.querySelector("#music-bpm").value = searchState.bpm);
     document.querySelector("#player-main-btn")?.addEventListener("click", togglePlay);
     document.querySelector("#player-dock-toggle")?.addEventListener("click", () => {
-      playerInline = !playerInline;
+      if (page === "/") playerInline = !playerInline;
+      else {
+        playerCompact = !document.querySelector(".player-wrap")?.classList.contains("is-compact");
+        sessionStorage.setItem("allenks-player-compact", playerCompact ? "1" : "0");
+      }
       positionPlayer();
     });
     document.querySelectorAll("[data-skip]").forEach(btn => btn.addEventListener("click", () => skipSeconds(Number(btn.dataset.skip))));
