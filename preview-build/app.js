@@ -31,8 +31,7 @@
   };
   let collabFilter = "all";
   let playerInline = false;
-  let playerCompact = sessionStorage.getItem("allenks-player-compact") === "1" ? true
-    : sessionStorage.getItem("allenks-player-compact") === "0" ? false : null;
+  let playerCompact = true;
   let playerVisibilityFrame = 0;
   let initialLoadFinished = false;
   const searchState = { query: "", genre: "all", bpm: "all" };
@@ -531,10 +530,10 @@
     const wrap = document.querySelector(".player-wrap");
     if (!wrap) return;
     const target = page === "/" ? document.querySelector("#lanzamientos")
-      : page === "/musica" ? document.querySelector("#catalogo") : null;
-    const inline = Boolean(page === "/" && playerInline && target);
+      : document.querySelector("#main-content > section:not(.inner-hero):not(.hero):not(.hub-hero)");
+    const inline = Boolean(playerInline && target);
     // Restore the fixed layout to the root: its CSS deliberately uses #app > .player-wrap.
-    if (inline) target.insertAdjacentElement("afterend", wrap);
+    if (inline) target.insertAdjacentElement(page === "/" ? "afterend" : "beforebegin", wrap);
     else if (wrap.parentElement !== app) app.appendChild(wrap);
     wrap.classList.toggle("is-inline", inline);
     document.documentElement.classList.toggle("player-inline-mode", inline);
@@ -564,14 +563,14 @@
     const footerTop = footer ? footer.getBoundingClientRect().top : window.innerHeight;
     const approachingFooter = footerTop <= window.innerHeight * .78;
     const internal = page !== "/";
-    const compact = internal && (playerCompact === true || (playerCompact === null && revealed && approachingFooter));
+    const compact = internal && !inline && playerCompact;
     wrap.classList.toggle("is-compact", compact);
     wrap.classList.toggle("is-offscreen", !inline && !compact && (!revealed || approachingBookings || approachingFooter));
     const toggle = document.querySelector("#player-dock-toggle");
     if (toggle && internal) {
-      toggle.textContent = compact ? "↗" : "−";
-      toggle.setAttribute("aria-label", compact ? "Expandir reproductor" : "Minimizar reproductor abajo a la izquierda");
-      toggle.setAttribute("aria-expanded", String(!compact));
+      toggle.textContent = inline || compact ? "↗" : "−";
+      toggle.setAttribute("aria-label", inline ? "Minimizar reproductor abajo a la izquierda" : "Expandir reproductor dentro de la página");
+      toggle.setAttribute("aria-expanded", String(inline));
       toggle.title = toggle.getAttribute("aria-label");
     }
     if (inline) {
@@ -763,10 +762,13 @@
     document.querySelector("#player-dock-toggle")?.addEventListener("click", () => {
       if (page === "/") playerInline = !playerInline;
       else {
-        playerCompact = !document.querySelector(".player-wrap")?.classList.contains("is-compact");
-        sessionStorage.setItem("allenks-player-compact", playerCompact ? "1" : "0");
+        playerInline = !document.querySelector(".player-wrap")?.classList.contains("is-inline");
+        playerCompact = !playerInline;
       }
       positionPlayer();
+      if (playerInline && page !== "/") {
+        document.querySelector(".player-wrap")?.scrollIntoView({behavior: "smooth", block: "center"});
+      }
     });
     document.querySelectorAll("[data-skip]").forEach(btn => btn.addEventListener("click", () => skipSeconds(Number(btn.dataset.skip))));
     const promo = document.querySelector("#player-promo");
@@ -860,6 +862,10 @@
   }
   function applyLocation() {
     const path = window.location.pathname.replace(/\/$/, "") || "/";
+    if (path !== page) {
+      playerInline = false;
+      playerCompact = true;
+    }
     page = knownPaths.includes(path) ? path : "/404";
     requestedTrackId = new URLSearchParams(window.location.search).get("tema");
     requestedTrackIndex = data.tracks.findIndex(t => t.id === requestedTrackId);
