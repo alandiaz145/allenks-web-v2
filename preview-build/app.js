@@ -32,6 +32,7 @@
   let collabFilter = "all";
   let playerInline = false;
   let playerVisibilityFrame = 0;
+  let initialLoadFinished = false;
   const searchState = { query: "", genre: "all", bpm: "all" };
   const normalize = value => String(value || "").normalize("NFD").replace(/[\u0300-\u036f]/g, "").toLowerCase();
   function matchesSearch(track) {
@@ -508,7 +509,7 @@
       "/spotify":()=>socialHubPage("spotify"), "/soundcloud":()=>socialHubPage("soundcloud"), "/apple-music":()=>socialHubPage("apple-music"), "/whatsapp":whatsappPage,
       "/instagram":()=>socialHubPage("instagram"), "/youtube":()=>socialHubPage("youtube"), "/tiktok":()=>socialHubPage("tiktok") };
     document.documentElement.dataset.page = page;
-    app.innerHTML = header() + `<main id="main-content">${(views[page] || notFound)()}</main>` + footer() + player() + '<div id="artwork-load-status" class="artwork-load-status" role="status" aria-live="off"></div>';
+    app.innerHTML = header() + `<main id="main-content">${(views[page] || notFound)()}</main>` + footer() + player();
     document.title = `${page === "/" ? "Sitio Oficial" : page === "/sobre-mi" ? "Sobre mí" : page === "/cancion" && requestedTrackIndex >= 0 ? `${data.tracks[requestedTrackIndex].title} — Descargas` : (routes.find(r=>r.path===page)?.label || page.slice(1).toUpperCase())} — ALLEN KS`;
     bindEvents();
     positionPlayer();
@@ -522,7 +523,7 @@
     if (totalLabel) totalLabel.textContent = Number.isFinite(audio.duration) && audio.duration > 0 ? formatTime(audio.duration) : data.tracks[selected].durationLabel;
     setPlayerProgress(Number.isFinite(audio.duration) && audio.duration > 0 ? audio.currentTime / audio.duration * 100 : 0);
     refreshPlayButton();
-    observeVisibleArtwork();
+    if (!initialLoadFinished) finishInitialLoading();
   }
   function positionPlayer() {
     const wrap = document.querySelector(".player-wrap");
@@ -548,24 +549,22 @@
     if (!wrap) return;
     const inline = wrap.classList.contains("is-inline");
     const releases = page === "/" ? document.querySelector("#lanzamientos") : null;
-    const playing = !audio.paused && Boolean(data.tracks[selected]?.audio);
-    // On Inicio the player appears at Lanzamientos, unless audio is already playing.
-    const revealed = !releases || playing || releases.getBoundingClientRect().top < window.innerHeight * 0.75;
-    // Hide the floating UI before Bookings; the independent audio keeps playing.
-    // Scrolling back above Bookings automatically reveals the controls again.
+    // All routes share a clear hero: the floating UI appears after scrolling.
+    // Inicio additionally waits until Lanzamientos is near the viewport.
+    const passedIntro = window.scrollY >= Math.min(240, window.innerHeight * .28);
+    const revealed = passedIntro && (!releases || releases.getBoundingClientRect().top < window.innerHeight * .75);
+    // Keep Bookings, the footer and the last section free of floating controls.
     const bookings = page === "/" ? document.querySelector(".booking-cta-wrap") : null;
     const approachingBookings = Boolean(bookings && bookings.getBoundingClientRect().top <= window.innerHeight * 0.76);
     const footer = document.querySelector(".site-footer");
     const footerTop = footer ? footer.getBoundingClientRect().top : window.innerHeight;
-    // Rise above the footer while visible, then leave the footer unobstructed.
-    const nearFooterEnd = footerTop <= wrap.offsetHeight + 18;
-    wrap.classList.toggle("is-offscreen", !inline && (!revealed || approachingBookings || nearFooterEnd));
+    const approachingFooter = footerTop <= window.innerHeight * .78;
+    wrap.classList.toggle("is-offscreen", !inline && (!revealed || approachingBookings || approachingFooter));
     if (inline) {
       wrap.style.removeProperty("--floating-bottom");
       return;
     }
-    const bottom = Math.max(12, window.innerHeight - footerTop + 12);
-    wrap.style.setProperty("--floating-bottom", Math.min(bottom, window.innerHeight - wrap.offsetHeight - 12) + "px");
+    wrap.style.setProperty("--floating-bottom", "12px");
   }
   function scheduleFloatingPlacement() {
     if (playerVisibilityFrame) return;
@@ -797,25 +796,49 @@
     }
     if (window.location.hash) setTimeout(() => document.getElementById(window.location.hash.slice(1))?.scrollIntoView({ block: "start" }), 70);
   }
-  function observeVisibleArtwork() {
-    const status = document.querySelector("#artwork-load-status");
-    if (!status) return;
-    const imgs = [...document.querySelectorAll("main img")].filter(img => {
-      const rect = img.getBoundingClientRect();
-      return rect.top < window.innerHeight * 1.7 && rect.bottom >= 0;
-    });
-    const pending = imgs.filter(img => !img.complete);
-    if (!pending.length) return;
-    const draw = () => {
-      if (!status.isConnected) return;
-      const done = imgs.filter(img => img.complete).length;
-      const percent = Math.round(done / imgs.length * 100);
-      status.textContent = `CARGANDO PORTADAS · ${percent}%`;
-      status.style.setProperty("--loaded", percent + "%");
-      status.classList.toggle("is-visible", done < imgs.length);
+  function finishInitialLoading() {
+    initialLoadFinished = true;
+    const overlay = document.querySelector("#initial-loader");
+    if (!overlay) return;
+    const percent = document.querySelector("#initial-loader-percent");
+    const bar = document.querySelector("#initial-loader-bar");
+    const setProgress = value => {
+      const rounded = Math.min(100, Math.max(0, Math.round(value)));
+      if (percent) percent.textContent = String(rounded);
+      if (bar) bar.style.width = `${rounded}%`;
     };
-    pending.forEach(img => { img.addEventListener("load", draw, {once:true}); img.addEventListener("error", draw, {once:true}); });
-    draw();
+    const images = [...document.querySelectorAll("main img")].filter(img => {
+      const bounds = img.getBoundingClientRect();
+      return bounds.top < window.innerHeight * 1.15 && bounds.bottom >= 0;
+    });
+    const started = performance.now();
+    const timeout = 4000;
+    let complete = false;
+    const finish = () => {
+      if (complete) return;
+      complete = true;
+      setProgress(100);
+      setTimeout(() => {
+        overlay.classList.add("is-done");
+        setTimeout(() => overlay.remove(), 480);
+      }, Math.max(0, 500 - (performance.now() - started)));
+    };
+    const update = () => {
+      if (complete) return;
+      const done = images.filter(img => img.complete).length;
+      setProgress(15 + (images.length ? done / images.length : 1) * 85);
+      if (done === images.length) finish();
+    };
+    images.forEach(img => {
+      if (!img.complete) {
+        img.loading = "eager";
+        img.addEventListener("load", update, {once:true});
+        img.addEventListener("error", update, {once:true});
+      }
+    });
+    setProgress(15);
+    update();
+    setTimeout(finish, timeout);
   }
   function applyLocation() {
     const path = window.location.pathname.replace(/\/$/, "") || "/";
@@ -874,8 +897,16 @@
   });
   audio.addEventListener("pause", refreshPlayButton);
   audio.addEventListener("ended", () => {
-    audio.currentTime = 0;
-    audio.pause();
+    // Continuous radio: skip unavailable MP3s and loop to the beginning.
+    const length = data.tracks.length;
+    for (let offset = 1; offset <= length; offset++) {
+      const candidate = (selected + offset) % length;
+      if (data.tracks[candidate]?.audio) {
+        if (candidate === selected) audio.currentTime = 0;
+        selectTrack(candidate, true);
+        return;
+      }
+    }
     refreshPlayButton();
   });
   audio.addEventListener("error", () => announce("No fue posible cargar este archivo de audio."));
