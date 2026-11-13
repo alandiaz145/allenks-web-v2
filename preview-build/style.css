@@ -803,3 +803,5 @@ html.player-inline-mode #app>.site-footer{padding-bottom:0!important}
 }
 
 @media(max-width:570px){.hero{height:1020px}.portrait-holder{height:40%;right:-8%;width:85%}}
+
+@media(max-width:570px){.booking-cta-home .booking-copy{position:static}.booking-cta-home .booking-whatsapp{position:absolute;bottom:20px;left:26px;top:auto;z-index:5;margin:0!important}}
