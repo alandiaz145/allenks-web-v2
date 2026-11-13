@@ -360,6 +360,7 @@
           <div class="track-detail-content">
             <span class="eyebrow">${track.download ? "FREE DOWNLOAD" : "ESCUCHAR ONLINE"} / ALLEN KS</span>
             <h2>${track.title}</h2><p>ALLEN KS · DUBSTEP / BASS</p>
+             ${track.audio ? `<button type="button" class="track-detail-play pill-btn play-btn" data-play="${requestedTrackIndex}" aria-label="Reproducir ${track.title}">${icon("play",15)} ESCUCHAR ESTE TEMA</button>` : ""}
             ${track.versionType && !/por confirmar|por clasificar/.test(track.versionType) ? `<p class="catalog-review-tag">${track.versionType}</p>` : ""}
             <div class="download-options" id="descargas">
               ${track.download ? `<a class="download-option available" href="${track.download}" download="ALLEN KS - ${track.title}.mp3"><span><strong>${icon("download", 20)} DESCARGAR MP3</strong><small>Archivo de audio</small></span><b>GRATIS</b></a>` : `<span class="download-option unavailable"><span><strong>SOLO REPRODUCCIÓN</strong><small>Descarga no habilitada para esta versión</small></span><b>ESCUCHÁ ONLINE</b></span>`}
@@ -749,6 +750,14 @@
     page = knownPaths.includes(path) ? path : "/404";
     requestedTrackId = new URLSearchParams(window.location.search).get("tema");
     requestedTrackIndex = data.tracks.findIndex(t => t.id === requestedTrackId);
+    // Al abrir una ficha sin música activa, se prepara su canción sin iniciarla.
+    if (page === "/cancion" && requestedTrackIndex >= 0 && audio.paused && selected !== requestedTrackIndex) {
+      selected = requestedTrackIndex;
+      if (data.tracks[selected].audio) {
+        audio.src = data.tracks[selected].audio;
+        audio.load();
+      }
+    }
   }
   document.addEventListener("click", event => {
     const anchor = event.target.closest("a[href]");
