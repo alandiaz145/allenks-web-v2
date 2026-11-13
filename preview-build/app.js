@@ -551,16 +551,17 @@
     const playing = !audio.paused && Boolean(data.tracks[selected]?.audio);
     // On Inicio the player appears at Lanzamientos, unless audio is already playing.
     const revealed = !releases || playing || releases.getBoundingClientRect().top < window.innerHeight * 0.75;
-    wrap.classList.toggle("is-offscreen", !inline && !revealed);
+    const footer = document.querySelector(".site-footer");
+    const footerTop = footer ? footer.getBoundingClientRect().top : window.innerHeight;
+    // Rise above the footer while visible, then leave the footer unobstructed.
+    const nearFooterEnd = footerTop <= wrap.offsetHeight + 18;
+    wrap.classList.toggle("is-offscreen", !inline && (!revealed || nearFooterEnd));
     if (inline) {
       wrap.style.removeProperty("--floating-bottom");
       return;
     }
-    const footer = document.querySelector(".site-footer");
-    const bottomDefault = 12;
-    const footerTop = footer ? footer.getBoundingClientRect().top : window.innerHeight;
-    const bottom = Math.max(bottomDefault, window.innerHeight - footerTop + 12);
-    wrap.style.setProperty("--floating-bottom", bottom + "px");
+    const bottom = Math.max(12, window.innerHeight - footerTop + 12);
+    wrap.style.setProperty("--floating-bottom", Math.min(bottom, window.innerHeight - wrap.offsetHeight - 12) + "px");
   }
   function scheduleFloatingPlacement() {
     if (playerVisibilityFrame) return;
