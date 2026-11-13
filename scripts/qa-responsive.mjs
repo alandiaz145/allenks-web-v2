@@ -14,7 +14,7 @@ for(const [label,width,height] of [['mobile',390,844],['tablet',768,1024],['desk
   const page=await browser.newPage({viewport:{width,height}, deviceScaleFactor:1});
   page.on('pageerror',error=>failures.push(label+' runtime: '+error.message));
   await page.goto(base+'/',{waitUntil:'domcontentloaded'});
-  await page.locator('#player-dock-toggle').waitFor({timeout:20000});
+  await page.locator('#player-dock-toggle').waitFor({state:'attached',timeout:20000});
   await page.waitForTimeout(300);
   let before=await page.evaluate(()=>({
     brand: getComputedStyle(document.querySelector('.site-header .brand')).visibility,
