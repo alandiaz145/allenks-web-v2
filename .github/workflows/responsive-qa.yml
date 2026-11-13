@@ -1,11 +1,5 @@
 name: Responsive QA preview
 on:
-  push:
-    branches:
-      - fix/player-scroll-mobile-bookings-20261113
-  pull_request:
-    branches:
-      - main
   workflow_dispatch:
 permissions:
   contents: read
