@@ -834,7 +834,7 @@ html.player-inline-mode #app>.site-footer{padding-bottom:0!important}
 
 /* Reproductor compacto global en páginas internas: reserva la derecha para soporte. */
 #app>.player-wrap.is-compact{
-  left:14px;right:auto;bottom:calc(14px + env(safe-area-inset-bottom,0px));
+  left:max(35px,calc((100vw - var(--max)) / 2 + 12px));right:auto;bottom:calc(20px + env(safe-area-inset-bottom,0px));
   width:min(268px,calc(100vw - 28px));max-width:268px;
   transform:none;opacity:1;visibility:visible;pointer-events:auto;
   transition:width .24s ease,left .24s ease,opacity .24s ease,transform .24s ease;
@@ -858,7 +858,7 @@ html.player-inline-mode #app>.site-footer{padding-bottom:0!important}
 #app>.player-wrap.is-compact .player-progress-wrap{display:none!important}
 #app>.player-wrap.is-compact .player-dock-toggle{right:-6px;top:-13px}
 @media(max-width:570px){
-  #app>.player-wrap.is-compact{left:9px;width:min(224px,calc(100vw - 18px))}
+  #app>.player-wrap.is-compact{left:17px;width:min(224px,calc(100vw - 34px))}
   #app>.player-wrap.is-compact .music-player{height:62px;grid-template-columns:42px minmax(0,1fr) 36px;gap:7px;padding:8px}
   #app>.player-wrap.is-compact .player-cover{width:42px;height:42px}
   #app>.player-wrap.is-compact .player-meta strong{font-size:11px}
