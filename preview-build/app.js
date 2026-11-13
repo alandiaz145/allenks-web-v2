@@ -30,6 +30,7 @@
     collaborations: Math.max(1, Number.parseInt(new URLSearchParams(window.location.search).get("colaboraciones"), 10) || 1)
   };
   let collabFilter = "all";
+  let playerInline = false;
   const searchState = { query: "", genre: "all", bpm: "all" };
   const normalize = value => String(value || "").normalize("NFD").replace(/[\u0300-\u036f]/g, "").toLowerCase();
   function matchesSearch(track) {
@@ -180,14 +181,13 @@
   const promoLines = ["ESCUCHÁ ONLINE", "DISFRUTÁ MI MÚSICA", "EXPLORÁ EL CATÁLOGO", "ALLEN KS · DUBSTEP / BASS"];
   function player() {
     const t = data.tracks[selected];
-    return `<section class="player-wrap container" aria-label="Reproductor musical">
+    return `<section class="player-wrap container" aria-label="Reproductor musical"><button type="button" class="player-dock-toggle" id="player-dock-toggle" aria-label="Quitar reproductor flotante y ubicarlo en la página" title="Ubicar reproductor en la página">−</button>
       <div class="music-player" id="music-player">
         <a class="player-cover" id="player-cover-link" href="${trackHref(t)}" aria-label="Abrir página de ${t.title}">${artwork(t, "player-art")}</a>
         <div class="player-controls"><button class="player-skip-btn" type="button" data-skip="-10" aria-label="Retroceder 10 segundos">−10</button><button class="player-main-btn" id="player-main-btn" type="button" aria-label="Reproducir o pausar">${icon("play", 30)}</button><button class="player-skip-btn" type="button" data-skip="10" aria-label="Adelantar 10 segundos">+10</button></div>
         <div class="player-meta"><strong id="player-title">${t.title}</strong><span>ALLEN KS</span></div>
-        <div class="player-promo" id="player-promo" aria-live="off"><span id="player-promo-label">${promoLines[0]}</span><a class="player-download-link" id="player-download-link" href="${playerDownloadHref(t)}">${icon("arrow",16)} VER FICHA</a></div>
+        <div class="player-promo" id="player-promo" aria-live="off"><span id="player-promo-label">${promoLines[0]}</span><a class="player-download-link" id="player-download-link" href="${playerDownloadHref(t)}">${icon("arrow",16)} VER TEMA</a></div>
         <div class="time-label"><span id="current-time">0:00</span> / <span id="total-time">${t.durationLabel}</span></div>
-        <div class="player-progress-wrap" id="player-progress" role="progressbar" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0" aria-label="Progreso de reproducción. Usá los botones de diez segundos para avanzar o retroceder."><div class="player-progress-track"><span id="player-progress-fill" class="player-progress-fill"></span><span id="player-progress-thumb" class="player-progress-thumb"></span></div></div>
         <div class="player-volume">${icon("volume", 17)} <input type="range" id="volume-range" min="0" max="1" step=".05" value=".85" aria-label="Volumen" /></div>
       </div>
     </section>`;
@@ -206,7 +206,7 @@
   }
   function ticket() {
     const e = data.event;
-    return `<section class="event-section container"><a class="ticket-link" href="/en-vivo" aria-label="Ver detalles del evento ${e.name}">
+    return `<section class="event-section container"><div class="ticket-link">
       <div class="ticket-card">
         <div class="ticket-copy">
           <div class="ticket-kicker"><span class="acid-slash"></span>PRÓXIMA FECHA</div>
@@ -215,10 +215,11 @@
           <div class="ticket-venue">${icon("location", 25)} ${e.venue}</div>
         </div>
         <div class="ticket-perforation"></div>
-        <div class="ticket-qr"><img src="/assets/hero/event-details-qr.svg" alt="QR con información del evento" loading="lazy" /><small>INFO DEL EVENTO</small></div>
+        <a class="ticket-qr" href="https://www.instagram.com/otranochefiesta/" target="_blank" rel="noopener noreferrer" aria-label="Instagram de Otra Noche"><img src="/assets/hero/otra-noche-instagram-qr.svg" alt="QR de Instagram @otranochefiesta" loading="lazy" /><small>INSTAGRAM OFICIAL</small></a>
       </div>
       ${eventPoster()}
-    </a></section>`;
+      <a class="ticket-details-link" href="/en-vivo" aria-label="Ver detalles de ${e.name}"></a>
+    </div></section>`;
   }
   function projectIcon(id) {
     const icons = { spartans: "vinyl.svg", "otra-noche": "event-ticket.svg", academia: "academy.svg" };
@@ -252,7 +253,7 @@
   }
   function musicPage() {
     return pageHero("ALLEN KS / DISCOGRAFÍA", "MI MÚSICA", "Dubstep, Bass y exploración sonora desde Buenos Aires. Escuchá los lanzamientos y descargá los archivos habilitados.")
-      + catalog() + releases()
+      + catalog()
       + `<section class="inner-section container" id="free-downloads"><div class="split-callout">
           <div><span class="eyebrow">ARCHIVOS DEL ARTISTA</span><h2>FREE<br>DOWNLOADS<span class="accent-dot">.</span></h2></div>
           <div><p>Descargá mi música directamente desde la web. Cada canción tiene su propia página con MP3, portada y opciones de producción.</p><p class="small-note">Las portadas oficiales se habilitan para descargar cuando estén disponibles.</p><a class="callout-cta" href="#catalogo">EXPLORAR CATÁLOGO ${icon("arrow", 19)}</a></div>
@@ -297,7 +298,8 @@
   }
   function collaborations() {
     const tracks=collaborationTracks();
-    return `<section class="collaborations-section container" id="colaboraciones">${sectionTitle("COLABORACIONES Y REMIXES", "Producciones compartidas, reinterpretaciones y remix contests.")}
+    return `<section class="collaborations-section container" id="colaboraciones">${sectionTitle("REMIXES", "Colaboraciones, remixes propios y versiones de remix contests.")}
+      <div class="collab-search"><label for="collab-search-input">BUSCAR EN REMIXES Y COLABORACIONES</label><input id="collab-search-input" type="search" autocomplete="off" placeholder="Título, artista o versión..." value="${searchState.query.replace(/"/g, "&quot;")}" /></div>
       <div class="collab-filters" role="group" aria-label="Filtrar colaboraciones y remixes"><button type="button" data-collab-filter="all" class="active" aria-pressed="true">TODOS</button><button type="button" data-collab-filter="collabs">COLABORACIONES</button><button type="button" data-collab-filter="remixes">MIS REMIXES</button><button type="button" data-collab-filter="contest">REMIX CONTEST</button></div>
       <div class="catalog-grid release-grid" id="collaborations-grid" aria-live="polite">${catalogCards("collaborations", tracks)}</div>
       <div id="collaborations-pages">${catalogPagination("collaborations", tracks.length)}</div>
@@ -398,7 +400,7 @@
   function liveBookingCTA(portrait = data.artist.portrait) {
     const link=generalWhatsappLink("Hola Alan, me gustaría contratar a ALLEN KS para un próximo show. ¿Podemos hablar de fechas y condiciones?", "bookings");
     const homeVersion=portrait!==data.artist.portrait;
-    return `<section class="container booking-cta-wrap"><div class="booking-cta${homeVersion ? " booking-cta-home" : ""}"><div class="booking-copy"><span class="eyebrow">BOOKINGS / ARGENTINA</span><h2>¿LLEVAMOS EL BASS<br>A TU PRÓXIMA FECHA?</h2><p>Clubs, fiestas, festivales y encuentros donde la música se vive fuerte. Hablemos de tu evento y armemos algo que se sienta de verdad.</p><a href="${link}" target="_blank" rel="noopener noreferrer" class="booking-whatsapp">CONSULTAR POR WHATSAPP ${icon("arrow",21)}</a></div>${asset(portrait,"booking-portrait","ALLEN KS, productor y DJ")}</div></section>`;
+    return `<section class="container booking-cta-wrap"><div class="booking-cta${homeVersion ? " booking-cta-home" : ""}"><div class="booking-copy"><span class="eyebrow">BOOKINGS</span><h2>¿LLEVAMOS EL BASS<br>A TU PRÓXIMA FECHA?</h2><p>Clubs, fiestas, festivales y encuentros donde la música se vive fuerte. Hablemos de tu evento y armemos algo que se sienta de verdad.</p><a href="${link}" target="_blank" rel="noopener noreferrer" class="booking-whatsapp">CONSULTAR POR WHATSAPP ${icon("arrow",21)}</a></div>${asset(portrait,"booking-portrait","ALLEN KS, productor y DJ")}</div></section>`;
   }
   function projectsPage() {
     return pageHero("CREAR / CONECTAR / IMPULSAR", "PROYECTOS", "Más allá de la música: sello, fiestas y formación para la comunidad bass.")
@@ -507,6 +509,7 @@
     app.innerHTML = header() + `<main id="main-content">${(views[page] || notFound)()}</main>` + footer() + player() + '<div id="artwork-load-status" class="artwork-load-status" role="status" aria-live="off"></div>';
     document.title = `${page === "/" ? "Sitio Oficial" : page === "/sobre-mi" ? "Sobre mí" : page === "/cancion" && requestedTrackIndex >= 0 ? `${data.tracks[requestedTrackIndex].title} — Descargas` : (routes.find(r=>r.path===page)?.label || page.slice(1).toUpperCase())} — ALLEN KS`;
     bindEvents();
+    positionPlayer();
     if (!audio.getAttribute("src") && data.tracks[selected]?.audio) {
       audio.src = data.tracks[selected].audio;
       audio.load();
@@ -518,6 +521,23 @@
     setPlayerProgress(Number.isFinite(audio.duration) && audio.duration > 0 ? audio.currentTime / audio.duration * 100 : 0);
     refreshPlayButton();
     observeVisibleArtwork();
+  }
+  function positionPlayer() {
+    const wrap = document.querySelector(".player-wrap");
+    if (!wrap) return;
+    const target = page === "/" ? document.querySelector("#lanzamientos")
+      : page === "/musica" ? document.querySelector("#catalogo") : null;
+    const inline = Boolean(playerInline && target);
+    if (inline) target.insertAdjacentElement("afterend", wrap);
+    wrap.classList.toggle("is-inline", inline);
+    wrap.classList.toggle("is-collapsed", playerInline && !target);
+    document.documentElement.classList.toggle("player-inline-mode", inline);
+    const toggle = document.querySelector("#player-dock-toggle");
+    if (toggle) {
+      toggle.textContent = inline || playerInline ? "↗" : "−";
+      toggle.setAttribute("aria-label", inline || playerInline ? "Mostrar reproductor flotante" : "Quitar reproductor flotante y ubicarlo en la página");
+      toggle.title = inline || playerInline ? "Volver a modo flotante" : "Ubicar reproductor en la página";
+    }
   }
   function formatTime(seconds) {
     if (!Number.isFinite(seconds)) return "0:00";
@@ -673,13 +693,28 @@
       bindTrackButtons(document.getElementById("collaborations-grid"));
       refreshPlayButton();
     });
-    document.querySelector("#music-search-input")?.addEventListener("input", e => { searchState.query = e.target.value; refreshMusicSearch(); });
+    document.querySelector("#music-search-input")?.addEventListener("input", e => {
+      searchState.query = e.target.value;
+      const other = document.querySelector("#collab-search-input");
+      if (other) other.value = searchState.query;
+      refreshMusicSearch();
+    });
+    document.querySelector("#collab-search-input")?.addEventListener("input", e => {
+      searchState.query = e.target.value;
+      const other = document.querySelector("#music-search-input");
+      if (other) other.value = searchState.query;
+      refreshMusicSearch();
+    });
     document.querySelector("#music-genre")?.addEventListener("change", e => { searchState.genre = e.target.value; refreshMusicSearch(); });
     document.querySelector("#music-bpm")?.addEventListener("change", e => { searchState.bpm = e.target.value; refreshMusicSearch(); });
     document.querySelector("#music-search-input") && (document.querySelector("#music-search-input").value = searchState.query);
     document.querySelector("#music-genre") && (document.querySelector("#music-genre").value = searchState.genre);
     document.querySelector("#music-bpm") && (document.querySelector("#music-bpm").value = searchState.bpm);
     document.querySelector("#player-main-btn")?.addEventListener("click", togglePlay);
+    document.querySelector("#player-dock-toggle")?.addEventListener("click", () => {
+      playerInline = !playerInline;
+      positionPlayer();
+    });
     document.querySelectorAll("[data-skip]").forEach(btn => btn.addEventListener("click", () => skipSeconds(Number(btn.dataset.skip))));
     const promo = document.querySelector("#player-promo");
     if (promo) {
