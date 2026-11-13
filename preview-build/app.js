@@ -244,9 +244,10 @@
     return hero() + releases() + ticket() + projectsShort() + liveBookingCTA("/assets/hero/allen-ks-booking-dj.png");
   }
   function pageHero(kicker, title, desc) {
+    const currentLabel = page === "/musica" ? "DISCOGRAFÍA" : (routes.find(r => r.path === page)?.label || kicker.split("/").pop().trim()).toUpperCase();
     const breadcrumb = page === "/cancion"
       ? '<nav class="track-breadcrumb" aria-label="Ruta de navegación"><a href="/">ALLEN KS</a><span aria-hidden="true">/</span><a href="/musica">DISCOGRAFÍA</a></nav>'
-      : '<span class="eyebrow">' + kicker + '</span>';
+      : '<nav class="track-breadcrumb" aria-label="Ruta de navegación"><a href="/">ALLEN KS</a><span aria-hidden="true">/</span><span aria-current="page">' + currentLabel + '</span></nav>';
     return `<section class="inner-hero"><div class="inner-hero-ribbon"></div><div class="container inner-hero-content">${breadcrumb}<h1>${title}</h1><p>${desc}</p></div></section>`;
   }
   function musicPage() {
@@ -769,7 +770,7 @@
     history.pushState({}, "", target);
     applyLocation();
     render();
-    window.scrollTo({top:0,behavior:"instant"});
+    window.scrollTo(0, 0);
     if (target.hash) requestAnimationFrame(() => document.getElementById(decodeURIComponent(target.hash.slice(1)))?.scrollIntoView());
   });
   window.addEventListener("popstate", () => {
