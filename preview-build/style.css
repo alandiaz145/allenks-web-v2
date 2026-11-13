@@ -817,3 +817,5 @@ html.player-inline-mode #app>.site-footer{padding-bottom:0!important}
 @media(max-width:570px){
   .portrait-holder{bottom:94px;height:51%;width:85%;right:-8%}
 }
+
+.artwork-load-status:not(.is-visible){display:none}
