@@ -30,8 +30,8 @@
     collaborations: Math.max(1, Number.parseInt(new URLSearchParams(window.location.search).get("colaboraciones"), 10) || 1)
   };
   let collabFilter = "all";
-  let playerInline = false;
-  let playerCompact = true;
+  let playerCompact = page !== "/";
+  let expandedAtScroll = null;
   let playerVisibilityFrame = 0;
   let initialLoadFinished = false;
   const searchState = { query: "", genre: "all", bpm: "all" };
@@ -529,28 +529,15 @@
   function positionPlayer() {
     const wrap = document.querySelector(".player-wrap");
     if (!wrap) return;
-    const target = page === "/" ? document.querySelector("#lanzamientos")
-      : document.querySelector("#main-content > section:not(.inner-hero):not(.hero):not(.hub-hero)");
-    const inline = Boolean(playerInline && target);
-    // Restore the fixed layout to the root: its CSS deliberately uses #app > .player-wrap.
-    if (inline) target.insertAdjacentElement(page === "/" ? "afterend" : "beforebegin", wrap);
-    else if (wrap.parentElement !== app) app.appendChild(wrap);
-    wrap.classList.toggle("is-inline", inline);
-    document.documentElement.classList.toggle("player-inline-mode", inline);
-    const toggle = document.querySelector("#player-dock-toggle");
-    if (toggle) {
-      const compact = page !== "/" && document.querySelector(".player-wrap")?.classList.contains("is-compact");
-      toggle.textContent = inline || compact ? "↗" : "−";
-      toggle.setAttribute("aria-label", page === "/" ? (inline ? "Expandir reproductor flotante" : "Ubicar reproductor en la página") : (compact ? "Expandir reproductor" : "Minimizar reproductor abajo a la izquierda"));
-      toggle.title = toggle.getAttribute("aria-label");
-      toggle.setAttribute("aria-expanded", String(!inline && !compact));
-    }
+    // The player is always floating; changing size never moves it into page content.
+    if (wrap.parentElement !== app) app.appendChild(wrap);
+    wrap.classList.remove("is-inline");
+    document.documentElement.classList.remove("player-inline-mode");
     updateFloatingPlayerPlacement();
   }
   function updateFloatingPlayerPlacement() {
     const wrap = document.querySelector(".player-wrap");
     if (!wrap) return;
-    const inline = wrap.classList.contains("is-inline");
     const releases = page === "/" ? document.querySelector("#lanzamientos") : null;
     // All routes share a clear hero: the floating UI appears after scrolling.
     // Inicio additionally waits until Lanzamientos is near the viewport.
@@ -562,20 +549,16 @@
     const footer = document.querySelector(".site-footer");
     const footerTop = footer ? footer.getBoundingClientRect().top : window.innerHeight;
     const approachingFooter = footerTop <= window.innerHeight * .78;
-    const internal = page !== "/";
-    const compact = internal && !inline && playerCompact;
+    if (expandedAtScroll !== null && Math.abs(window.scrollY - expandedAtScroll) > 25) expandedAtScroll = null;
+    const compact = playerCompact;
     wrap.classList.toggle("is-compact", compact);
-    wrap.classList.toggle("is-offscreen", !inline && !compact && (!revealed || approachingBookings || approachingFooter));
+    wrap.classList.toggle("is-offscreen", !compact && expandedAtScroll === null && (!revealed || approachingBookings || approachingFooter));
     const toggle = document.querySelector("#player-dock-toggle");
-    if (toggle && internal) {
-      toggle.textContent = inline || compact ? "↗" : "−";
-      toggle.setAttribute("aria-label", inline ? "Minimizar reproductor abajo a la izquierda" : "Expandir reproductor dentro de la página");
-      toggle.setAttribute("aria-expanded", String(inline));
+    if (toggle) {
+      toggle.textContent = compact ? "↗" : "−";
+      toggle.setAttribute("aria-label", compact ? "Expandir reproductor flotante" : "Minimizar reproductor flotante");
+      toggle.setAttribute("aria-expanded", String(!compact));
       toggle.title = toggle.getAttribute("aria-label");
-    }
-    if (inline) {
-      wrap.style.removeProperty("--floating-bottom");
-      return;
     }
     wrap.style.setProperty("--floating-bottom", "12px");
   }
@@ -760,15 +743,11 @@
     document.querySelector("#music-bpm") && (document.querySelector("#music-bpm").value = searchState.bpm);
     document.querySelector("#player-main-btn")?.addEventListener("click", togglePlay);
     document.querySelector("#player-dock-toggle")?.addEventListener("click", () => {
-      if (page === "/") playerInline = !playerInline;
-      else {
-        playerInline = !document.querySelector(".player-wrap")?.classList.contains("is-inline");
-        playerCompact = !playerInline;
-      }
+      playerCompact = !playerCompact;
+      // Keep the expanded player visible immediately after clicking; scrolling
+      // resumes the standard show/hide rules without interrupting playback.
+      expandedAtScroll = playerCompact ? null : window.scrollY;
       positionPlayer();
-      if (playerInline && page !== "/") {
-        document.querySelector(".player-wrap")?.scrollIntoView({behavior: "smooth", block: "center"});
-      }
     });
     document.querySelectorAll("[data-skip]").forEach(btn => btn.addEventListener("click", () => skipSeconds(Number(btn.dataset.skip))));
     const promo = document.querySelector("#player-promo");
@@ -863,8 +842,8 @@
   function applyLocation() {
     const path = window.location.pathname.replace(/\/$/, "") || "/";
     if (path !== page) {
-      playerInline = false;
-      playerCompact = true;
+      playerCompact = path !== "/";
+      expandedAtScroll = null;
     }
     page = knownPaths.includes(path) ? path : "/404";
     requestedTrackId = new URLSearchParams(window.location.search).get("tema");
