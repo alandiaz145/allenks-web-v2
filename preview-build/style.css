@@ -793,3 +793,11 @@ html.player-inline-mode #app>.site-footer{padding-bottom:0!important}
 @media(prefers-reduced-motion:reduce){
  #app>.player-wrap{transition:none}
 }
+
+
+/* Mobile booking CTA sits below the portrait's face, never over the eyes. */
+@media(max-width:570px){
+.booking-cta{position:relative;min-height:665px}
+.booking-cta-home .booking-whatsapp{position:absolute;bottom:20px;left:26px;top:auto;z-index:5;margin:0!important}
+.booking-cta-home .booking-portrait{width:76%;height:58%;bottom:-10px;right:-25px}
+}
