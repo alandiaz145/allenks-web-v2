@@ -42,3 +42,17 @@ Actualizado: 13 de noviembre de 2026. Este archivo permite continuar el proyecto
 
 ## Regla de continuidad
 En cada nuevo chat: leer este documento y la versión actual de `main` antes de tocar producción. No asumir que un PR fusionado equivale a despliegue verificado. Mantener copia de seguridad/reversión, comprobar Actions y sitio real.
+
+## Revisión responsive 13/11/2026 (nueva corrección)
+- Usuario revisó la web en escritorio, tablet y móvil. Reportó overlay en inicio, banda negra al minimizar, falla al volver al modo flotante y CTA de Bookings tapando el rostro.
+- Correcciones integradas en rama `fix/player-scroll-mobile-bookings-20261113`: reproductor oculto durante hero de Inicio hasta Lanzamientos (salvo audio ya activo), con elevación sobre el footer y ocultamiento al llegar al final; botón del reproductor vuelve al DOM raíz tras alternar inline/flotante; sin relleno artificial de footer; volumen 100 % inicial y slider solo escritorio; logotipo superior restaurado móvil; foto de hero situada debajo de botones y sticker corregido; CTA de Bookings anclado abajo de tarjeta para no tapar cara.
+- Requisitos de prueba: scroll desde hero a Lanzamientos, toggle inline/flotante ida/vuelta repetido, navegar Inicio→Música→En vivo→Contacto con audio en curso, scroll hasta footer sin bloque negro; tamaños 375, 430, 768, 1024, 1440 px; iPhone real. No afirmar verificación visual si el navegador remoto no es accesible.
+- Notas: evitar cambiar fotos / estética iridiscente o aumentar el contenido de Música sin autorización. La carga de archivos y las descargas deben seguir controles existentes.
+
+## QA final de responsive, 13/11/2026
+- Verificación real de Chromium sobre preview-build en resoluciones 390×844 móvil, 768×1024 tablet y 1440×900 escritorio.
+- Playwright: 29 verificaciones aprobadas y cero fallos; comprueba player oculto hasta Lanzamientos, aparición al hacer scroll, minimizar y restaurar, footer sin padding artificial, búsqueda de remixes, marca visible y control de volumen según tamaño.
+- Capturas y resultados registrados en GitHub Actions: https://github.com/alandiaz145/allenks-web-v2/actions/runs/43361438030 (artifact `allenks-responsive-qa`).
+- Revisión visual: portada móvil, tarjeta Bookings y reproductor; ajustes finales del retrato y loader realizados.
+- El workflow `Responsive QA preview` queda como ejecución manual para ahorrar minutos en futuras actualizaciones.
+- La verificación con navegador real del dominio público e iPhone sigue siendo distinta de las pruebas locales Chromium; no declararla realizada sin comprobarla.
