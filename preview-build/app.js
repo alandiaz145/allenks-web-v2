@@ -186,7 +186,7 @@
         <a class="player-cover" id="player-cover-link" href="${trackHref(t)}" aria-label="Abrir página de ${t.title}">${artwork(t, "player-art")}</a>
         <div class="player-controls"><button class="player-skip-btn" type="button" data-skip="-10" aria-label="Retroceder 10 segundos">−10</button><button class="player-main-btn" id="player-main-btn" type="button" aria-label="Reproducir o pausar">${icon("play", 30)}</button><button class="player-skip-btn" type="button" data-skip="10" aria-label="Adelantar 10 segundos">+10</button></div>
         <div class="player-meta"><strong id="player-title">${t.title}</strong><span>ALLEN KS</span></div>
-        <div class="player-promo" id="player-promo" aria-live="off"><span id="player-promo-label">${promoLines[0]}</span><a class="player-download-link" id="player-download-link" href="${playerDownloadHref(t)}">${icon("arrow",16)} VER TEMA</a></div>
+        <div class="player-promo" id="player-promo" aria-live="off"><span id="player-promo-label">${promoLines[0]}</span><a class="player-download-link" id="player-download-link" href="${playerDownloadHref(t)}">${icon("arrow",16)} DESCUBRIR</a></div>
         <div class="time-label"><span id="current-time">0:00</span> / <span id="total-time">${t.durationLabel}</span></div>
         <div class="player-volume">${icon("volume", 17)} <input type="range" id="volume-range" min="0" max="1" step=".05" value=".85" aria-label="Volumen" /></div>
       </div>
@@ -506,6 +506,7 @@
     const views = { "/":home, "/musica":musicPage, "/cancion":trackPage, "/en-vivo":livePage, "/proyectos":projectsPage, "/sobre-mi":aboutPage, "/contacto":contactPage,
       "/spotify":()=>socialHubPage("spotify"), "/soundcloud":()=>socialHubPage("soundcloud"), "/apple-music":()=>socialHubPage("apple-music"), "/whatsapp":whatsappPage,
       "/instagram":()=>socialHubPage("instagram"), "/youtube":()=>socialHubPage("youtube"), "/tiktok":()=>socialHubPage("tiktok") };
+    document.documentElement.dataset.page = page;
     app.innerHTML = header() + `<main id="main-content">${(views[page] || notFound)()}</main>` + footer() + player() + '<div id="artwork-load-status" class="artwork-load-status" role="status" aria-live="off"></div>';
     document.title = `${page === "/" ? "Sitio Oficial" : page === "/sobre-mi" ? "Sobre mí" : page === "/cancion" && requestedTrackIndex >= 0 ? `${data.tracks[requestedTrackIndex].title} — Descargas` : (routes.find(r=>r.path===page)?.label || page.slice(1).toUpperCase())} — ALLEN KS`;
     bindEvents();
@@ -527,6 +528,7 @@
     if (!wrap) return;
     const target = page === "/" ? document.querySelector("#lanzamientos")
       : page === "/musica" ? document.querySelector("#catalogo") : null;
+    if (playerInline && !target) playerInline = false;
     const inline = Boolean(playerInline && target);
     if (inline) target.insertAdjacentElement("afterend", wrap);
     wrap.classList.toggle("is-inline", inline);
