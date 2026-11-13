@@ -42,3 +42,9 @@ Actualizado: 13 de noviembre de 2026. Este archivo permite continuar el proyecto
 
 ## Regla de continuidad
 En cada nuevo chat: leer este documento y la versión actual de `main` antes de tocar producción. No asumir que un PR fusionado equivale a despliegue verificado. Mantener copia de seguridad/reversión, comprobar Actions y sitio real.
+
+## Revisión responsive 13/11/2026 (nueva corrección)
+- Usuario revisó la web en escritorio, tablet y móvil. Reportó overlay en inicio, banda negra al minimizar, falla al volver al modo flotante y CTA de Bookings tapando el rostro.
+- Correcciones integradas en rama `fix/player-scroll-mobile-bookings-20261113`: reproductor oculto durante hero de Inicio hasta Lanzamientos (salvo audio ya activo), con elevación sobre el footer y ocultamiento al llegar al final; botón del reproductor vuelve al DOM raíz tras alternar inline/flotante; sin relleno artificial de footer; volumen 100 % inicial y slider solo escritorio; logotipo superior restaurado móvil; foto de hero situada debajo de botones y sticker corregido; CTA de Bookings anclado abajo de tarjeta para no tapar cara.
+- Requisitos de prueba: scroll desde hero a Lanzamientos, toggle inline/flotante ida/vuelta repetido, navegar Inicio→Música→En vivo→Contacto con audio en curso, scroll hasta footer sin bloque negro; tamaños 375, 430, 768, 1024, 1440 px; iPhone real. No afirmar verificación visual si el navegador remoto no es accesible.
+- Notas: evitar cambiar fotos / estética iridiscente o aumentar el contenido de Música sin autorización. La carga de archivos y las descargas deben seguir controles existentes.
