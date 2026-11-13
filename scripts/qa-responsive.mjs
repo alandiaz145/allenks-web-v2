@@ -40,6 +40,7 @@ for(const [label,width,height] of [['mobile',390,844],['tablet',768,1024],['desk
   check(label+' undock returns to fixed root',!floating.inline&&floating.parent==='app'&&floating.position==='fixed',JSON.stringify(floating));
   await page.screenshot({path:'qa-artifacts/'+label+'-player.png'});
   await page.locator('.booking-cta').scrollIntoViewIfNeeded();
+  await page.waitForTimeout(650);
   await page.screenshot({path:'qa-artifacts/'+label+'-bookings.png'});
   if(label==='mobile') {
     const b=await page.evaluate(()=>{
