@@ -31,6 +31,7 @@
   };
   let collabFilter = "all";
   let playerInline = false;
+  let playerVisibilityFrame = 0;
   const searchState = { query: "", genre: "all", bpm: "all" };
   const normalize = value => String(value || "").normalize("NFD").replace(/[\u0300-\u036f]/g, "").toLowerCase();
   function matchesSearch(track) {
@@ -188,7 +189,7 @@
         <div class="player-meta"><strong id="player-title">${t.title}</strong><span>ALLEN KS</span></div>
         <div class="player-promo" id="player-promo" aria-live="off"><span id="player-promo-label">${promoLines[0]}</span><a class="player-download-link" id="player-download-link" href="${playerDownloadHref(t)}">${icon("arrow",16)} DESCUBRIR</a></div>
         <div class="time-label"><span id="current-time">0:00</span> / <span id="total-time">${t.durationLabel}</span></div>
-        <div class="player-volume">${icon("volume", 17)} <input type="range" id="volume-range" min="0" max="1" step=".05" value=".85" aria-label="Volumen" /></div>
+        <div class="player-volume">${icon("volume", 17)} <input type="range" id="volume-range" min="0" max="1" step=".05" value="1" aria-label="Volumen" /></div>
       </div>
     </section>`;
   }
@@ -528,18 +529,45 @@
     if (!wrap) return;
     const target = page === "/" ? document.querySelector("#lanzamientos")
       : page === "/musica" ? document.querySelector("#catalogo") : null;
-    if (playerInline && !target) playerInline = false;
     const inline = Boolean(playerInline && target);
+    // Restore the fixed layout to the root: its CSS deliberately uses #app > .player-wrap.
     if (inline) target.insertAdjacentElement("afterend", wrap);
+    else if (wrap.parentElement !== app) app.appendChild(wrap);
     wrap.classList.toggle("is-inline", inline);
-    wrap.classList.toggle("is-collapsed", playerInline && !target);
     document.documentElement.classList.toggle("player-inline-mode", inline);
     const toggle = document.querySelector("#player-dock-toggle");
     if (toggle) {
-      toggle.textContent = inline || playerInline ? "↗" : "−";
-      toggle.setAttribute("aria-label", inline || playerInline ? "Mostrar reproductor flotante" : "Quitar reproductor flotante y ubicarlo en la página");
-      toggle.title = inline || playerInline ? "Volver a modo flotante" : "Ubicar reproductor en la página";
+      toggle.textContent = inline ? "↗" : "−";
+      toggle.setAttribute("aria-label", inline ? "Volver a reproductor flotante" : "Colocar reproductor debajo del catálogo o lanzamientos");
+      toggle.title = inline ? "Volver a modo flotante" : "Volver a su lugar en la página";
     }
+    updateFloatingPlayerPlacement();
+  }
+  function updateFloatingPlayerPlacement() {
+    const wrap = document.querySelector(".player-wrap");
+    if (!wrap) return;
+    const inline = wrap.classList.contains("is-inline");
+    const releases = page === "/" ? document.querySelector("#lanzamientos") : null;
+    const playing = !audio.paused && Boolean(data.tracks[selected]?.audio);
+    // On Inicio the player appears at Lanzamientos, unless audio is already playing.
+    const revealed = !releases || playing || releases.getBoundingClientRect().top < window.innerHeight * 0.75;
+    wrap.classList.toggle("is-offscreen", !inline && !revealed);
+    if (inline) {
+      wrap.style.removeProperty("--floating-bottom");
+      return;
+    }
+    const footer = document.querySelector(".site-footer");
+    const bottomDefault = 12;
+    const footerTop = footer ? footer.getBoundingClientRect().top : window.innerHeight;
+    const bottom = Math.max(bottomDefault, window.innerHeight - footerTop + 12);
+    wrap.style.setProperty("--floating-bottom", bottom + "px");
+  }
+  function scheduleFloatingPlacement() {
+    if (playerVisibilityFrame) return;
+    playerVisibilityFrame = requestAnimationFrame(() => {
+      playerVisibilityFrame = 0;
+      updateFloatingPlayerPlacement();
+    });
   }
   function formatTime(seconds) {
     if (!Number.isFinite(seconds)) return "0:00";
@@ -588,6 +616,7 @@
     }
     const panel = document.querySelector("#music-player");
     panel?.classList.toggle("is-playing", playing);
+    scheduleFloatingPlacement();
     document.querySelectorAll("[data-play]").forEach(cardBtn => {
       const index = Number(cardBtn.dataset.play);
       const current = index === selected;
@@ -815,7 +844,9 @@
     render();
     window.scrollTo(0,0);
   });
-  audio.volume = .85;
+  audio.volume = 1;
+  window.addEventListener("scroll", scheduleFloatingPlacement, {passive: true});
+  window.addEventListener("resize", scheduleFloatingPlacement, {passive: true});
   audio.addEventListener("timeupdate", () => {
     if (pendingSeekPercent !== null) return;
     const current = document.querySelector("#current-time");
