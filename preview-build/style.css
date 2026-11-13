@@ -819,3 +819,29 @@ html.player-inline-mode #app>.site-footer{padding-bottom:0!important}
 }
 
 .artwork-load-status:not(.is-visible){display:none}
+
+/* Comparaciones visuales de Alan, 13/11: composición móvil. */
+@media(max-width:570px){
+.hero{height:930px}
+.hero-inner{width:calc(100% - 34px)}
+.hero-copy{top:112px;left:3px;right:0;width:100%;z-index:12}
+.hero-copy h1{font-size:clamp(69px,21vw,100px)}
+.hero-copy .genre-sticker{margin:23px 0 0 20px;max-width:max-content;font-size:clamp(18px,5vw,24px);transform:rotate(-8deg)}
+.portrait-holder{top:215px;bottom:auto;right:-12%;width:77%;height:415px;z-index:8}
+.artist-portrait{object-position:bottom right}
+.hero-ribbon-back{height:65%;bottom:23%;left:-32%;width:180%;object-position:bottom center}
+.hero-ribbon-front{height:41%;bottom:22%;right:-30%;width:180%;z-index:9}
+.hero-copy .hero-subtitle{position:absolute;top:535px;left:10px;margin:0;max-width:calc(100% - 28px);font-size:clamp(16px,4.1vw,18px);line-height:1.4;padding-left:18px;z-index:12}
+.hero-actions{position:absolute;top:625px;left:50%;transform:translateX(-50%);width:min(81%,325px);gap:14px;align-items:stretch;z-index:13}
+.hero-actions .hero-cta{width:100%;min-height:54px;font-size:19px}
+.booking-cta-wrap{padding-bottom:54px}
+.booking-cta{min-height:0;height:clamp(344px,93vw,410px);border-radius:25px;padding:21px 20px;align-items:flex-start}
+.booking-cta-home .booking-copy{position:static;max-width:68%;z-index:3}
+.booking-copy .eyebrow{font-size:10px;letter-spacing:.08em}
+.booking-copy h2{font-size:clamp(27px,7.7vw,36px);line-height:.98;letter-spacing:-1.35px;margin:12px 0 10px}
+.booking-copy p{font-size:clamp(10px,2.8vw,12px);line-height:1.32;max-width:94%;padding:0;margin:0}
+.booking-cta-home .booking-portrait{width:58%;height:82%;right:-10px;bottom:-15px;opacity:1;object-position:bottom right}
+.booking-cta-home .booking-whatsapp{position:absolute;left:15px;bottom:16px;top:auto;max-width:calc(100% - 30px);padding:12px 13px;font-size:clamp(10px,2.7vw,12px);gap:7px;margin:0!important;z-index:5}
+.booking-whatsapp svg{width:17px;height:17px;flex:none}
+}
+@media(max-width:360px){.hero-copy .hero-subtitle{font-size:15px}.booking-cta{height:354px;padding:18px 17px}.booking-copy h2{font-size:26px}.booking-cta-home .booking-copy{max-width:71%}.booking-cta-home .booking-portrait{width:57%}}
