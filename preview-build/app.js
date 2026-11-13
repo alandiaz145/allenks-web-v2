@@ -551,11 +551,15 @@
     const playing = !audio.paused && Boolean(data.tracks[selected]?.audio);
     // On Inicio the player appears at Lanzamientos, unless audio is already playing.
     const revealed = !releases || playing || releases.getBoundingClientRect().top < window.innerHeight * 0.75;
+    // Hide the floating UI before Bookings; the independent audio keeps playing.
+    // Scrolling back above Bookings automatically reveals the controls again.
+    const bookings = page === "/" ? document.querySelector(".booking-cta-wrap") : null;
+    const approachingBookings = Boolean(bookings && bookings.getBoundingClientRect().top <= window.innerHeight * 0.76);
     const footer = document.querySelector(".site-footer");
     const footerTop = footer ? footer.getBoundingClientRect().top : window.innerHeight;
     // Rise above the footer while visible, then leave the footer unobstructed.
     const nearFooterEnd = footerTop <= wrap.offsetHeight + 18;
-    wrap.classList.toggle("is-offscreen", !inline && (!revealed || nearFooterEnd));
+    wrap.classList.toggle("is-offscreen", !inline && (!revealed || approachingBookings || nearFooterEnd));
     if (inline) {
       wrap.style.removeProperty("--floating-bottom");
       return;
