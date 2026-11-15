@@ -28,6 +28,17 @@ const MEDIA = Object.freeze({
 const ORIGINS = new Set(["https://allenks.com.ar", "https://www.allenks.com.ar"]);
 const common = {"X-Content-Type-Options": "nosniff", "Cache-Control": "public, max-age=3600"};
 
+// D1 binding: DOWNLOADS_DB. Count successful, full-file GET requests on the
+// allowlisted download route; never count HEAD, streaming, covers or ranges.
+// The statistic represents fulfilled HTTP requests, not unique listeners.
+async function recordDownload(database, slug) {
+  if (!database) return;
+  await database.prepare(`INSERT INTO song_downloads (slug, count, updated_at)
+    VALUES (?, 1, datetime('now'))
+    ON CONFLICT(slug) DO UPDATE SET count = count + 1, updated_at = datetime('now')`)
+    .bind(slug).run();
+}
+
 export default {
   async fetch(request, env) {
     const url = new URL(request.url);
@@ -41,6 +52,15 @@ export default {
     } : {};
     if (request.method === "OPTIONS") return new Response(null, {status: 204, headers: {...common, ...cors}});
     if (request.method !== "GET" && request.method !== "HEAD") return new Response("Method not allowed", {status: 405, headers: {...common, ...cors}});
+    if (url.pathname === "/stats/downloads" && !url.search) {
+      if (!env.DOWNLOADS_DB) return new Response(JSON.stringify({error: "Statistics unavailable"}), {
+        status: 503, headers: {...cors, "Content-Type": "application/json", "Cache-Control": "no-store"}
+      });
+      const result = await env.DOWNLOADS_DB.prepare("SELECT slug, count FROM song_downloads").all();
+      return new Response(request.method === "HEAD" ? null : JSON.stringify({counts: Object.fromEntries(result.results.map(row => [row.slug, row.count]))}), {
+        headers: {...cors, "Content-Type": "application/json", "Cache-Control": "no-store"}
+      });
+    }
     // Alan explicitly authorized public listing of all MP3 names, including
     // unreleased recordings and remixes. Never expose R2 keys, sizes or URLs.
     if (url.pathname === "/catalog.json" && !url.search) {
@@ -88,6 +108,11 @@ export default {
       headers.set("Content-Range", `bytes ${start}-${end}/${object.size}`);
       headers.set("Content-Length", String(end - start + 1));
     } else headers.set("Content-Length", String(object.size));
+    if (download && request.method === "GET" && !partial) {
+      const slug = name.slice("download/".length);
+      try { await recordDownload(env.DOWNLOADS_DB, slug); }
+      catch (error) { console.error("Download statistics write failed", String(error)); }
+    }
     return new Response(request.method === "HEAD" ? null : object.body, {
       status: partial ? 206 : 200, headers
     });

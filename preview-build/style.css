@@ -72,6 +72,9 @@ a:focus-visible,button:focus-visible,input:focus-visible,textarea:focus-visible,
 .cover-acid .cover-melt.three{filter:hue-rotate(118deg) blur(7px)}
 .release-card h3{font-size:19px;font-style:italic;font-weight:900;letter-spacing:-.8px;margin:13px 0 10px;white-space:nowrap}
 .release-actions{display:flex;align-items:center;justify-content:center;gap:10px}
+.download-proof{display:flex;align-items:center;justify-content:center;gap:5px;width:max-content;max-width:100%;margin:0 auto 10px;padding:5px 11px;border:1px solid #cce67c;border-radius:999px;background:linear-gradient(115deg,#f1ffbd,#e8ffc9);color:#24331a;box-shadow:0 3px 12px #a0c6422b;font-size:10px;line-height:1.2;white-space:nowrap}
+.download-proof strong{font-size:14px;font-weight:950;font-variant-numeric:tabular-nums}
+.download-proof span{font-size:9px;font-weight:850;letter-spacing:.055em}
 .pill-btn{border:0;display:flex;align-items:center;justify-content:center;gap:7px;border-radius:999px;padding:8px 13px;min-height:33px;font-size:12px;font-weight:900;white-space:nowrap;transition:transform .15s,box-shadow .15s}
 .pill-btn:hover{transform:translateY(-2px)}
 .play-btn{background:linear-gradient(180deg,#63f3ff,#00dbea);box-shadow:0 4px 11px #11d6eb4d}
@@ -597,7 +600,7 @@ body{padding-bottom:154px}
 .inner-hero-content h1{font-size:clamp(42px,7vw,105px);line-height:1.02;overflow-wrap:anywhere}
 .track-breadcrumb{display:flex;align-items:center;flex-wrap:wrap;gap:12px;color:#6245e4;font-size:12px;font-weight:900;letter-spacing:.13em;margin-bottom:18px}
 .track-breadcrumb a:hover{text-decoration:underline;text-underline-offset:4px}
-.music-search{display:grid;grid-template-columns:minmax(220px,2fr) minmax(135px,1fr) minmax(135px,1fr);gap:12px;margin:12px 0 24px}
+.music-search{display:grid;grid-template-columns:minmax(220px,2fr) repeat(3,minmax(125px,1fr));gap:12px;margin:12px 0 24px}
 .music-search label{display:flex;flex-direction:column;gap:6px;min-width:0;color:#5c566d;font-size:10px;font-weight:900;letter-spacing:.09em}
 .music-search input,.music-search select{height:44px;min-width:0;width:100%;background:#fff;border:1px solid #d5cde9;border-radius:14px;color:#171323;padding:0 13px;font-weight:650;font-size:13px;outline-offset:2px}
 .music-search input:focus,.music-search select:focus{border-color:#7547eb;box-shadow:0 0 0 3px #7547eb19}
