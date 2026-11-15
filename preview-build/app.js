@@ -34,7 +34,42 @@
   let playerCompact = true;
   let playerVisibilityFrame = 0;
   let initialLoadFinished = false;
-  const searchState = { query: "", genre: "all", bpm: "all" };
+  const searchState = { query: "", genre: "all", bpm: "all", order: "original" };
+  // Historical downloads supplied by Alan from SoundCloud Insights (all time).
+  // Never infer counts from page views, streaming or unverified Worker logs.
+  const verifiedHistory = Object.freeze({
+    "gods-messenger": 19, "go-down": 13, "legendary-remix": 8,
+    "bust-it": 4, "back-strong": 3
+  });
+  let websiteDownloads = {};
+  const downloadsFor = track => (verifiedHistory[track.id] || 0) + (websiteDownloads[track.id] || 0);
+  const orderTracks = tracks => searchState.order === "downloads"
+    ? [...tracks].sort((a, b) => downloadsFor(b) - downloadsFor(a)) : tracks;
+  const downloadBadge = track => {
+    const historic = verifiedHistory[track.id] || 0;
+    const current = websiteDownloads[track.id] || 0;
+    const count = historic + current;
+    if (!count) return "";
+    const sources = [historic ? `SoundCloud: ${historic}` : "", current ? `Web: ${current}` : ""].filter(Boolean).join(" · ");
+    return `<div class="download-proof" title="Descargas registradas · ${sources}" aria-label="${count} descargas registradas, ${sources}">${icon("download", 13)} <strong>${count.toLocaleString("es-AR")}</strong><span>DESCARGAS</span></div>`;
+  };
+  async function loadDownloadStats() {
+    try {
+      const response = await fetch("https://allenks-music-media.allenbeatsadb.workers.dev/stats/downloads", { cache: "no-store" });
+      if (!response.ok) return;
+      const result = await response.json();
+      if (!result.counts || typeof result.counts !== "object") return;
+      websiteDownloads = Object.fromEntries(Object.entries(result.counts).filter(([slug, count]) => /^[a-z0-9-]+$/.test(slug) && Number.isSafeInteger(count) && count >= 0));
+      if (page === "/musica" && searchState.order === "downloads") refreshMusicSearch();
+      else document.querySelectorAll(".release-card[data-track-id]").forEach(card => {
+        const track = data.tracks.find(item => item.id === card.dataset.trackId);
+        if (!track) return;
+        card.querySelector(".download-proof")?.remove();
+        const actions = card.querySelector(".release-actions");
+        if (actions) actions.insertAdjacentHTML("beforebegin", downloadBadge(track));
+      });
+    } catch { /* Historic verified statistics remain available offline. */ }
+  }
   const normalize = value => String(value || "").normalize("NFD").replace(/[\u0300-\u036f]/g, "").toLowerCase();
   function matchesSearch(track) {
     const q = normalize(searchState.query.trim());
@@ -49,7 +84,7 @@
     }
     return true;
   }
-  const catalogueTracks = () => data.tracks.filter(t => t.category !== "collaboration" && matchesSearch(t));
+  const catalogueTracks = () => orderTracks(data.tracks.filter(t => t.category !== "collaboration" && matchesSearch(t)));
   const compactTitle = track => {
     const name = String(track.title || "").trim();
     const remix = name.match(/^.+?[-–]\s*(.+?)\s*\((?:ALLEN\s*KS\s*)?REMIX\)$/i);
@@ -59,14 +94,14 @@
   };
   function collaborationTracks() {
     const tracks = data.tracks.filter(t => t.category === "collaboration");
-    return tracks.filter(t => {
+    return orderTracks(tracks.filter(t => {
       if (!matchesSearch(t)) return false;
       if (collabFilter === "all") return true;
       const type = t.versionType || "";
       if (collabFilter === "contest") return type === "Remix contest";
       if (collabFilter === "remixes") return /Mi remix|Remix \/ por clasificar/.test(type);
       return !/Remix contest|Mi remix|Remix \/ por clasificar/.test(type);
-    });
+    }));
   }
   const asset = (url, cls = "", alt = "") => url ? `<img class="${cls}" src="${url}" alt="${alt}" loading="${/hero|detail-priority/.test(cls) ? "eager" : "lazy"}" decoding="async" ${/hero|detail-priority/.test(cls) ? 'fetchpriority="high"' : ""} />` : "";
   const trackHref = track => `/cancion/?tema=${encodeURIComponent(track.id)}`;
@@ -149,10 +184,11 @@
         </div>`;
   }
   function releaseCard(track, index) {
-    return `<article class="release-card"><a class="release-art-link" href="${trackHref(track)}" aria-label="Abrir página de ${track.title}">${artwork(track)}</a>
+    return `<article class="release-card" data-track-id="${track.id}"><a class="release-art-link" href="${trackHref(track)}" aria-label="Abrir página de ${track.title}">${artwork(track)}</a>
       <h3><a href="${trackHref(track)}" aria-label="Ver detalles de ${track.title}" title="${track.title.replace(/"/g,"&quot;")}">${compactTitle(track)}</a></h3>
       ${track.artists ? `<p class="release-artist-label">${track.artists}</p>` : ""}
       ${track.versionType && !/por confirmar|por clasificar/.test(track.versionType) ? `<p class="catalog-review-tag">${track.versionType}</p>` : ""}
+      ${downloadBadge(track)}
       <div class="release-actions">
         ${track.audio ? `<button class="pill-btn play-btn" type="button" data-play="${index}" aria-label="Reproducir ${track.title}" aria-pressed="false">${icon("play", 15)} PLAY</button>` : `<span class="pill-btn no-audio-badge">${track.sourceFile ? "EN REVISIÓN" : "SIN AUDIO"}</span>`}
         <a class="pill-btn download-btn" href="${trackHref(track)}" aria-label="Ficha de ${track.title}">${track.download ? icon("download", 15) : icon("arrow",15)} ${track.download ? "DESCARGAR" : "VER FICHA"}</a>
@@ -279,6 +315,7 @@
       <label><span>BUSCAR CANCIÓN</span><input id="music-search-input" type="search" placeholder="Título, artista o versión..." autocomplete="off" /></label>
       <label><span>GÉNERO</span><select id="music-genre"><option value="all">${genres.length ? "Todos los géneros" : "Géneros por clasificar"}</option>${genres.map(g => `<option value="${g.replace(/"/g, "&quot;")}">${g}</option>`).join("")}</select></label>
       <label><span>BPM</span><select id="music-bpm"><option value="all">Todos los BPM</option><option value="60-109">60–109</option><option value="110-139">110–139</option><option value="140-159">140–159</option><option value="160-179">160–179</option><option value="180-999">180+</option></select></label>
+      <label><span>ORDENAR</span><select id="music-order"><option value="original">Orden original</option><option value="downloads">Más descargadas</option></select></label>
     </div>`;
   }
   function refreshMusicSearch() {
@@ -366,6 +403,7 @@
           <div class="track-detail-content">
             <span class="eyebrow">${track.download ? "FREE DOWNLOAD" : "ESCUCHAR ONLINE"} / ALLEN KS</span>
             <h2>${track.title}</h2><p>ALLEN KS · DUBSTEP / BASS</p>
+            ${downloadBadge(track)}
              ${track.audio ? `<button type="button" class="track-detail-play pill-btn play-btn" data-play="${requestedTrackIndex}" aria-label="Reproducir ${track.title}">${icon("play",15)} ESCUCHAR ESTE TEMA</button>` : ""}
             ${track.versionType && !/por confirmar|por clasificar/.test(track.versionType) ? `<p class="catalog-review-tag">${track.versionType}</p>` : ""}
             <div class="download-options" id="descargas">
@@ -755,9 +793,11 @@
     });
     document.querySelector("#music-genre")?.addEventListener("change", e => { searchState.genre = e.target.value; refreshMusicSearch(); });
     document.querySelector("#music-bpm")?.addEventListener("change", e => { searchState.bpm = e.target.value; refreshMusicSearch(); });
+    document.querySelector("#music-order")?.addEventListener("change", e => { searchState.order = e.target.value; refreshMusicSearch(); });
     document.querySelector("#music-search-input") && (document.querySelector("#music-search-input").value = searchState.query);
     document.querySelector("#music-genre") && (document.querySelector("#music-genre").value = searchState.genre);
     document.querySelector("#music-bpm") && (document.querySelector("#music-bpm").value = searchState.bpm);
+    document.querySelector("#music-order") && (document.querySelector("#music-order").value = searchState.order);
     document.querySelector("#player-main-btn")?.addEventListener("click", togglePlay);
     document.querySelector("#player-dock-toggle")?.addEventListener("click", () => {
       if (page === "/") playerInline = !playerInline;
@@ -935,4 +975,6 @@
   });
   audio.addEventListener("error", () => announce("No fue posible cargar este archivo de audio."));
   render();
+  loadDownloadStats();
+  window.addEventListener("focus", loadDownloadStats);
 })();
