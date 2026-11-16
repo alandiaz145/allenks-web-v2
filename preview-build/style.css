@@ -655,7 +655,7 @@ html.player-inline-mode #app>.site-footer{padding-bottom:0}
 #app>.player-wrap .time-label{font-size:11px;position:static;white-space:nowrap;align-self:center;justify-self:center;margin:0}
 #app>.player-wrap .player-volume{display:none}
 #app>.player-wrap .player-progress-wrap{display:none!important}
-.player-dock-toggle{position:absolute;right:8px;top:-14px;border:1px solid #c6b8ee;border-radius:50%;width:28px;height:28px;display:grid;place-items:center;font-size:17px;font-weight:900;color:#211744;background:#fff;cursor:pointer;z-index:20;box-shadow:0 3px 10px #1d16453a}
+.player-dock-toggle{position:absolute;right:-6px;top:-13px;border:1px solid #c6b8ee;border-radius:50%;width:28px;height:28px;display:grid;place-items:center;font-size:17px;font-weight:900;color:#211744;background:#fff;cursor:pointer;z-index:20;box-shadow:0 3px 10px #1d16453a}
 .player-dock-toggle:hover{background:#e9e0ff}
 #app .player-wrap.is-inline{position:relative;left:auto;bottom:auto;transform:none;width:min(calc(100% - 40px),1170px);max-width:1170px;margin:25px auto 45px;z-index:3}
 #app .player-wrap.is-inline .music-player{height:105px;grid-template-columns:65px 138px minmax(130px,1fr) minmax(160px,1.2fr) 75px;gap:15px;padding:14px 24px;border-radius:20px}
